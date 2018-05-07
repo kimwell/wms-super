@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <div class="sign-in">
-            <h1>钢刚好超管后台管理系统</h1>
+            <h1>超管后台管理系统</h1>
             <div class="form-item">
                 <div class="form-item-content">
                     <div class="el-input">

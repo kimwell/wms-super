@@ -1,6 +1,6 @@
-# ggh-super
+# wms-super
 
-> ggh-super
+> wms-super
 
 ## Build Setup
 

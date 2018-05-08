@@ -1,7 +1,7 @@
 {
-  "name": "ggh-super",
+  "name": "wms-super",
   "version": "1.0.0",
-  "description": "ggh-super",
+  "description": "wms-super",
   "author": "kimwell <jinwei613@163.com>",
   "private": true,
   "scripts": {

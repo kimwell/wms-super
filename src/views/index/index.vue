@@ -3,11 +3,11 @@
         <Row type="flex">
             <Col span="4" class="layout-menu-left">
             <Menu ref="menu" :active-name="activeIndex" theme="dark" width="auto" @on-select="openSubpage" :open-names="openArr" style="overflow: hidden;">
-                <div class="layout-logo-left">钢刚好超管后台管理系统</div>
+                <div class="layout-logo-left">超管后台管理系统</div>
                 <Submenu :name="index" v-for="(item,index) in menu" :key="index">
                     <template slot="title">
-                            <span class="iconfont menuicon" :class="item.icon"></span>{{ item.name }}
-                    </template>
+                                <span class="iconfont menuicon" :class="item.icon"></span>{{ item.name }}
+</template>
                         <MenuItem :name="index+'-'+i" v-for="(sub,i) in item.children" :key="i">{{ sub.name }}</MenuItem>
                     </Submenu>
                 </Menu>
@@ -79,12 +79,12 @@
                 this.menu.forEach((el, index) => {
                     this.openArr.push(index);
                     el.children.forEach((sub, i) => {
-                        if(sub.child != undefined){
+                        if (sub.child != undefined) {
                             sub.child.forEach((ch, j) => {
-                                if(this.$route.fullPath === ch.router.name)
+                                if (this.$route.fullPath === ch.router.name)
                                     this.activeIndex = `${index}-${i}`
                             })
-                        }else{
+                        } else {
                             if (this.$route.name === sub.router.name)
                                 this.activeIndex = `${index}-${i}`
                         }
@@ -139,7 +139,7 @@
                 //如果回到首页，就去掉菜单的选中效果
                 if (a.name === '/') {
                     this.activeIndex = '';
-                }else{
+                } else {
                     this.setActiveMenu();
                 }
             }
@@ -203,16 +203,19 @@
         height: 100%;
         background-color: #fff;
     }
-    .layout-ceiling-main{
+    
+    .layout-ceiling-main {
         float: right;
         margin-right: 15px;
         line-height: 60px;
     }
-    .layout-ceiling-main a{
+    
+    .layout-ceiling-main a {
         color: #9ba7b5;
         font-size: 14px;
     }
-    .menuicon{
+    
+    .menuicon {
         margin-right: 4px;
         vertical-align: middle;
     }

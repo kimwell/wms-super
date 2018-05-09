@@ -96,6 +96,10 @@ const router = new Router({
         path: 'jurisdiction',
         name: 'jurisdiction',
         component: resolve => require(['@/views/authority/jurisdiction/index'], resolve)
+      }, {
+        path: 'menu',
+        name: 'menu',
+        component: resolve => require(['@/views/authority/menu/index'], resolve)
       }]
     }]
   }, {

@@ -795,3 +795,13 @@ export const articleZero = '/sys/indutryNew/articleZero'
  */
 export const articleRise = '/sys/indutryNew/articleRise'
 
+
+
+// -----------------------------------菜单管理---------------------------------
+
+/**
+ * 菜单-查询所有菜单
+ */
+export const findMenuList = '/sys/auth/menu/findList'
+
+

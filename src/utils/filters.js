@@ -1,37 +1,8 @@
 import df from 'dateformat-util'
 
-//  2位数不足10前面补0
-export const addZero = (value) => {
-  return value < 10 ? '0' + value : value
-}
-
-//  将毫秒转为天时分秒
-/*
-*params 1、 转为 天时分秒
-*params 2、 转为 时分秒
-*params 3、 转为 天-时:分:秒
-params 转为 时:分:秒
-*/
-export const formatDuring = (mss, params) => {
-
-  let days = parseInt(mss / (1000 * 60 * 60 * 24));
-  let hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  let minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
-  let seconds = (mss % (1000 * 60)) / 1000;
-  switch (params * 1) {
-    case 1:
-      return days + " 天 " + hours + " 小时 " + addZero(minutes) + " 分钟 " + addZero(seconds) + " 秒 ";
-      break;
-    case 2:
-      return hours + " 小时 " + addZero(minutes) + " 分钟 " + addZero(seconds) + " 秒 ";
-      break;
-    case 3:
-      return days + '-' + addZero(hours) + ':' + addZero(minutes) + ':' + addZero(seconds);
-      break;
-    default:
-      return addZero(hours) + ':' + addZero(minutes) + ':' + addZero(seconds);
-      break
-  }
+//  时间戳转年月日时分
+export const dateformat = (value, fromatStr = 'yyyy-MM-dd hh:mm') => {
+  return df.format(new Date(value), fromatStr)
 }
 
 
@@ -74,9 +45,4 @@ export const isEmpty = (value, params) => {
   } else {
     return params ? params : '全部'
   }
-}
-
-//  时间戳转年月日时分
-export const dateformat = (value, fromatStr = 'yyyy-MM-dd hh:mm') => {
-  return df.format(new Date(value), fromatStr)
 }

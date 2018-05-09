@@ -16,6 +16,11 @@ export default [{
     router: {
       name: 'role'
     }
+  }, {
+    name: '菜单管理',
+    router: {
+      name: 'menu'
+    }
   }]
 }, {
   name: '系统配置',

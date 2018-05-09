@@ -36,12 +36,12 @@
           padding: 0 10px;
         }
       }
-      .page-count{
+      .page-count {
         position: absolute;
         right: 10px;
         bottom: 0;
       }
-      .tal{
+      .tal {
         text-align: left;
       }
     }
@@ -60,8 +60,8 @@
         </FormItem>
         <FormItem prop="role" label="角色：">
           <Select v-model="filterData.roleId" @on-change="onFilter" placeholder="请选择" style="width:150px">
-             <Option v-for="role in [{roleName:'不限',roleId:''},...roleList]" :key="role.roleId" :value="role.roleId">{{ role.roleName }}</Option>
-          </Select>
+               <Option v-for="role in [{roleName:'不限',roleId:''},...roleList]" :key="role.roleId" :value="role.roleId">{{ role.roleName }}</Option>
+            </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -84,7 +84,7 @@
             <th>状态</th>
             <th class="tal">角色</th>
             <!-- <th>最后登录时间</th>
-              <th>最后登录IP</th> -->
+                <th>最后登录IP</th> -->
             <th>操作</th>
           </tr>
         </thead>
@@ -94,7 +94,7 @@
             <td>{{ item.mobile }}</td>
             <td>{{ item.status == 1 ? '启用' : '禁用' }}</td>
             <td class="tal">
-               <Tag  v-for="(el,i) in item.roleName.split(',')" :key="i" color="blue" v-if="el!= ''">{{ el }}</Tag>
+              <Tag v-for="(el,i) in item.roleName.split(',')" :key="i" color="blue" v-if="el!= ''">{{ el }}</Tag>
             </td>
             <td>
               <!-- <Button type="info">详情</Button> -->
@@ -108,7 +108,7 @@
     </div>
   
     <!-- 添加、修改用户 -->
-    <Modal v-model="userInfoShow" :title="userEdit ? '编辑用户' : '添加用户'" @on-cancel="resetData"  :mask-closable="false">
+    <Modal v-model="userInfoShow" :title="userEdit ? '编辑用户' : '添加用户'" @on-cancel="resetData" :mask-closable="false">
       <Form ref="userInfo" :model="userData" :rules="addRule" :label-width="90">
         <FormItem label="昵称" prop="name">
           <Input v-model="userData.name" placeholder="用户昵称"></Input>
@@ -124,12 +124,12 @@
         </FormItem>
         <FormItem label="设置角色" prop="roleList">
           <Select v-model="userData.roleList" multiple placeholder="请选择">
-             <Option v-for="role in roleList" :key="role.roleId" :value="role.roleId">{{ role.roleName }}</Option>
-          </Select>
+               <Option v-for="role in roleList" :key="role.roleId" :value="role.roleId">{{ role.roleName }}</Option>
+            </Select>
         </FormItem>
       </Form>
       <Form :label-width="90">
-            <FormItem label="创建人" prop="createUser" v-if="userEdit">
+        <FormItem label="创建人" prop="createUser" v-if="userEdit">
           {{userOtherData.createUser | isEmpty(params = '暂无')}}
         </FormItem>
         <FormItem label="创建时时间" prop="createTime" v-if="userEdit">
@@ -230,7 +230,7 @@
       // 获取用户列表
       getAllList() {
         this.$http.post(this.api.userList, this.filterData).then(res => {
-          if(res.code === 1000){
+          if (res.code === 1000) {
             this.listData = res.data.list;
             this.totalCount = res.data.totalCount;
           }

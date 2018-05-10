@@ -5,7 +5,7 @@
             <span :class="{loadSyncNode:model.loadNode==1}" v-if='model.loadNode==1'></span>
             <span :class='model.iconClass' v-show='model.iconClass' v-else></span>
         </a> -->
-        <span class="node_name">{{model.father.goodsName}}</span>
+        <span class="node_name">{{model.node.menuName}}</span>
         <div class="tree-option">
             <a @click="Func(model,$event,1)"><i class="iconfont icon-add1"></i>新增</a>
             <a @click="Func(model,$event,2)"><i class="iconfont icon-bianji1"></i>编辑</a>
@@ -13,7 +13,7 @@
         </div>
         </div>
         <ul :class="ulClassVal" v-show='model.isFolder'>
-            <ztree-item v-for="(item,i) in model.children" :key='i' :callback='callback' :expandfunc='expandfunc' :cxtmenufunc='cxtmenufunc' :model.sync="item" :num.sync='i' root='1' :nodes.sync='model.child.length' :trees.sync='trees'></ztree-item>
+            <ztree-item v-for="(item,i) in model.children" :key='i' :callback='callback' :expandfunc='expandfunc' :cxtmenufunc='cxtmenufunc' :model.sync="item" :num.sync='i' root='1' :nodes.sync='model.children.length' :trees.sync='trees'></ztree-item>
         </ul>
     </li>
 </template>
@@ -122,7 +122,7 @@
                         returnChar = 'close'
                     }
                 }
-                if (this.model.child.length == 0 && this.rootClass.indexOf("docu") == -1) {
+                if (this.model.children.length == 0 && this.rootClass.indexOf("docu") == -1) {
                     returnChar = 'docu'
                 }
     

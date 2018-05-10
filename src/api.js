@@ -801,7 +801,18 @@ export const articleRise = '/sys/indutryNew/articleRise'
 
 /**
  * 菜单-查询所有菜单
+ * 
  */
 export const findMenuList = '/sys/auth/menu/findList'
 
+/**
+ * 菜单-新增菜单
+ * 
+ */
+export const saveMenu = '/sys/auth/menu/save'
 
+/**
+ * 菜单-删除菜单
+ * 
+ */
+export const deleteMenu = '/sys/auth/menu/deleteMenu'

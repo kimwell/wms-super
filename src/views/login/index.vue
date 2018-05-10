@@ -30,8 +30,7 @@
             return {
                 formInline: {
                     mobile: '',
-                    password: '',
-                    flag: 1
+                    password: ''
                 },
                 isLoading: false
             }

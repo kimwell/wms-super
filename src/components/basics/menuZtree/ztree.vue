@@ -64,10 +64,11 @@
         // 递归操作，增加删除一些属性。比如: 展开/收起
         var recurrenceFunc = (data) => {
           data.forEach((m) => {
+            console.log(m)
             m.clickNode = m.hasOwnProperty("clickNode") ? m.clickNode : false;
-            m.children = m.child || [];
-            m.isFolder = m.hasOwnProperty("open") ? m.open : this.isOpen && m.child.length > 0;
-            m.isExpand = m.hasOwnProperty("open") ? m.open : this.isOpen && m.child.length > 0;
+            m.children = m.children || [];
+            m.isFolder = m.hasOwnProperty("open") ? m.open : this.isOpen && m.children.length > 0;
+            m.isExpand = m.hasOwnProperty("open") ? m.open : this.isOpen && m.children.length > 0;
             m.loadNode = 0;
             recurrenceFunc(m.children);
   

@@ -21,6 +21,11 @@ export default [{
     router: {
       name: 'menu'
     }
+  }, {
+    name: '绑定菜单',
+    router: {
+      name: 'BindMenu'
+    }
   }]
 }, {
   name: '系统配置',

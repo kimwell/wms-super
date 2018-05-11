@@ -100,6 +100,10 @@ const router = new Router({
         path: 'menu',
         name: 'menu',
         component: resolve => require(['@/views/authority/menu/index'], resolve)
+      }, {
+        path: 'BindMenu',
+        name: 'BindMenu',
+        component: resolve => require(['@/views/authority/bindMenu/index'], resolve)
       }]
     }]
   }, {

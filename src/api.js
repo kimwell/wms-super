@@ -816,3 +816,15 @@ export const saveMenu = '/sys/auth/menu/save'
  * 
  */
 export const deleteMenu = '/sys/auth/menu/deleteMenu'
+
+/**
+ * 菜单-角色菜单绑定
+ * 
+ */
+export const bindMenuToRole = '/sys/auth/menu/bindMenuToRole'
+
+/**
+ * 菜单-根据角色编号查找菜单列表
+ * 
+ */
+export const findBindMenuList = '/sys/auth/menu/findBindList'

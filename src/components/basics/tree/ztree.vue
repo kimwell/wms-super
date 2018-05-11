@@ -136,7 +136,6 @@
     padding: 0;
     margin: 0;
     font-size: 15px;
-    font-family: Verdana, Arial, Helvetica, AppleGothic, sans-serif;
     box-sizing: content-box;
   }
   

@@ -54,6 +54,7 @@
                     this.isLoading = true;
                     this.$http.post(this.api.login, this.formInline).then(res => {
                         if (res.code === 1000) {
+                            console.log(res)
                             this.setUser({
                                 authorization: res.data.authorization,
                                 loginId: res.data.loginId

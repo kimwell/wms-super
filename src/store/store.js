@@ -11,11 +11,12 @@ export default new Vuex.Store({
         authorization: undefined,
         loginId: undefined,
         pushData: '',
+        menuData: []
     },
     getters: {
         roleId: state => {
             //写死的超管id,后期修改为从state user中获取
-            return '402800815e74a92e015e74a99ca50000'
+            return '297e89536343f6d8016343f6ef650000'
         },
         loginId: state => {
             //写死的超管id,后期修改为从state user中获取
@@ -27,6 +28,12 @@ export default new Vuex.Store({
         },
         pushData: state => {
             return state.pushData
+        },
+        menuData: state => {
+            return state.menuData
+        },
+        user: state => {
+            return state.user
         }
     },
     mutations: {
@@ -45,6 +52,12 @@ export default new Vuex.Store({
         // 消息推送commit
         [types.UPDATE_PUSH_MSG]: (state, payload) => {
             state.pushData = payload;
+        },
+        [types.MENU_DATA]: (state, payload) => {
+            state.menuData = payload;
+        },
+        [types.USER]: (state, payload) => {
+            state.user = payload;
         }
     }
 })

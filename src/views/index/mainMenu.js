@@ -1,6 +1,6 @@
 export default [{
   name: '权限管理',
-  icon: 'icon-yonhu',
+  icon: 'icon-icon-quanxianxg',
   children: [{
     name: '角色配置',
     router: {
@@ -29,7 +29,7 @@ export default [{
   }]
 }, {
   name: '系统配置',
-  icon: 'icon-xinwen',
+  icon: 'icon-xitong',
   children: [{
     name: '网站首页广告位',
     router: {
@@ -48,7 +48,7 @@ export default [{
   }]
 }, {
   name: '新闻管理',
-  icon: 'icon-xinwen',
+  icon: 'icon-shangwutubiao-',
   children: [{
     name: '新建新闻内容',
     router: {

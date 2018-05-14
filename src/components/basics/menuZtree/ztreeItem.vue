@@ -7,16 +7,16 @@
                     <span :class='model.iconClass' v-show='model.iconClass' v-else></span>
                 </a> -->
             <span class="node_name">
-                <span :class="isCheckClass" @click.self="checkHandle(model)" v-if="showCheckbox"></span> {{model.menuName}}
+                {{model.menuName}}
             </span>
-            <div class="tree-option" v-if="!showCheckbox">
-                <a @click="Func(model,$event,1)"><i class="iconfont icon-add1"></i>新增</a>
-                <a @click="Func(model,$event,2)"><i class="iconfont icon-bianji1"></i>编辑</a>
-                <a @click="Func(model,$event,3)"><i class="iconfont icon-shanchu2"></i>删除</a>
+            <div class="tree-option">
+                <a @click="Func(model,$event,1)"><i class="iconfont icon-xinzeng"></i>新增</a>
+                <a @click="Func(model,$event,2)"><i class="iconfont icon-bj"></i>编辑</a>
+                <a @click="Func(model,$event,3)"><i class="iconfont icon-icon"></i>删除</a>
             </div>
         </div>
         <ul :class="ulClassVal" v-show='model.isFolder'>
-            <ztree-item v-for="(item,i) in model.children" :key='i' :callback='callback' :expandfunc='expandfunc' :showCheckbox="showCheckbox" :cxtmenufunc='cxtmenufunc' :model.sync="item" :num.sync='i' root='1' :nodes.sync='model.children.length' :trees.sync='trees'></ztree-item>
+            <ztree-item v-for="(item,i) in model.children" :key='i' :callback='callback' :expandfunc='expandfunc' :cxtmenufunc='cxtmenufunc' :model.sync="item" :num.sync='i' root='1' :nodes.sync='model.children.length' :trees.sync='trees'></ztree-item>
         </ul>
     </li>
 </template>
@@ -56,10 +56,6 @@
             },
             cxtmenufunc: {
                 type: Function
-            },
-            showCheckbox: {
-                type: Boolean,
-                default: false
             }
         },
         methods: {
@@ -102,13 +98,9 @@
                         el.isCheck = !el.isCheck;
                     });
                 }
-                console.log(m);
             }
         },
         computed: {
-            isCheckClass(){
-                return this.model.isCheck ? 'icon-check icon-ischecked':'icon-check icon-checked'
-            },
             // 给（根 和 子树）赋值不同的样式
             rootClass() {
                 var strRootClass = "";

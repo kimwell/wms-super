@@ -50,9 +50,6 @@ export const findArea = '/api/query/findArea'
 
 export const findDistrict = '/api/query/findDistrict'
 
-// ****************************系统配置***************************************
-
-
 
 // *********************************权限管理*********************************
 /**
@@ -523,128 +520,6 @@ export const getSalemanBind = '/sys/saleman/findSalemanBind'
  */
 export const findSalemanInfos = '/sys/saleman/findSalemanInfo'
 
-/*
- * 专员信息统计
- * 
- */
-
-export const salesManData = '/sys/dataStatics/salesManData'
-
-
-
-/*
- * 超管查询绑定管理
- * /sys/saleman/findCompangWithSaleman
- */
-export const findCompangWithSaleman = '/sys/saleman/findCompangWithSaleman'
-
-/*
- * 超管进行商户绑定
- * /sys/saleman/findCompangWithSaleman
- */
-export const updateSalemanInfo = '/sys/saleman/updateSalemanInfo'
-
-/**
- * 获取商家用户列表
- * path: /sys/buserInfo/findBuserInfoPage
- * method: POST
- * params:
- */
-export const getBusiness = '/sys/buserInfo/findBuserInfoPage'
-
-/**
- * 查询商家详情
- * path: /sys/buserInfo/findBuserInfoById
- * params: bUserId
- */
-export const getBusinessInfo = '/sys/buserInfo/findBuserInfoById'
-
-/**
- * 修改商家信息
- * path: /sys/buserInfo/updateBuserInfo
- */
-export const eidtBusiness = '/sys/buserInfo/updateBuserInfo'
-
-/**
- * 超管查询用户经营范围
- * path: /sys/ironBuy/queryBussinessScopeByUserId
- */
-export const scopeByUserId = '/sys/businessScope/findBusinessScope'
-
-/**
- * 超管保存用户经营范围
- * path: /sys/ironBuy/saveBussinessScopeByUserId
- */
-export const saveScopeByUserId = '/sys/businessScope/saveBusinessScope'
-
-
-/**
- * 超管分页查询公司子账号列表
- * path: /common/subaccountManagement/findSubaccountManagementPage
- */
-
-export const findSubaccountManagementPage = '/common/subaccountManagement/findSubaccountManagementPage'
-
-
-/**
- * 更新公司主账号手机号
- * path: /sys/buserInfo/updateMainAccountMobile
- */
-
-export const updateMainAccountMobile = '/sys/buserInfo/updateMainAccountMobile'
-
-/**
- * 超管删除公司子账号列表
- * path: /common/subaccountManagement/deleteSubaccountManagement
- */
-
-export const deleteSubaccountManagement = '/common/subaccountManagement/deleteSubaccountManagement'
-
-/**
- * 超管重置公司子账号密码
- * path: /common/subaccountManagement/resetPassword
- */
-export const resetPassword = '/common/subaccountManagement/resetPassword'
-
-/**
- * 超管保存子账号信息
- * path: /common/subaccountManagement/saveSubaccountManagement
- */
-export const saveSubaccountManagement = '/common/subaccountManagement/saveSubaccountManagement'
-
-
-/**
- * 超管更新子账号信息
- * path: /common/subaccountManagement/updateSubaccountType
- */
-export const updateSubaccountType = '/common/subaccountManagement/updateSubaccountType'
-
-
-/**
- * 模糊匹配查询商户信息
- * path: /common/subaccountManagement/findCompanyInfo
- */
-export const findCompanyInfo = '/common/subaccountManagement/findCompanyInfo'
-
-/**
- * 根据公司编号查询公司业务员
- * 
- */
-export const findSalesmanByCompanyId = '/sys/buserInfo/findSalesmanByCompanyId'
-
-
-/**
- * 超管分页查询客户信息
- * 
- */
-export const findClientManagementPage = '/common/clientManagement/findClientManagementPage'
-
-
-/**
- * 超管批量更新公司客户业务员
- * 
- */
-export const updateClientManagement = '/common/clientManagement/updateClientManagement'
 
 
 // *********************************广告位管理*********************************
@@ -800,31 +675,31 @@ export const articleRise = '/sys/indutryNew/articleRise'
 // -----------------------------------菜单管理---------------------------------
 
 /**
- * 菜单-查询所有菜单
+ * 查询所有菜单
  * 
  */
 export const findMenuList = '/sys/auth/menu/findList'
 
 /**
- * 菜单-新增菜单
+ * 新增菜单
  * 
  */
 export const saveMenu = '/sys/auth/menu/save'
 
 /**
- * 菜单-删除菜单
+ * 删除菜单
  * 
  */
 export const deleteMenu = '/sys/auth/menu/deleteMenu'
 
 /**
- * 菜单-角色菜单绑定
+ * 角色菜单绑定
  * 
  */
 export const bindMenuToRole = '/sys/auth/menu/bindMenuToRole'
 
 /**
- * 菜单-根据角色编号查找菜单列表
+ * 根据角色编号查找菜单列表
  * 
  */
 export const findBindMenuList = '/sys/auth/menu/findBindList'

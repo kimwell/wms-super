@@ -2,7 +2,7 @@
   <div class="ztree_content_wrap" v-if='treeDataSource.length>0'>
     <div class="zTreeDemoBackground">
       <ul class="ztree">
-        <ztree-item v-for='(m,i) in treeDataSource' :key='i' :model.sync="m" :num.sync='i' root='0' :showCheckbox="showCheckbox" :nodes.sync='treeDataSource.length' :callback='func' :expandfunc='expand' :cxtmenufunc='contextmenu' :trees.sync='treeDataSource'></ztree-item>
+        <ztree-item v-for='(m,i) in treeDataSource' :key='i' :model.sync="m" :num.sync='i' root='0' :nodes.sync='treeDataSource.length' :callback='func' :expandfunc='expand' :cxtmenufunc='contextmenu' :trees.sync='treeDataSource'></ztree-item>
       </ul>
     </div>
   </div>
@@ -47,10 +47,6 @@
         type: Boolean,
         twoWay: true,
         default: false
-      },
-      showCheckbox:{
-          type: Boolean,
-          default: false
       }
     },
     watch: {
@@ -136,22 +132,7 @@
     // overflow-y: scroll;
     overflow-x: auto;
   }
-  .ztree .icon-check{
-    width: 14px;
-    height: 14px;
-    display: inline-block;
-    vertical-align: middle;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    background-image: url("./images/ztree/zTreeStandard.png");
-  }
-  .ztree .icon-check.icon-ischecked{
-    background-position: -14px 0;
-  }
-  .ztree .icon-check.icon-checked{
-    background-position: 0 0;
-  }
+
   .ztree * {
     padding: 0;
     margin: 0;
@@ -190,6 +171,9 @@
     top: 0;
     line-height: 36px;
   }
+   .tree-option .iconfont{
+     font-size: 16px;
+   }
   
   .tree-option a {
     user-select: none;

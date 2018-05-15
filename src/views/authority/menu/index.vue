@@ -11,7 +11,7 @@
         <FormItem label="菜单名称：" prop="menuName">
           <Input v-model="itemApi.menuName" placeholder="请输入"></Input>
         </FormItem>
-        <FormItem label="菜单地址">
+        <FormItem label="菜单地址：">
           <Input v-model="itemApi.url" placeholder="请输入"></Input>
         </FormItem>
         <FormItem label="菜单图标：">

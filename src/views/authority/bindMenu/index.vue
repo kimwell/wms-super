@@ -5,11 +5,10 @@
       <Button slot="extra" type="primary" @click="bindMenu(false)">绑定菜单</Button>
       <Row>
         <Col span="18" push="6">
-        <Tree :data="menuDataSource" ref="Tree" @on-check-change="checkHandle" show-checkbox></Tree>
-        <!-- <menuZtree :list.sync='menuDataSource' :func="nodeClick" :showCheckbox='true' :is-open='true'></menuZtree> -->
+          <Tree :data="menuDataSource" ref="Tree" @on-check-change="checkHandle"  show-checkbox></Tree>
         </Col>
         <Col span="6" pull="18">
-        <ztree :list.sync='ztreeDataSource' :func="nodeClick" :is-open='true'></ztree>
+          <ztree :list.sync='ztreeDataSource' :func="nodeClick" :is-open='true'></ztree>
         </Col>
       </Row>
     </Card>

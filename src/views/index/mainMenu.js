@@ -63,7 +63,7 @@ export default [{
     router: {
       name: 'nlist'
     },
-    child: [{
+    children: [{
       name: '已发布',
       router: {
         name: '/news/nlist/publish'

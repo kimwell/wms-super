@@ -1,4 +1,4 @@
-export const excelBaseUrl = 'http://tbxoss.oss-cn-hangzhou.aliyuncs.com/';
+export const baseAliyun = 'http://tbxoss.oss-cn-hangzhou.aliyuncs.com/';
 
 // WebSocket链接
 let host = window.location.host;
@@ -31,6 +31,11 @@ export const uploadApi = commHost + '/common/fileUpload/images';
  * }
  */
 export const login = '/login/userLogin';
+
+/**
+ * 获取所有角色列表
+ */
+export const findRoleList = '/login/findRoleList';
 
 /**
  * 获取用户信息
@@ -82,6 +87,10 @@ export const addRole = '/sys/auth/role/save'
  */
 export const editRole = '/sys/auth/role/update'
 
+/**
+ * 删除角色
+ */
+export const delRole = '/sys/auth/role/delRole'
 /**
  * 按角色编号查询子角色
  * path: /sys/auth/role/findById

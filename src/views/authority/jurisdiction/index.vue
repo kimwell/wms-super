@@ -6,6 +6,7 @@
                     <!-- <li><a @click='delNode'><span class="iconfont icon-delete"></span></a></li> -->
                     <li><a @click='openEdit(true)'><span class="iconfont icon-bianji"></span></a></li>
                     <li><a @click='openEdit(false)'><span class="iconfont icon-addcontacts"></span></a></li>
+                    <li><a @click='delRole'><span class="iconfont icon-delete"></span></a></li>
                 </ul>
             </Affix>
             <ztree :list.sync='ztreeDataSource' :func="nodeClick" :is-open='true'></ztree>
@@ -123,6 +124,22 @@
                     this.loading = false;
                     this.rolePanelShow = false;
                     this.$Modal.remove();
+                })
+            },
+            // 删除角色
+            delRole(){
+                this.$Modal.confirm({
+                    title: '删除提示',
+                    content: '确定删除角色？删除后将不可撤销。',
+                    onOk: ()=>{
+                        this.$http.post(this.api.delRole,{roleId: this.activeRoleId.roleId}).then(res =>{
+                            if(res.code === 1000){
+                                this.gettreeData();
+                            }else{
+                                this.$Message.error(res.messgage)
+                            }
+                        })
+                    }
                 })
             },
             // 删除节点

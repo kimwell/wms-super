@@ -4,7 +4,30 @@ import df from 'dateformat-util'
 export const dateformat = (value, fromatStr = 'yyyy-MM-dd hh:mm') => {
   return df.format(new Date(value), fromatStr)
 }
-
+//接口类型转换图标
+export const toIcon = value => {
+  let icon = '';
+  switch (value) {
+    case 0:
+      icon = "icon-weizhi";
+      break;
+    case 1:
+      icon = "icon-chaxun";
+      break;
+    case 2:
+      icon = "icon-zengjia";
+      break;
+    case 3:
+      icon = "icon-gengxin";
+      break;
+    case 4:
+      icon = "icon-shanchu";
+      break;
+    default:
+      break;
+  }
+  return icon
+}
 
 // js时间转化为几天前,几小时前，几分钟前
 export const getDateDiff = (value, now) => {

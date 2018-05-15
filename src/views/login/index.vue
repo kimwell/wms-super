@@ -2,10 +2,15 @@
     <div class="wrapper">
         <div class="sign-in">
             <h1>超管后台管理系统</h1>
+            <div class="form-item-select">
+                <Select v-model="formInline.roleId" size="large">
+                    <Option v-for="item in roleList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                </Select>
+            </div>
             <div class="form-item">
                 <div class="form-item-content">
                     <div class="el-input">
-                        <input v-model="formInline.mobile" @keyup.enter="keyHandle"  placeholder="管理员账号" type="text" class="el-input__inner" >
+                        <input v-model="formInline.mobile" @keyup.enter="keyHandle" placeholder="管理员账号" type="text" class="el-input__inner">
                     </div>
                 </div>
             </div>
@@ -30,15 +35,18 @@
             return {
                 formInline: {
                     mobile: '',
-                    password: ''
+                    password: '',
+                    roleId: '',
+                    terminal: 1
                 },
-                isLoading: false
+                isLoading: false,
+                roleList: []
             }
         },
         computed: {
             // 是否填写完整登录账号密码？
             valid() {
-                return this.formInline.mobile != '' && this.formInline.password != ''
+                return this.formInline.mobile != '' && this.formInline.password != '' && this.formInline.roleId != ''
             }
         },
         methods: {
@@ -54,7 +62,6 @@
                     this.isLoading = true;
                     this.$http.post(this.api.login, this.formInline).then(res => {
                         if (res.code === 1000) {
-                            console.log(res)
                             this.setUser({
                                 authorization: res.data.authorization,
                                 loginId: res.data.loginId
@@ -66,7 +73,7 @@
                         } else {
                             this.$Notice.error({
                                 title: '登录错误！',
-                                desc: '请输入正确的账号密码！'
+                                desc: res.message
                             })
                         }
                         this.isLoading = false;
@@ -77,11 +84,21 @@
                     this.$Message.error('请将账号密码填写完整！');
                 }
             },
-            keyHandle(eve){
-                if(eve.keyCode == 13){
+            keyHandle(eve) {
+                if (eve.keyCode == 13) {
                     this.login();
                 }
+            },
+            getRoleList() {
+                this.$http.post(this.api.findRoleList,{loginType:1}).then(res => {
+                    if (res.code === 1000) {
+                        this.roleList = res.data;
+                    }
+                })
             }
+        },
+        created() {
+            this.getRoleList();
         }
     }
 </script>
@@ -105,9 +122,9 @@
         margin: 180px auto;
         z-index: 100;
         background-color: #fff;
-        -webkit-box-shadow: 0px 15px 15px 0px rgba(24, 117, 240, .1); 
-        -moz-box-shadow: 0px 15px 15px 0px rgba(24, 117, 240, .1); 
-        box-shadow: 0px 15px 15px 0px rgba(24, 117, 240, .1); 
+        -webkit-box-shadow: 0px 15px 15px 0px rgba(24, 117, 240, .1);
+        -moz-box-shadow: 0px 15px 15px 0px rgba(24, 117, 240, .1);
+        box-shadow: 0px 15px 15px 0px rgba(24, 117, 240, .1);
         h1 {
             font-size: 26px;
             font-weight: 400;
@@ -125,6 +142,9 @@
         input:-webkit-autofill {
             box-shadow: 0 0 0 30px #fff inset;
             -webkit-text-fill-color: #555
+        }
+        .form-item-select{
+            margin-bottom: 22px;
         }
         .form-item {
             border: 1px solid #ddd;

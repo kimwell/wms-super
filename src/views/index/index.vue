@@ -6,7 +6,7 @@
           <div class="layout-logo-left">超管后台管理系统</div>
           <Submenu :name="index" v-for="(item,index) in menu" :key="index">
             <template slot="title">
-                <span class="iconfont menuicon" :class="item.icon"></span>{{ item.menuName }}
+                        <span class="iconfont menuicon" :class="item.icon"></span>{{ item.menuName }}
 </template>
             <MenuItem :name="index+'-'+i" v-for="(sub,i) in item.children" :key="i">{{ sub.menuName }}</MenuItem>
           </Submenu>
@@ -82,11 +82,11 @@
       // 跳转子页面
       openSubpage(name) {
         this.activeIndex = name;
-        if(this.activeMenu.router.name == 'nadd'){
+        if (this.activeMenu.router.name == "nadd") {
           this.activeMenu.router.params = {
             id: 0,
-            type: 'add'
-          }
+            type: "add"
+          };
         }
         this.$router.push(this.activeMenu.router);
       },
@@ -95,14 +95,14 @@
         this.menu.forEach((el, index) => {
           this.openArr.push(index);
           el.children.forEach((sub, i) => {
-            if (sub.children.length !== 0) {
+            if (sub.children.length != 0) {
               sub.children.forEach((ch, j) => {
-                if (this.$route.name == ch.url)
-                  this.activeIndex = `${index}-${i}`;
-              });
+                if (this.$route.fullPath === ch.url)
+                  this.activeIndex = `${index}-${i}`
+              })
             } else {
-              if (this.$route.name == sub.url)
-                this.activeIndex = `${index}-${i}`;
+              if (this.$route.name === sub.url)
+                this.activeIndex = `${index}-${i}`
             }
           });
         });
@@ -144,10 +144,11 @@
     },
     created() {
       this.getUserInfo();
-      this.setActiveMenu();
     },
     mounted() {
-      this.$refs.menu.updateActiveName();
+      this.$nextTick(function() {
+        this.$refs.menu.updateActiveName();
+      });
       this.resizeContent();
     },
     watch: {
@@ -156,11 +157,17 @@
         if (a.name === "/") {
           this.activeIndex = "";
         } else {
-          this.setActiveMenu();
+          this.$nextTick(function() {
+            this.$refs.menu.updateActiveName();
+          });
         }
       },
-      menu(){
-        this.setActiveMenu()
+      menu() {
+        this.setActiveMenu();
+        this.$nextTick(function() {
+          this.$refs.menu.updateActiveName();
+          this.$refs.menu.updateOpened();
+        });
       }
     }
   };

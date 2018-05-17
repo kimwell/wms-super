@@ -11,6 +11,9 @@
         <FormItem label="菜单名称：" prop="menuName">
           <Input v-model="itemApi.menuName" placeholder="请输入"></Input>
         </FormItem>
+        <FormItem label="菜单别名：">
+          <Input v-model="itemApi.alias" placeholder="请输入"></Input>
+        </FormItem>
         <FormItem label="菜单地址：">
           <Input v-model="itemApi.url" placeholder="请输入"></Input>
         </FormItem>
@@ -54,7 +57,8 @@
           orderNum: "",
           openType: 1,
           levels: "",
-          id: ""
+          id: "",
+          alias: ''
         },
         ruleValidate: {
           menuName: [{
@@ -86,7 +90,8 @@
             orderNum: "",
             openType: 1,
             levels: "",
-            id: ""
+            id: "",
+            alias: ''
           };
         } else if (o == 2) {
           // 编辑
@@ -100,7 +105,8 @@
             orderNum: m.orderNum,
             openType: m.openType,
             levels: m.levels,
-            id: m.id
+            id: m.id,
+            alias: m.alias
           };
         } else if (o == 3) {
           // 删除
@@ -157,7 +163,8 @@
           orderNum: "",
           openType: 1,
           levels: "",
-          id: ""
+          id: "",
+          alias: ''
         };
       }
     },

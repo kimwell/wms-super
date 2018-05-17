@@ -8,7 +8,7 @@ let commHost = ''
 export let exportExcel = ''
 if (process.env.NODE_ENV == 'development') {
   ws = 'ws://192.168.0.251/websocket';
-  commHost = 'http://192.168.0.251:90'
+  commHost = 'http://192.168.0.164:8080'
   exportExcel = 'http://192.168.0.164:8080/export.jsp'
 } else {
   ws = 'ws://' + host + '/websocket';
@@ -260,7 +260,7 @@ export const updateIronUnit = '/sys/ironAndUnit/updateIronAndUnit'
  *      notice:
  * }
  */
-export const addType = '/sys/ironTypes/saveIronTypes'
+export const addType = '/sys/ironType/saveIronType'
 
 /**
  * 更新品类信息
@@ -273,7 +273,7 @@ export const addType = '/sys/ironTypes/saveIronTypes'
  *      status:
  * }
  */
-export const updateType = '/sys/ironTypes/updateIronTypes'
+export const updateType = '/sys/ironType/modifyIronTypeSort'
 
 
 /**
@@ -285,7 +285,19 @@ export const updateType = '/sys/ironTypes/updateIronTypes'
  *      pageSize
  * }
  */
-export const getTypes = '/sys/ironTypes/findIronTypesPage'
+export const getTypes = '/sys/ironType/findIronTypeList'
+
+/**
+ * 删除品类信息
+ * path: /sys/ironTypes/findIronTypesPage
+ * method: POST
+ * params: {
+ *      currentPage
+ *      pageSize
+ * }
+ */
+export const deleteIronType = '/sys/ironType/deleteIronType'
+
 
 export const G_getTypes = '/api/query/findIronTypes'
 
@@ -312,7 +324,7 @@ export const addSurface = '/sys/surface/saveSurface'
  *      status:
  * }
  */
-export const updateSurFace = '/sys/surface/updateSurFace'
+export const updateSurFace = '/sys/surface/modifySurfaceSort'
 
 
 /**
@@ -324,7 +336,20 @@ export const updateSurFace = '/sys/surface/updateSurFace'
  *      pageSize
  * }
  */
-export const getSurFaces = '/sys/surface/findSurfacePage'
+export const getSurFaces = '/sys/surface/findSurfaceList'
+
+
+/**
+ * 查询表面信息
+ * path: /sys/surface/findSurfacePage
+ * method: POST
+ * params: {
+ *      id
+ * }
+ */
+export const deleteSurface = '/sys/surface/deleteSurface'
+
+
 
 export const G_getSurFaces = '/api/query/findSurFace'
 
@@ -351,7 +376,7 @@ export const addMaterials = '/sys/materials/saveMaterials'
  *      status:
  * }
  */
-export const updateMaterials = '/sys/materials/updateMaterials'
+export const updateMaterials = '/sys/material/modifyMaterialSort'
 
 
 /**
@@ -363,7 +388,21 @@ export const updateMaterials = '/sys/materials/updateMaterials'
  *      pageSize
  * }
  */
-export const getMaterials = '/sys/materials/findMaterialsPage'
+export const getMaterials = '/sys/material/findMaterialList'
+
+
+/**
+ * 删除材质信息
+ * path: /sys/materials//findMaterialsPage
+ * method: POST
+ * params: {
+ *      currentPage
+ *      pageSize
+ * }
+ */
+export const deleteMaterial = '/sys/material/deleteMaterial'
+
+
 
 // -----------------------------------产地---------------------------------
 /**
@@ -375,7 +414,7 @@ export const getMaterials = '/sys/materials/findMaterialsPage'
  *      notice:
  * }
  */
-export const addProPlaces = '/sys/proPlaces/saveProPlaces'
+export const addProPlaces = '/sys/proplace/saveProPlace'
 
 /**
  * 更新产地信息
@@ -388,7 +427,7 @@ export const addProPlaces = '/sys/proPlaces/saveProPlaces'
  *      status:
  * }
  */
-export const updateProPlaces = '/sys/proPlaces/updateProPlaces'
+export const updateProPlaces = '/sys/proplace/modifyProPlaceSort'
 
 
 /**
@@ -400,8 +439,18 @@ export const updateProPlaces = '/sys/proPlaces/updateProPlaces'
  *      pageSize
  * }
  */
-export const getProPlaces = '/sys/proPlaces/findProPlacesPage'
+export const getProPlaces = '/sys/proplace/findProPlaceList'
 
+/**
+ * 删除产地信息
+ * path: /sys/proplace/deleteProPlace
+ * method: POST
+ * params: {
+ *      id
+ *      
+ * }
+ */
+export const deleteProPlace = '/sys/proplace/deleteProPlace'
 
 // -----------------------------------仓库---------------------------------
 /**
@@ -712,3 +761,45 @@ export const bindMenuToRole = '/sys/auth/menu/bindMenuToRole'
  * 
  */
 export const findBindMenuList = '/sys/auth/menu/findBindList'
+
+/**
+ * 商户-远程查询接单吧商户
+ * 
+ */
+export const getRemoteBusinessInfo = '/sys/auth/business/getRemoteBusinessInfo'
+
+/**
+ * 保存SAAS商户信息
+ * 
+ */
+export const saveBusinessInfo = '/sys/auth/business/saveBusinessInfo'
+
+/**
+ * 分页查询SAAS商户信息
+ * 
+ */
+export const findBusinessList = '/sys/auth/business/findBusinessList'
+
+/**
+ * 分页查询SAAS商户信息
+ * 
+ */
+export const delBusiness = '/sys/auth/business/delBusiness'
+
+
+
+// -----------------------------------密度---------------------------------
+/**
+ * 查询材质密度
+ */
+export const findDensityList = '/sys/density/findDensityList'
+
+/**
+ * 保存材质密度
+ */
+export const saveDensity = '/sys/density/saveDensity'
+
+/**
+ * 删除材质密度
+ */
+export const deleteDensity = '/sys/density/deleteDensity'

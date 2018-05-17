@@ -62,6 +62,8 @@ export default {
       var recurFunc = data => {
         data.forEach(i => {
           i.title = i.menuName;
+          this.$set(i, "checked", false);
+          this.$set(i, "indeterminate", false);
           this.$set(i, "expand", true);
           if (i.children) {
             recurFunc(i.children);
@@ -105,8 +107,12 @@ export default {
           this.$set(i, "checked", false);
           this.$set(i, "indeterminate", false);
           this.roleMenu.forEach(j => {
-            if (i.id === j.id) {
-              this.$set(i, "checked", true);
+            if(i.id !== j.pid){
+              if (i.id === j.id) {
+                this.$set(i, "checked", true);
+              }
+            }else{
+                this.$set(i, "checked", false);
             }
           });
           if (i.children) {

@@ -64,6 +64,19 @@ const router = new Router({
         component: resolve => require(['@/views/news/nconfig/index'], resolve)
       }]
     }, {
+      path: 'staff',
+      name: 'staff',
+      component: resolve => require(['@/views/staff/index'], resolve),
+      children: [{
+        path: 'customer',
+        name: 'customer',
+        component: resolve => require(['@/views/staff/customer/index'], resolve),
+      },{
+        path: 'merchant',
+        name: 'merchant',
+        component: resolve => require(['@/views/staff/merchant/index'], resolve),
+      }]
+    },{
       path: 'system',
       name: 'system',
       component: resolve => require(['@/views/system/index'], resolve),
@@ -79,6 +92,18 @@ const router = new Router({
         path: 'appData',
         name: 'appData',
         component: resolve => require(['@/views/system/data/index'], resolve)
+      }, {
+        path: 'costManage',
+        name: 'costManage',
+        component: resolve => require(['@/views/system/cost/index'], resolve)
+      }, {
+        path: 'densityManage',
+        name: 'densityManage',
+        component: resolve => require(['@/views/system/density/index'], resolve)
+      }, {
+        path: 'formulaManage',
+        name: 'formulaManage',
+        component: resolve => require(['@/views/system/formula/index'], resolve)
       }]
     }, {
       path: 'authority',
@@ -104,6 +129,10 @@ const router = new Router({
         path: 'BindMenu',
         name: 'BindMenu',
         component: resolve => require(['@/views/authority/bindMenu/index'], resolve)
+      }, {
+        path: 'account',
+        name: 'account',
+        component: resolve => require(['@/views/authority/account/index'], resolve)
       }]
     }]
   }, {

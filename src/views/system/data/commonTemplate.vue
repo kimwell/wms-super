@@ -14,7 +14,7 @@
                     <Row v-for="(item,index) in list" :key="item.id">
                         <Col class-name="col" span="10">{{ item.name }}</Col>
                         <Col class-name="col" span="5">{{ item.sortIndex }}</Col>
-                        <Col class-name="col" span="5">{{ item.notice }}</Col>
+                        <Col class-name="col" span="5">{{ item.remark }}</Col>
                         <Col class-name="col" span="4">
                         <Button size="small" type="warning" @click="openModel(true,item)">编辑</Button>
                         <Button size="small" type="error" @click="deleteItem(item)">删除</Button>
@@ -31,13 +31,13 @@
         <Modal v-model="show" :title="isEdit?`编辑${title}数据`:`添加${title}数据`" :closable="false" :mask-closable="false">
             <Form :label-width="80" :ref="ref" :model="itemApi" :rules="rules">
                 <FormItem :label="`${title}名称`" prop="name">
-                    <Input type="text" v-model="itemApi.name" size="small" placeholder="请输入..."></Input>
+                    <Input type="text" :disabled="isEdit" v-model="itemApi.name" size="small" placeholder="请输入..."></Input>
                 </FormItem>
                 <FormItem :label="`${title}排序`">
                     <Input type="text" v-model="itemApi.sortIndex" size="small" placeholder="请输入..."></Input>
                 </FormItem>
-                <FormItem :label="`${title}备注`">
-                    <Input type="text" v-model="itemApi.notice" size="small" placeholder="请输入..."></Input>
+                <FormItem :label="`${title}备注`" v-if="!isEdit">
+                    <Input type="text" v-model="itemApi.remark" size="small" placeholder="请输入..."></Input>
                 </FormItem>
             </Form>
             <div slot="footer">
@@ -54,7 +54,8 @@
             title: String,
             getListApi: String,
             addApi: String,
-            updateApi: String
+            updateApi: String,
+            deleteApi: String
         },
         data() {
             return {
@@ -69,7 +70,7 @@
                 },
                 itemApi: {
                     name: '',
-                    notice: '',
+                    remark: '',
                     sortIndex: ''
                 },
                 rules: {
@@ -103,14 +104,15 @@
                 if (isEdit) {
                     this.editItem = item || {};
                     this.itemApi = {
+                        id: item.id,
                         name: item.name,
-                        notice: item.notice,
+                        remark: item.remark,
                         sortIndex: item.sortIndex
                     }
                 } else {
                     this.itemApi = {
                         name: '',
-                        notice: '',
+                        remark: '',
                         sortIndex: ''
                     }
                 }
@@ -123,10 +125,9 @@
                     content: '删除后无法撤销，是否继续？',
                     onOk: () => {
                         let params = {
-                            id: item.id,
-                            status: 0
+                            id: item.id
                         }
-                        this.$http.post(this.updateApi, params).then(res => {
+                        this.$http.post(this.deleteApi, params).then(res => {
                             if (res.code === 1000) {
                                 this.getList();
                                 this.$Message.success('删除成功！');
@@ -145,7 +146,8 @@
                         let params = JSON.parse(JSON.stringify(this.itemApi));
                         if (this.isEdit) {
                             params.id = this.editItem.id;
-                            params.status = this.editItem.status;
+                            delete params.name;
+                            delete params.remark
                         }
                         let apiUrl = this.isEdit ? this.updateApi : this.addApi
                         this.$http.post(apiUrl, params).then(res => {

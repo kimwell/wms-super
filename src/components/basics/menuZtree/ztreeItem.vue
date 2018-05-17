@@ -7,7 +7,7 @@
                     <span :class='model.iconClass' v-show='model.iconClass' v-else></span>
                 </a> -->
             <span class="node_name">
-                {{model.menuName}}
+                {{model.menuName}}<span v-show="model.alias !=''">({{model.alias}})</span>
             </span>
             <div class="tree-option">
                 <a @click="Func(model,$event,1)"><i class="iconfont icon-xinzeng"></i>新增</a>

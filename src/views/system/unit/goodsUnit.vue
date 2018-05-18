@@ -1,7 +1,7 @@
 <template>
     <div class="unit">
         <Card :bordered="false" class="card">
-            <p slot="title">现货求购单位管理</p>
+            <p slot="title">货品单位管理</p>
             <div class="card-contnet">
                 <div class="table-contnet">
                     <Row class-name="head">
@@ -29,7 +29,7 @@
         <Modal v-model="show" title="编辑品类绑定计量单位" :closable="false" :mask-closable="false">
             <Form :label-width="80" ref="ironUnit" :model="dataApi" :rules="rules">
                 <FormItem label="品类" prop="ironId">
-                    <Select v-model="dataApi.ironId" size="small" style="width:200px"><Option v-for="type in ironTypes" :key="type.id" :value="type.id">{{ type.name }}</Option></Select>
+                    <Select v-model="dataApi.ironName" size="small" style="width:200px"><Option v-for="type in ironTypes" :key="type" :value="type">{{ type }}</Option></Select>
                 </FormItem>
                 <FormItem label="数量单位">
                     <Select v-model="dataApi.numUnitId" size="small" style="width:200px"><Option v-for="type in numberUnits" :key="type.id" :value="type.id">{{ type.cName }}</Option></Select>
@@ -92,12 +92,12 @@
             }
         },
         watch: {
-            'dataApi.ironId': {
+            'dataApi.ironName': {
                 handler: function(nowVal, oldVal) {
                     let type = this.ironTypes.find(val => {
-                        return val.id == nowVal
+                        return val == nowVal
                     })
-                    this.dataApi.ironName = type.name;
+                    this.dataApi.ironName = type;
                 }
             },
             'dataApi.numUnitId': {
@@ -183,6 +183,9 @@
                     if (valid) {
                         this.loading = true;
                         let params = JSON.parse(JSON.stringify(this.dataApi));
+                        delete params.ironId;
+                        delete params.numUnitId;
+                        delete params.weightUnitId;
                         this.$http.post(this.api.updateIronUnit, params).then(res => {
                             if (res.code === 1000) {
                                 this.getIronUnit();

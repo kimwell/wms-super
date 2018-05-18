@@ -299,7 +299,7 @@ export const getTypes = '/sys/ironType/findIronTypeList'
 export const deleteIronType = '/sys/ironType/deleteIronType'
 
 
-export const G_getTypes = '/api/query/findIronTypes'
+export const G_getTypes = '/sys/ironType/findAllIronType'
 
 // -----------------------------------表面---------------------------------
 /**
@@ -787,6 +787,21 @@ export const findBusinessList = '/sys/auth/business/findBusinessList'
 export const delBusiness = '/sys/auth/business/delBusiness'
 
 
+/**
+ * 商户绑定用户
+ * 
+ */
+
+export const  bindAccount= '/sys/auth/business/bindAccount'
+
+
+/**
+ * 商户-根据商户编号查找帐号
+ * 
+ */
+
+export const  findCompanyUserList= '/sys/auth/business/findCompanyUserList'
+
 
 // -----------------------------------密度---------------------------------
 /**
@@ -803,3 +818,26 @@ export const saveDensity = '/sys/density/saveDensity'
  * 删除材质密度
  */
 export const deleteDensity = '/sys/density/deleteDensity'
+
+
+
+// -----------------------------------费用管理---------------------------------
+/**
+ * 查询费用
+ */
+export const findSaleCostList = '/sys/saleCost/findSaleCostList'
+
+/**
+ * 保存费用
+ */
+export const saveSaleCost = '/sys/saleCost/saveSaleCost'
+
+/**
+ * 更新费用
+ */
+export const updateSaleCost = '/sys/saleCost/updateSaleCost'
+
+/**
+ * 删除费用
+ */
+export const delSaleCost = '/sys/saleCost/delSaleCost'

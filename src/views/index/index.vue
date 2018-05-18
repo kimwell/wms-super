@@ -76,6 +76,9 @@
       },
       menu() {
         return this.$store.state.menuData;
+      },
+      user(){
+        return this.$store.state.user
       }
     },
     methods: {
@@ -119,6 +122,7 @@
         this.$http.post(this.api.getUser).then(res => {
           if (res.code === 1000) {
             this.$store.commit(types.MENU_DATA, JSON.parse(res.data.menuInfo));
+            // this.$store.commit(types.USER,res.data)
             // document.addEventListener("visibilitychange", () => {
             //   let isHidden = document.hidden;
             //   if (isHidden) {
@@ -140,6 +144,9 @@
       loginout(data) {
         this.$store.commit(types.LOGOUT, data);
         window.location.href = "/bg/login";
+      },
+      itemClick(data){
+        console.log(data)
       }
     },
     created() {

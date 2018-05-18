@@ -14,22 +14,23 @@
       <div class="card-contnet">
         <div class="table-contnet">
           <Row class-name="head">
-            <Col class-name="col" span="8">商户名称</Col>
+            <Col class-name="col" span="7">商户名称</Col>
             <Col class-name="col" span="3">联系人</Col>
             <Col class-name="col" span="3">联系电话</Col>
-            <Col class-name="col" span="3">qq</Col>
+            <Col class-name="col" span="3">QQ</Col>
             <Col class-name="col" span="3">传真</Col>
-            <Col class-name="col" span="4">操作</Col>
+            <Col class-name="col" span="5">操作</Col>
           </Row>
           <Row v-for="(item,index) in list" :key="item.id">
-            <Col class-name="col" span="8">{{ item.companyName }}</Col>
+            <Col class-name="col" span="7">{{ item.companyName }}</Col>
             <Col class-name="col" span="3">{{ item.contact }}</Col>
             <Col class-name="col" span="3">{{ item.contactNum}}</Col>
             <Col class-name="col" span="3">{{ item.qq}}</Col>
             <Col class-name="col" span="3">{{ item.fax}}</Col>
-            <Col class-name="col" span="4">
+            <Col class-name="col" span="5">
+            <Button size="small" type="warning" @click="bindAccount(item,false)">绑定账号</Button>
+            <Button size="small" type="warning" @click="bindItem(item)">查看绑定账号</Button>
             <Button size="small" type="warning" @click="openModel(true,item)">编辑</Button>
-            <Button size="small" type="warning" @click="bindItem(item)">绑定</Button>
             <Button size="small" type="error" @click="deleteItem(item)">删除</Button>
             </Col>
           </Row>
@@ -69,6 +70,63 @@
         <Button type="primary" :loading="loading" @click="modalHandle">{{ isEdit ? '编辑' : '添加' }}</Button>
       </div>
     </Modal>
+    <Modal v-model="bindRoleShow" width="1000" :closable="false" :mask-closable="false" title="已绑定账号">
+      <div class="card">
+      <div class="card-contnet">
+        <div class="table-contnet">
+          <Row class-name="head">
+            <Col class-name="col" span="4">昵称</Col>
+            <Col class-name="col" span="4">真实姓名</Col>
+            <Col class-name="col" span="4">账号</Col>
+            <Col class-name="col" span="8">角色</Col>
+            <Col class-name="col" span="4">操作</Col>
+          </Row>
+          <Row v-for="(item,index) in bindRoleList" :key="item.id">
+            <Col class-name="col" span="4">{{item.userName}}</Col>
+            <Col class-name="col" span="4">{{item.realName}}</Col>
+            <Col class-name="col" span="4">{{item.mobile}}</Col>
+            <Col class-name="col" span="8">
+              <Tag v-if="item.roleInfos.length != 0" color="blue" v-for="(sub,index) in item.roleInfos" :key="index">{{sub.roleName}}</Tag>
+            </Col>
+            <Col class-name="col" span="4">
+              <Button size="small" type="warning" @click="bindAccount(item,true)">编辑</Button>
+            </Col>
+          </Row>
+          <Row v-if="bindRoleList.length == 0">
+            <Col class-name="col" span="24">暂无数据</Col>
+          </Row>
+        </div>
+      </div>
+      </div>
+      <div slot="footer">
+        <Button @click="bindRoleShow = false">关闭</Button>
+      </div>
+    </Modal>
+    <Modal v-model="modalShow" :closable="false" :mask-closable="false" title="绑定账号">
+      <Form ref="userInfo" :model="accountData" :rules="addRule" :label-width="90">
+        <FormItem label="昵称" prop="userName">
+          <Input v-model="accountData.userName" placeholder="用户昵称"></Input>
+        </FormItem>
+        <FormItem label="真实姓名" prop="realName">
+          <Input v-model="accountData.realName" placeholder="用户真实姓名"></Input>
+        </FormItem>
+        <FormItem label="账号" prop="mobile">
+          <Input v-model="accountData.mobile" ref="mobile" placeholder="账号"></Input>
+        </FormItem>
+        <FormItem label="密码" prop="password">
+          <Input v-model="accountData.userPsd" type="password" :placeholder="roleEdit ? '如需修改密码，请在此输入新密码' : '用户密码'"></Input>
+        </FormItem>
+        <FormItem label="设置角色" prop="roleIds">
+          <Select v-model="accountData.roleIds" multiple placeholder="请选择">
+                     <Option v-for="role in roleList" :key="role.id" :value="role.id">{{ role.name }}</Option>
+                  </Select>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button @click="closeAccount">取消</Button>
+        <Button type="primary" :loading="loading" @click="accountHandle">添加</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -79,6 +137,7 @@
         ref: 'form' + new Date().getTime(),
         isEdit: false,
         panelShow: false,
+        bindRoleShow: false,
         itemApi: {
           companyName: '',
           qq: '',
@@ -117,7 +176,49 @@
         loading: false,
         companyList: [],
         list: [],
-        totalCount: 0
+        totalCount: 0,
+        accountData: {
+          mobile: '',
+          userName: '',
+          userPsd: '',
+          realName: '',
+          saasCompanyId: '',
+          mainCompanyId: '',
+          roleIds: []
+        },
+        modalShow: false,
+        addRule: {
+          userName: [{
+            required: true,
+            message: '昵称不能为空',
+            trigger: 'blur'
+          }],
+          realName: [{
+            required: true,
+            message: '真实姓名不能为空',
+            trigger: 'blur'
+          }],
+          mobile: [{
+            required: true,
+            message: '账号不能为空',
+            trigger: 'blur'
+          }],
+          password: [{
+            required: false,
+            message: '密码不能为空',
+            trigger: 'blur'
+          }],
+          roleIds: [{
+            required: true,
+            type: 'array',
+            min: 1,
+            message: '至少选择一个角色',
+            trigger: 'change'
+          }]
+        },
+        roleList: [],
+        bindRoleList: [],
+        roleEdit: false//是否为编辑模式
       };
     },
     watch: {
@@ -255,12 +356,85 @@
           }
         })
       },
-      bindItem() {
-  
+      //  查看已绑定的账号
+      bindItem(data) {
+        this.bindRoleShow = true;
+        this.$http.post(this.api.findCompanyUserList,{companyId: data.id}).then(res =>{
+          if(res.code === 1000){
+            this.bindRoleList = res.data;
+          }
+        })
+      },
+      resetAccount() {
+        this.accountData = {
+          mobile: '',
+          userName: '',
+          userPsd: '',
+          realName: '',
+          saasCompanyId: '',
+          mainCompanyId: '',
+          roleIds: []
+        }
+      },
+      bindAccount(data,roleEdit) {
+        this.roleEdit = roleEdit;
+        this.modalShow = true;
+        if(roleEdit){
+          data.roleInfos.forEach(el => {
+            this.accountData.roleIds.push(el.roleId)
+          })
+            this.accountData.mainCompanyId = data.mainCompanyId,
+            this.accountData.saasCompanyId =  data.saasCompanyId,
+            this.accountData.mobile = data.mobile,
+            this.accountData.userName = data.userName,
+            this.accountData.realName = data.realName
+        }else{
+          this.accountData.mainCompanyId = data.companyId;
+          this.accountData.saasCompanyId = data.id
+        }
+      },
+      //  绑定账号
+      accountHandle() {
+        this.$refs.userInfo.validate((valid) => {
+          if (valid) {
+            let params = JSON.stringify(this.accountData);
+            this.$http.post(this.api.bindAccount, {
+              jsonInfo: params
+            }).then(res => {
+              if (res.code === 1000) {
+                this.$Message.success('绑定成功')
+                this.modalShow = false;
+                  this.getList();
+                if(this.roleEdit)
+                  this.bindRoleShow = false
+                  this.resetAccount();
+                
+              } else {
+                this.$Message.error(res.message)
+              }
+            })
+          } else {
+            this.$Message.error('表单验证失败!');
+          }
+        })
+      },
+      closeAccount() {
+        this.modalShow = false;
+        this.resetAccount();
+      },
+      getRoleList() {
+        this.$http.post(this.api.findRoleList, {
+          loginType: 2
+        }).then(res => {
+          if (res.code === 1000) {
+            this.roleList = res.data;
+          }
+        })
       }
     },
     created() {
       this.getList();
+      this.getRoleList();
     }
   };
 </script>

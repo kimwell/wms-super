@@ -71,12 +71,35 @@ const router = new Router({
         path: 'customer',
         name: 'customer',
         component: resolve => require(['@/views/staff/customer/index'], resolve),
-      },{
+      }, {
         path: 'merchant',
         name: 'merchant',
         component: resolve => require(['@/views/staff/merchant/index'], resolve),
       }]
-    },{
+    }, {
+      path: 'stock',
+      name: 'stock',
+      component: resolve => require(['@/views/stock/index'], resolve),
+      children: [{
+        path: 'stockInto',
+        name: 'stockInto',
+        component: resolve => require(['@/views/stock/stockInto/index'], resolve),
+      }, {
+        path: 'goods',
+        name: 'goods',
+        component: resolve => require(['@/views/stock/goods/index'], resolve),
+        redirect: 'goods/goodsManage',
+        children: [{
+          path: 'goodsManage',
+          name: 'goodsManage',
+          component: resolve => require(['@/views/stock/goods/manage/index'], resolve),
+        }, {
+          path: 'skuManage',
+          name: 'skuManage',
+          component: resolve => require(['@/views/stock/goods/sku/index'], resolve),
+        }]
+      }]
+    }, {
       path: 'system',
       name: 'system',
       component: resolve => require(['@/views/system/index'], resolve),

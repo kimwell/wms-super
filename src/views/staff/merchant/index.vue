@@ -14,23 +14,24 @@
       <div class="card-contnet">
         <div class="table-contnet">
           <Row class-name="head">
-            <Col class-name="col" span="7">商户名称</Col>
+            <Col class-name="col" span="6">商户名称</Col>
             <Col class-name="col" span="3">联系人</Col>
             <Col class-name="col" span="3">联系电话</Col>
             <Col class-name="col" span="3">QQ</Col>
             <Col class-name="col" span="3">传真</Col>
-            <Col class-name="col" span="5">操作</Col>
+            <Col class-name="col" span="6">操作</Col>
           </Row>
           <Row v-for="(item,index) in list" :key="item.id">
-            <Col class-name="col" span="7">{{ item.companyName }}</Col>
+            <Col class-name="col" span="6">{{ item.companyName }}</Col>
             <Col class-name="col" span="3">{{ item.contact }}</Col>
             <Col class-name="col" span="3">{{ item.contactNum}}</Col>
             <Col class-name="col" span="3">{{ item.qq}}</Col>
             <Col class-name="col" span="3">{{ item.fax}}</Col>
-            <Col class-name="col" span="5">
+            <Col class-name="col" span="6">
             <Button size="small" type="warning" @click="bindAccount(item,false)">绑定账号</Button>
             <Button size="small" type="warning" @click="bindItem(item)">查看绑定账号</Button>
             <Button size="small" type="warning" @click="openModel(true,item)">编辑</Button>
+            <Button size="small" type="warning" @click="showBaseData(index)">分类数据</Button>
             <Button size="small" type="error" @click="deleteItem(item)">删除</Button>
             </Col>
           </Row>
@@ -72,31 +73,31 @@
     </Modal>
     <Modal v-model="bindRoleShow" width="1000" :closable="false" :mask-closable="false" title="已绑定账号">
       <div class="card">
-      <div class="card-contnet">
-        <div class="table-contnet">
-          <Row class-name="head">
-            <Col class-name="col" span="4">昵称</Col>
-            <Col class-name="col" span="4">真实姓名</Col>
-            <Col class-name="col" span="4">账号</Col>
-            <Col class-name="col" span="8">角色</Col>
-            <Col class-name="col" span="4">操作</Col>
-          </Row>
-          <Row v-for="(item,index) in bindRoleList" :key="item.id">
-            <Col class-name="col" span="4">{{item.userName}}</Col>
-            <Col class-name="col" span="4">{{item.realName}}</Col>
-            <Col class-name="col" span="4">{{item.mobile}}</Col>
-            <Col class-name="col" span="8">
+        <div class="card-contnet">
+          <div class="table-contnet">
+            <Row class-name="head">
+              <Col class-name="col" span="4">昵称</Col>
+              <Col class-name="col" span="4">真实姓名</Col>
+              <Col class-name="col" span="4">账号</Col>
+              <Col class-name="col" span="8">角色</Col>
+              <Col class-name="col" span="4">操作</Col>
+            </Row>
+            <Row v-for="(item,index) in bindRoleList" :key="item.id">
+              <Col class-name="col" span="4">{{item.userName}}</Col>
+              <Col class-name="col" span="4">{{item.realName}}</Col>
+              <Col class-name="col" span="4">{{item.mobile}}</Col>
+              <Col class-name="col" span="8">
               <Tag v-if="item.roleInfos.length != 0" color="blue" v-for="(sub,index) in item.roleInfos" :key="index">{{sub.roleName}}</Tag>
-            </Col>
-            <Col class-name="col" span="4">
+              </Col>
+              <Col class-name="col" span="4">
               <Button size="small" type="warning" @click="bindAccount(item,true)">编辑</Button>
-            </Col>
-          </Row>
-          <Row v-if="bindRoleList.length == 0">
-            <Col class-name="col" span="24">暂无数据</Col>
-          </Row>
+              </Col>
+            </Row>
+            <Row v-if="bindRoleList.length == 0">
+              <Col class-name="col" span="24">暂无数据</Col>
+            </Row>
+          </div>
         </div>
-      </div>
       </div>
       <div slot="footer">
         <Button @click="bindRoleShow = false">关闭</Button>
@@ -118,8 +119,8 @@
         </FormItem>
         <FormItem label="设置角色" prop="roleIds">
           <Select v-model="accountData.roleIds" multiple placeholder="请选择">
-                     <Option v-for="role in roleList" :key="role.id" :value="role.id">{{ role.name }}</Option>
-                  </Select>
+                       <Option v-for="role in roleList" :key="role.id" :value="role.id">{{ role.name }}</Option>
+                    </Select>
         </FormItem>
       </Form>
       <div slot="footer">
@@ -127,11 +128,18 @@
         <Button type="primary" :loading="loading" @click="accountHandle">添加</Button>
       </div>
     </Modal>
+    <Modal title="分类数据配置" width="900" v-model="showData" loading :mask-closable="false" @on-ok="saveData">
+        <baseData v-if="showData" :id="activeItem.id" ref="scope"></baseData>
+    </Modal>
   </div>
 </template>
 
 <script>
+  import baseData from './baseData'
   export default {
+    components: {
+      baseData
+    },
     data() {
       return {
         ref: 'form' + new Date().getTime(),
@@ -218,8 +226,15 @@
         },
         roleList: [],
         bindRoleList: [],
-        roleEdit: false//是否为编辑模式
+        roleEdit: false, //是否为编辑模式
+        activeIndex: 0,
+        showData: false
       };
+    },
+    computed: {
+      activeItem() {
+        return this.list.length != 0 ? this.list[this.activeIndex] : {}
+      }
     },
     watch: {
       'itemApi.companyName': function(val, oldval) {
@@ -231,6 +246,15 @@
       },
     },
     methods: {
+      showBaseData(index) {
+        this.activeIndex = index;
+        this.showData = true;
+      },
+      //  保存分类数据
+      saveData(){
+        this.$refs.scope.saveBaseData();
+        this.showData = false
+      },
       resetFilter() {
         this.listApi = {
           companyName: '',
@@ -359,8 +383,10 @@
       //  查看已绑定的账号
       bindItem(data) {
         this.bindRoleShow = true;
-        this.$http.post(this.api.findCompanyUserList,{companyId: data.id}).then(res =>{
-          if(res.code === 1000){
+        this.$http.post(this.api.findCompanyUserList, {
+          companyId: data.id
+        }).then(res => {
+          if (res.code === 1000) {
             this.bindRoleList = res.data;
           }
         })
@@ -376,19 +402,19 @@
           roleIds: []
         }
       },
-      bindAccount(data,roleEdit) {
+      bindAccount(data, roleEdit) {
         this.roleEdit = roleEdit;
         this.modalShow = true;
-        if(roleEdit){
+        if (roleEdit) {
           data.roleInfos.forEach(el => {
             this.accountData.roleIds.push(el.roleId)
           })
-            this.accountData.mainCompanyId = data.mainCompanyId,
-            this.accountData.saasCompanyId =  data.saasCompanyId,
+          this.accountData.mainCompanyId = data.mainCompanyId,
+            this.accountData.saasCompanyId = data.saasCompanyId,
             this.accountData.mobile = data.mobile,
             this.accountData.userName = data.userName,
             this.accountData.realName = data.realName
-        }else{
+        } else {
           this.accountData.mainCompanyId = data.companyId;
           this.accountData.saasCompanyId = data.id
         }
@@ -404,11 +430,11 @@
               if (res.code === 1000) {
                 this.$Message.success('绑定成功')
                 this.modalShow = false;
-                  this.getList();
-                if(this.roleEdit)
+                this.getList();
+                if (this.roleEdit)
                   this.bindRoleShow = false
-                  this.resetAccount();
-                
+                this.resetAccount();
+  
               } else {
                 this.$Message.error(res.message)
               }

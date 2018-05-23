@@ -1,8 +1,8 @@
 <template>
   <div>
     <Card :bordered="false" class="card">
-      <p slot="title">商户管理</p>
-      <Button slot="extra" type="primary" @click="openModel">新增商户</Button>
+      <p slot="title">密度管理</p>
+      <Button slot="extra" type="primary" @click="openModel(false)">新增密度</Button>
       <Form :mode="listApi" :label-width="80" inline>
         <FormItem label="材质：">
           <Input type="text" v-model="listApi.material" @on-change="onFilter" placeholder="请输入..."></Input>
@@ -14,14 +14,15 @@
       <div class="card-contnet">
         <div class="table-contnet">
           <Row class-name="head">
-            <Col class-name="col" span="10">材质</Col>
-            <Col class-name="col" span="10">密度</Col>
+            <Col class-name="col" span="10">材质名称</Col>
+            <Col class-name="col" span="10">材质密度(g/cm³)</Col>
             <Col class-name="col" span="4">操作</Col>
           </Row>
           <Row v-for="(item,index) in list" :key="item.id">
             <Col class-name="col" span="10">{{ item.material }}</Col>
             <Col class-name="col" span="10">{{ item.density}}</Col>
             <Col class-name="col" span="4">
+            <Button size="small" type="warning" @click="openModel(true,item)">编辑</Button>
             <Button size="small" type="error" @click="deleteItem(item)">删除</Button>
             </Col>
           </Row>
@@ -32,8 +33,7 @@
         <Page class="page-count" size="small" :total="totalCount" show-total :current="listApi.currentPage" :page-size="listApi.pageSize" @on-change="changePage"></Page>
       </div>
     </Card>
-    <Modal v-model="panelShow" :closable="false" :mask-closable="false" title="新增材质密度">
-      <!-- <Form :label-width="110" ref="menuEdit" :model="itemApi" :rules="ruleValidate"> -->
+    <Modal v-model="panelShow" :closable="false" :mask-closable="false" :title="isEdit ? '编辑密度':'新增密度'">
       <Form :label-width="110" :ref="ref" :model="dataApi" :rules="rules">
         <FormItem label="材质：" prop="material">
           <Input v-model="dataApi.material" placeholder="请输入"></Input>
@@ -44,7 +44,7 @@
       </Form>
       <div slot="footer">
         <Button @click="close">取消</Button>
-        <Button type="primary" :loading="loading" @click="modalHandle">添加</Button>
+        <Button type="primary" :loading="loading" @click="modalHandle">{{isEdit ? '编辑':'保存'}}</Button>
       </div>
     </Modal>
   </div>
@@ -79,7 +79,8 @@
             message: '密度不能为空',
             trigger: 'blur'
           }]
-        }
+        },
+        isEdit: false
       }
     },
     methods: {
@@ -111,7 +112,19 @@
           pageSize: 10
         }
       },
-      openModel() {
+      openModel(isEdit, item) {
+        this.isEdit = isEdit;
+        if (isEdit) {
+          this.dataApi = {
+            material: item.material,
+            density: item.density.toString()
+          }
+        } else {
+          this.dataApi = {
+            material: '',
+            density: ''
+          }
+        }
         this.panelShow = true;
       },
       //  新增
@@ -120,7 +133,8 @@
           if (valid) {
             this.loading = true;
             let params = JSON.parse(JSON.stringify(this.dataApi));
-            this.$http.post(this.api.saveDensity, params).then(res => {
+            let urls = this.isEdit ? this.api.updateDensity : this.api.saveDensity
+            this.$http.post(urls, params).then(res => {
               if (res.code === 1000) {
                 this.getList();
                 this.$Message.success('操作成功！');

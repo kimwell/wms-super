@@ -278,7 +278,6 @@ export const updateType = '/sys/ironType/modifyIronTypeSort'
 
 /**
  * 查询品类信息
- * path: /sys/ironTypes/findIronTypesPage
  * method: POST
  * params: {
  *      currentPage
@@ -289,7 +288,6 @@ export const getTypes = '/sys/ironType/findIronTypeList'
 
 /**
  * 删除品类信息
- * path: /sys/ironTypes/findIronTypesPage
  * method: POST
  * params: {
  *      currentPage
@@ -451,6 +449,28 @@ export const getProPlaces = '/sys/proplace/findProPlaceList'
  * }
  */
 export const deleteProPlace = '/sys/proplace/deleteProPlace'
+
+
+
+/**
+ * 查询所有品类
+ */
+export const findAllIronType = '/sys/ironType/findAllIronType'
+
+/**
+* 查询所有表面
+*/
+export const findAllSurface = '/sys/surface/findAllSurface'
+
+/**
+* 查询所有材质
+*/
+export const findAllMaterial = '/sys/material/findAllMaterial'
+
+/**
+* 查询所有产地
+*/
+export const findAllProPlace = '/sys/proplace/findAllProPlace'
 
 // -----------------------------------仓库---------------------------------
 /**
@@ -819,6 +839,10 @@ export const saveDensity = '/sys/density/saveDensity'
  */
 export const deleteDensity = '/sys/density/deleteDensity'
 
+/**
+ * 编辑材质密度
+ */
+export const updateDensity = '/sys/density/updateDensity'
 
 
 // -----------------------------------费用管理---------------------------------
@@ -841,3 +865,84 @@ export const updateSaleCost = '/sys/saleCost/updateSaleCost'
  * 删除费用
  */
 export const delSaleCost = '/sys/saleCost/delSaleCost'
+
+
+// -----------------------------------商户基础信息---------------------------------
+/**
+ * 超管查询商户基础信息
+ */
+export const findDataList= '/sys/ironType/findList'
+
+
+/**
+ * 超管保存商户基础信息
+ */
+export const saveBaseData= '/sys/ironType/save'
+
+
+// -----------------------------------商户基础信息---------------------------------
+/**
+ * 修改计算公式
+ */
+export const updateFormula= '/sys/formula/update'
+
+
+/**
+ * 查询计算公式
+ */
+export const findFormula= '/sys/formula/list'
+
+
+// -----------------------------------客户管理---------------------------------
+
+
+/**
+ * 户分页查询
+ */
+export const findCustomer= '/sys/customer/page'
+
+
+/**
+ * 保存客户
+ */
+export const saveCustomer= '/sys/customer/save'
+
+
+/**
+ * 删除客户
+ */
+export const deleteCustomer= '/sys/customer/delete'
+
+/**
+ * 汉字转拼音首字母
+ */
+export const characterToSpell= '/api/spell/characterToSpell'
+
+
+// -----------------------------------入库单管理---------------------------------
+
+
+/**
+ * 入库单列表查询
+ */
+export const findStorageInList= '/sys/storageIn/findStorageInList'
+
+
+/**
+ * 入库单列表查询
+ */
+export const storageIn= '/sys/storageIn/storageIn'
+
+// -----------------------------------货品管理---------------------------------
+
+
+/**
+ * 分页查询货品
+ */
+export const findCargoInfoList= '/common/cargoInfo/page'
+
+
+/**
+ * 入库单列表查询
+ */
+// export const storageIn= '/sys/storageIn/storageIn'

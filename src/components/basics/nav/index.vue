@@ -59,7 +59,7 @@
         a {
             position: relative;
             display: inline-block;
-            padding: 0 15px;
+            padding: 0 20px;
             line-height: 60px;
             color: #333;
             font-size: 14px;

@@ -3,6 +3,17 @@
     <Card :bordered="false" class="card">
       <p slot="title">费用管理</p>
       <Button slot="extra" type="primary" @click="openPanel(false)">新增费用</Button>
+      <Form :mode="dataApi" :label-width="80" inline>
+        <FormItem label="费用名称">
+          <Input type="text" v-model="dataApi.costName" placeholder="请输入..."></Input>
+        </FormItem>
+        <FormItem label="商家名称">
+          <Input type="text" v-model="dataApi.companyName" placeholder="请输入..."></Input>
+        </FormItem>
+        <FormItem>
+          <Button type="warning" @click.native="resetFilter">清除</Button>
+        </FormItem>
+      </Form>
       <div class="card-contnet">
         <div class="table-contnet">
           <Row class-name="head">
@@ -34,40 +45,33 @@
       </div>
     </Card>
     <Modal v-model="panelShow" :title="isEdit?`编辑费用`:`添加费用`" :closable="false" :mask-closable="false">
-        <Form :label-width="80" :ref="ref" :model="itemApi" :rules="rules">
-            <FormItem label="费用名称" prop="costName">
-                <Input type="text" v-model="itemApi.costName" placeholder="请输入..."></Input>
-            </FormItem>
-            <FormItem label="单价" prop="number">
-                <Input type="text" v-model="itemApi.number" placeholder="请输入..."></Input>
-            </FormItem>
-            <FormItem label="计算税率" prop="tax">
-                <Input type="text" v-model="itemApi.tax" placeholder="请输入..."></Input>
-            </FormItem>
-            <FormItem label="所属公司">
-              <Select
-                v-model="companyData.companyName"
-                filterable
-                remote
-                :remote-method="remoteMethod"
-                :loading="queryLoading" @on-change="changeCompany">
+      <Form :label-width="80" :ref="ref" :model="itemApi" :rules="rules">
+        <FormItem label="费用名称" prop="costName">
+          <Input type="text" v-model="itemApi.costName" placeholder="请输入..."></Input>
+        </FormItem>
+        <FormItem label="单价" prop="number">
+          <Input type="text" v-model="itemApi.number" placeholder="请输入..."></Input>
+        </FormItem>
+        <FormItem label="计算税率" prop="tax">
+          <Input type="text" v-model="itemApi.tax" placeholder="请输入..."></Input>
+        </FormItem>
+        <FormItem label="所属公司" prop="companyName">
+          <Select v-if="!isEdit" v-model="itemApi.companyName" filterable remote :remote-method="remoteMethod" :loading="queryLoading">
                 <Option v-for="(option, index) in companyList" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-            </Select>
-            <!-- <Select v-model="companyData.companyName" filterable remote :remote-method="remoteMethod" :loading="queryLoading">
-              <Option v-for="(option, index) in companyData" :value="`${option.companyName}-${option.companyId}`" :key="index">{{option.companyName}}</Option>
-            </Select> -->
-            </FormItem>
-            <FormItem label="排序">
-                <Input type="text" v-model="itemApi.sortIndex" placeholder="请输入..."></Input>
-            </FormItem>
-            <FormItem label="备注">
-                <Input type="text" v-model="itemApi.remark" placeholder="请输入..."></Input>
-            </FormItem>
-        </Form>
-        <div slot="footer">
-            <Button @click="panelShow = false">取消</Button>
-            <Button type="primary" @click="handleSubmit" :loading="loading">{{ isEdit ? '编辑' : '添加' }}</Button>
-        </div>
+              </Select>
+          <span v-else>{{itemApi.companyName}}</span>
+        </FormItem>
+        <FormItem label="排序" prop="sortIndex">
+          <Input type="text" v-model="itemApi.sortIndex" placeholder="请输入..."></Input>
+        </FormItem>
+        <FormItem label="备注">
+          <Input type="text" v-model="itemApi.remark" placeholder="请输入..."></Input>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button @click="panelShow = false">取消</Button>
+        <Button type="primary" @click="handleSubmit" :loading="loading">{{ isEdit ? '编辑' : '添加' }}</Button>
+      </div>
     </Modal>
   </div>
 </template>
@@ -97,39 +101,83 @@
           number: "",
           sortIndex: "",
           tax: "",
-          remark: ""
+          remark: "",
+          companyName: ''
         },
         rules: {
-            costName: [{
-                required: true,
-                message: '名称不能为空',
-                trigger: 'blur'
-            }],
-            number: [{
-                required: true,
-                message: '名称不能为空',
-                trigger: 'blur'
-            }],
-            tax: [{
-                required: true,
-                message: '名称不能为空',
-                trigger: 'blur'
-            }]
+          companyName: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'change'
+          }],
+          costName: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'blur'
+          }],
+          number: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'blur'
+          }],
+          tax: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'blur'
+          }],
+          sortIndex:[{
+            required: true,
+            message: '不能为空',
+            trigger: 'blur'
+          }]
         },
         companyList: [],
-        companyData:{
+        companyData: {
           companyName: '',
           contact: '',
           contactNum: '',
           fax: '',
           qq: '',
           currentPage: 1,
-          pageSize: 10
+          pageSize: 20
         },
         editItem: []
       };
     },
+    computed: {
+      handleFilter() {
+        return {
+          costName: this.dataApi.costName,
+          companyName: this.dataApi.companyName,
+          buserId: '',
+          pageSize: this.dataApi.pageSize,
+          currentPage: this.dataApi.currentPage
+        }
+      }
+    },
+    watch: {
+      'handleFilter': {
+        handler: _.debounce(function(val, oldVal) {
+          // 是否是翻页操作
+          if (val.currentPage == oldVal.currentPage)
+            this.dataApi.currentPage = 1;
+          this.getList();
+        }, 200),
+        deep: true
+      }
+    },
     methods: {
+      //  清除筛选
+      resetFilter() {
+        this.dataApi = {
+          pageSize: 10,
+          currentPage: 1,
+          costName: "",
+          companyName: "",
+          buserId: ""
+        }
+        this.getList();
+      },
       getList() {
         this.$http.post(this.api.findSaleCostList, this.dataApi).then(res => {
           if (res.code === 1000) {
@@ -138,7 +186,10 @@
           }
         });
       },
-      changePage(page) {},
+      changePage(page) {
+        this.dataApi.currentPage = page;
+        this.getList();
+      },
       openPanel(isEdit, item) {
         this.isEdit = isEdit;
         this.panelShow = true;
@@ -148,13 +199,12 @@
             id: item.id,
             buserId: item.buserId,
             costName: item.costName,
-            number: item.number,
-            sortIndex: item.sortIndex,
-            tax: item.tax,
-            remark: item.remark
+            number: item.number.toString(),
+            sortIndex: item.sortIndex.toString(),
+            tax: item.tax.toString(),
+            remark: item.remark,
+            companyName: item.companyName
           };
-          this.companyData.companyName = `${item.companyName}-${item.buserId}`
-          this.remoteMethod();
         } else {
           this.itemApi = {
             id: "",
@@ -163,42 +213,52 @@
             number: "",
             sortIndex: "",
             tax: "",
-            remark: ""
+            remark: "",
+            companyName: ''
           };
           this.companyData.companyName = '';
         }
       },
       //  查找商户
-      remoteMethod(query){
-        if(query != ''){
+      remoteMethod(query) {
+        if (query != '') {
           this.queryLoading = true;
-          this.$http.post(this.api.findBusinessList,this.companyData).then(res =>{
-            if(res.code === 1000){
+          this.$http.post(this.api.findBusinessList, {
+            companyName: query,
+            contact: '',
+            contactNum: '',
+            currentPage: 1,
+            pageSize: 20,
+            fax: '',
+            qq: ''
+          }).then(res => {
+            if (res.code === 1000) {
               this.queryLoading = false;
               this.companyList = res.data.list
             }
           })
-        }else{
-          this.companyData.companyName = '';
+        } else {
           this.companyList = [];
         }
       },
-      changeCompany(data){
-        let id = data.split('-');
-        this.itemApi.buserId = id[1];
-      },
-      handleSubmit(){
+      handleSubmit() {
         this.$refs[this.ref].validate((valid) => {
           if (valid) {
             this.loading = true;
             let params = JSON.parse(JSON.stringify(this.itemApi))
-            let urls = this.isEdit ? this.api.updateSaleCost:this.api.saveSaleCost
-            this.$http.post(urls,params).then(res =>{
-              if(res.code === 1000){
-                this.$Message.success(this.isEdit ? '编辑成功':'添加成功')
+            let splits = params.companyName.split('-')
+            params.buserId = splits[1];
+            delete params.companyName;
+            if (this.isEdit) {
+              params.buserId = this.editItem.buserId
+            }
+            let urls = this.isEdit ? this.api.updateSaleCost : this.api.saveSaleCost
+            this.$http.post(urls, params).then(res => {
+              if (res.code === 1000) {
+                this.$Message.success(this.isEdit ? '编辑成功' : '添加成功')
                 this.getList();
                 this.panelShow = false;
-              }else{
+              } else {
                 this.$Message.error(res.message)
               }
             })

@@ -942,7 +942,50 @@ export const storageIn= '/sys/storageIn/storageIn'
 export const findCargoInfoList= '/common/cargoInfo/page'
 
 
+// -----------------------------------仓库管理---------------------------------
+
 /**
- * 入库单列表查询
+ * 分页仓库管理
  */
-// export const storageIn= '/sys/storageIn/storageIn'
+export const findWareHouse= '/sys/wareHouse/page'
+
+
+/**
+ * 仓库删除
+ */
+export const deleteWareHouse= '/sys/wareHouse/delete'
+
+
+
+/**
+ * 仓库保存
+ */
+export const saveWareHouse= '/sys/wareHouse/save'
+
+/**
+ * 查询平台库管人员
+ */
+export const findSysKG= '/common/role/findSysKG'
+
+
+// -----------------------------------加工单---------------------------------
+/**
+ * 加工单分页查询
+ */
+export const findProcessTicketList= '/sys/processTicket/findProcessTicketList'
+
+
+/**
+ * 查询仓库
+ */
+export const findAWareHouse= '/common/wareHouse/list'
+
+/**
+ * 加工单详情查询
+ */
+export const findProcess= '/sys/processTicket/findProcess'
+
+/**
+ * 加工单加工
+ */
+export const saveProcess= '/sys/processTicket/process'

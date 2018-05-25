@@ -307,6 +307,8 @@
                 this.userInfoShow = false;
               } else if (res.code === 1001) {
                 this.$Message.error('账号已存在，请修改账号！');
+              }else{
+                this.$Message.error(res.message);
               }
             })
           } else {

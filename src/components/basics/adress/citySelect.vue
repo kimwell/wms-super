@@ -13,30 +13,49 @@
         data() {
             return {
                 arr: []
-            }
+            };
         },
         methods: {
             findProvince() {
                 this.$http.post(this.api.findProvince).then(res => {
                     if (res.code === 1000) {
-                        this.pipData(res.data, this.arr, true)
+                        this.pipData(res.data, this.arr, true);
                     }
-                })
+                });
             },
             findCity(id, item, callback) {
-                this.$http.post(this.api.findCity, {
-                    id: id
-                }).then(res => {
-                    if (res.code === 1000) {
-                        this.pipData(res.data, item);
-                        item.loading = false;
-                        callback();
-                    }
-                })
+                this.$http
+                    .post(this.api.findCity, {
+                        id: id
+                    })
+                    .then(res => {
+                        if (res.code === 1000) {
+                            this.pipData(res.data, item);
+                            item.loading = false;
+                            callback();
+                        }
+                    });
+            },
+            findDistrict(id, item, callback) {
+                this.$http
+                    .post(this.api.findDistrict, {
+                        id: id
+                    })
+                    .then(res => {
+                        if (res.code === 1000) {
+                            this.pipData(res.data, item);
+                            item.loading = false;
+                            callback();
+                        }
+                    });
             },
             loadData(item, callback) {
                 item.loading = true;
-                this.findCity(item.value, item, callback);
+                if (item.pid == '100000') {
+                    this.findCity(item.value, item, callback);
+                } else {
+                    this.findDistrict(item.value, item, callback);
+                }
             },
             pipData(arr, target, isArr = false) {
                 arr.forEach(el => {
@@ -45,24 +64,35 @@
                             value: el.id,
                             label: el.shortName,
                             children: [],
-                            loading: false
-                        })
+                            loading: false,
+                            pid: el.parentId
+                        });
                     } else {
-                        target.children.push({
-                            value: el.id,
-                            label: el.shortName
-                        })
+                        if (target.pid == '100000') {
+                            target.children.push({
+                                value: el.id,
+                                label: el.shortName,
+                                children: [],
+                                loading: false,
+                            });
+                        } else {
+                            target.children.push({
+                                value: el.id,
+                                label: el.shortName
+                            });
+                        }
                     }
-    
                 });
             },
             exportData(value, selectedData) {
-                this.$emit('on-pick', {
+                this.$emit("on-pick", {
                     provinceId: selectedData[0].value,
                     provinceName: selectedData[0].label,
                     cityId: selectedData[1].value,
-                    cityName: selectedData[1].label
-                })
+                    cityName: selectedData[1].label,
+                    districtId: selectedData[2].value,
+                    districtName: selectedData[2].label
+                });
             },
             //  清除数据
             clearData() {
@@ -74,14 +104,14 @@
                     this.$refs.cs.currentValue = [];
                     this.$refs.cs.selected = [];
                     this.$refs.cs.tmpSelected = [];
-                    this.$refs.cs.validDataStr = '';
+                    this.$refs.cs.validDataStr = "";
                     this.findProvince();
-                })
+                });
             }
         },
         created() {
             this.init();
         }
-    }
+    };
 </script>
 

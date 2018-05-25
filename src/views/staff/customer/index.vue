@@ -431,7 +431,7 @@
         return this.list.length != 0 ? this.list[this.activeIndex] : {}
       },
       placeHolder() {
-        return this.dataApi.province != '' ? this.dataApi.province + ' / ' + this.dataApi.city : '请选择地区'
+        return this.dataApi.province != '' ? `${this.dataApi.province}/${this.dataApi.city}/${this.dataApi.area}` : '请选择地区'
       },
     },
     watch: {
@@ -496,6 +496,7 @@
       selectCity(data) {
         this.dataApi.province = data.provinceName;
         this.dataApi.city = data.cityName;
+        this.dataApi.area = data.districtName
       },
       getList() {
         this.$http.post(this.api.findCustomer, this.pageApi).then(res => {

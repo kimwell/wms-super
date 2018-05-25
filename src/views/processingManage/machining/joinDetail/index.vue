@@ -1,7 +1,67 @@
 <template>
   <div>
     <Card :bordered="false" class="card">
-      <p slot="title">货品管理</p>
+      <p slot="title">加工单详情<span class="status-header">状态：{{item.status | toStatus}}</span><span class="status-header">加工单号:{{item.id}}</span></p>
+      <div slot="extra">
+        <Button size="small" type="warning" @click="goBack">返回</Button>
+      </div>
+      <div class="detail-wrapper">
+        <Row class="row-list">
+          <Col span="6">公司名称：{{item.customerName}}</Col>
+          <Col span="6">加工公司名称：{{item.processName}}</Col>
+          <Col span="6">加工公司联系人：{{item.contactName}}</Col>
+          <Col span="6">加工公司联系方式：{{item.contactNum}}</Col>
+        </Row>
+        <Row class="row-list">
+          <Col span="6">制单人：{{item.ticketMan}}</Col>
+          <Col span="6">审核人：{{item.checkMan}}</Col>
+          <Col span="6">提货人：{{item.carMan}}</Col>
+          <Col span="6">提货车号：{{item.carId}}</Col>
+        </Row>
+      </div>
+    </Card>
+    <Card :bordered="false" class="card">
+      <p slot="title">加工货物</p>
+      <div class="detail-wrapper">
+        <Row class="row-list">
+          <Col span="6">货物名称：{{item.cargoName}}</Col>
+          <Col span="6">剩余重量：{{item.remainWeight}}</Col>
+          <Col span="6">原重量：{{item.processWeight}}</Col>
+          <Col span="6">卷号：{{item.coiledSheetNum}}</Col>
+        </Row>
+        <Row class="row-list">
+          <Col span="6">规格：{{item.specification !=''? item.specification: `${item.height}*${item.width}*${item.length}`}}</Col>
+          <Col span="6">公差：{{item.tolerance}}</Col>
+          <Col span="6">产地：{{item.proPlaceName}}</Col>
+          <Col span="6">表面：{{item.surfaceName}}</Col>
+        </Row>
+        <Row class="row-list">
+          <Col span="6">仓库：{{item.storeHouseName}}</Col>
+          <Col span="6">加工费用：{{item.cost}}</Col>
+          <Col span="6">交货日期：{{item.delivery | dateformat('yyyy-MM-dd')}}</Col>
+          <Col span="6">备注：{{item.remark}}</Col>
+        </Row>
+      </div>
+    </Card>
+    <Card :bordered="false" class="card">
+      <p slot="title">加工单货物明细</p>
+      <div slot="extra">
+        <Button size="small" type="warning" @click="selectGoods">选择库存货物</Button>
+      </div>
+      <div class="detail-wrapper">
+        <div class="extra-form">
+          <Form :mode="dataApi" :label-width="100" inline>
+            <FormItem label="收卷值：">
+              <Input type="text" v-model="dataApi.coildSheetWeight" placeholder="请输入..."></Input>
+            </FormItem>
+            <FormItem label="收卷备注：">
+              <Input type="text" v-model="dataApi.remark" placeholder="请输入..."></Input>
+            </FormItem>
+          </Form>
+        </div>
+      </div>
+    </Card>
+    <Modal title="选择库存货物" width="1000" v-model="show" :mask-closable="false">
       <Form :mode="pageApi" :label-width="85" inline>
         <FormItem label="供应商名称：">
           <Input type="text" v-model="pageApi.ownerName" placeholder="请输入..."></Input>
@@ -14,28 +74,28 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.cargoStatus" style="width: 130px;">
-              <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-            </Select>
+                                    <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+                                  </Select>
         </FormItem>
         <FormItem label="品类：">
           <Select v-model="pageApi.category" style="width: 130px;">
-              <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                                    <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
+                                  </Select>
         </FormItem>
         <FormItem label="表面：">
           <Select v-model="pageApi.surface" style="width: 130px;">
-              <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                                    <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
+                                  </Select>
         </FormItem>
         <FormItem label="材质：">
           <Select v-model="pageApi.material" style="width: 130px;">
-              <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                                    <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
+                                  </Select>
         </FormItem>
         <FormItem label="产地：">
           <Select v-model="pageApi.proPlacesName" style="width: 130px;">
-              <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                                    <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
+                                  </Select>
         </FormItem>
         <FormItem label="厚度：">
           <Input type="text" v-model="pageApi.heightBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
@@ -61,62 +121,13 @@
       </Form>
       <div class="card-contnet">
         <div class="table-contnet">
-          <Table width="100%" :columns="columns" :data="list"></Table>
+          <Table width="100%" :columns="columns" :data="list" @on-selection-change="onSelected"></Table>
         </div>
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
-    </Card>
-    <Modal v-model="show" :closable="false" width="900" :mask-closable="false" title="货品详情">
-      <Row class="row-list">
-        <Col span="8">供应商名称：{{editItem.ownerName}}</Col>
-        <Col span="8">货品名称：{{editItem.cargoName}}</Col>
-        <Col span="8">型号：{{editItem.model}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">品类：{{editItem.category}}</Col>
-        <Col span="8">表面：{{editItem.surface}}</Col>
-        <Col span="8">材质：{{editItem.material}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">规格：{{editItem.specifications !='' ? editItem.specifications : `${editItem.height}*${editItem.width}*${editItem.length}`}}</Col>
-        <Col span="8">公差：{{editItem.tolerance}}</Col>
-        <Col span="8">产地：{{editItem.proPlacesName}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">密度：{{editItem.density}}</Col>
-        <Col span="8">理算方法：{{editItem.formula}}</Col>
-        <Col span="8">单价重量：{{editItem.singleWeight}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">卷号：{{editItem.coiledSheetNum}}</Col>
-        <Col span="8">状态：{{editItem.cargoStatus}}</Col>
-        <Col span="8">在库重量：{{editItem.warehouseWeights}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">在途重量：{{editItem.preInWareHouseWeight}}</Col>
-        <Col span="8">当前卷重：{{editItem.currentCoiledSheetWeights}}</Col>
-        <Col span="8">原卷重：{{editItem.totalCoiledSheetWeights}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">仓库重量控制值：{{editItem.weightSwitchVal}}</Col>
-        <Col span="8">成本价格：{{editItem.costPrice}}</Col>
-        <Col span="8">销售价格：{{editItem.salePrice}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">货品库存数量：{{editItem.warehouseNumber}}</Col>
-        <Col span="8">内部编号：{{editItem.internalNumber}}</Col>
-        <Col span="8">备注：{{editItem.remark | isEmpty('暂无')}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">产品编号：{{editItem.productNumber}}</Col>
-        <Col span="8">产品图片：
-        <div class="pic-lists" v-for="item in productImg" :key="item">
-          <img :src="item">
-        </div>
-        </Col>
-      </Row>
       <div slot="footer">
-        <Button @click="show = false">关闭</Button>
+        <Button @click="cancelModal">取消</Button>
+        <Button type="primary" @click="saveData">添加</Button>
       </div>
     </Modal>
   </div>
@@ -126,6 +137,13 @@
   export default {
     data() {
       return {
+        item: {},
+        dataApi: {
+          coildSheetWeight: '',
+          processId: '',
+          remark: '',
+          goods: []
+        },
         pageApi: {
           currentPage: 1,
           pageSize: 10,
@@ -153,13 +171,33 @@
           ownerId: ''
         },
         columns: [{
-          title: '供应商名称',
-          key: 'ownerName',
+          type: 'selection',
+          width: 60,
+          align: 'center'
+        }, {
+          title: '产品编号',
+          key: 'productNumber',
           width: 200,
+        }, {
+          title: '仓库',
+          key: 'wareHouseCargoSet',
+          width: 150,
+          render: (h, params) => {
+            let str = params.row.wareHouseCargoSet[0].wareHouseName
+            return h('div', str);
+          }
         }, {
           title: '货品名称',
           key: 'cargoName',
           width: 150,
+        }, {
+          title: '日期',
+          key: 'createTime',
+          width: 135,
+          render: (h, params) => {
+            let str = this.toTime(params.row.createTime);
+            return h('div', str);
+          }
         }, {
           title: '型号',
           key: 'model',
@@ -230,41 +268,21 @@
           title: '备注',
           key: 'remark',
           width: 100,
-        }, {
-          title: '操作',
-          key: 'action',
-          width: 100,
-          fixed: 'right',
-          render: (h, params) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'warning',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.openModel(params.row)
-                  }
-                }
-              }, '详情')
-            ]);
-          }
         }],
         list: [],
         totalCount: 0,
         show: false,
-        editItem: {},
         ironTypeList: [],
         surfaceList: [],
         materialList: [],
         proPlaceList: [],
+        goods: []
       }
     },
     computed: {
+      id() {
+        return this.$route.params.id
+      },
       handleFilter() {
         return {
           currentPage: this.pageApi.currentPage,
@@ -287,16 +305,38 @@
           cargoStatus: this.pageApi.cargoStatus,
           model: this.pageApi.model,
           costPrice: this.pageApi.costPrice,
-          wareHouseName: this.pageApi.wareHouseName,
+          wareHouseName: this.item.storeHouseName,
           productNumber: this.pageApi.productNumber,
           ownerName: this.pageApi.ownerName,
-          ownerId: this.pageApi.ownerId
+          ownerId: this.item.customerId
         }
       },
       productImg() {
-        return this.editItem.productImg != undefined ? this.editItem.productImg.split(',') : []
+        // return this.editItem.productImg != undefined ? this.editItem.productImg.split(',') : []
       }
     },
+    filters: {
+      toStatus(val) {
+        switch (val * 1) {
+          case 1:
+            return '待加工'
+            break;
+          case 2:
+            return '加工中'
+            break;
+          case 3:
+            return '待入库'
+            break;
+          case 4:
+            return '已入库'
+            break;
+          case 5:
+            return '已取消'
+            break;
+        }
+      }
+    },
+  
     watch: {
       'handleFilter': {
         handler: _.debounce(function(val, oldVal) {
@@ -309,6 +349,92 @@
       }
     },
     methods: {
+      getData() {
+        this.$http.post(this.api.findProcess, {
+          processId: this.id
+        }).then(res => {
+          if (res.code === 1000) {
+            this.item = res.data;
+          }
+        })
+      },
+      // 返回
+      goBack() {
+        this.$router.go(-1)
+      },
+      //  选择货物
+      selectGoods() {
+        this.show = true;
+      },
+      saveData() {
+        if (this.goods.length > 0) {
+          this.goods.forEach(el => {
+            el.cargoId = el.id,
+              el.coiledSheetNum = '',
+              el.number = '',
+              el.poundWeight = '',
+              el.coiledWeight = '',
+              el.oldCoiledWeight = '',
+              el.costPrice = '',
+              el.floorPrice = '',
+              el.remark = '',
+              el.merge = '',
+              el.mergeCargoId = ''
+          })
+          this.show = false;
+          this.dataApi.goods = this.goods;
+        } else {
+          this.$Message.error('请选择货品')
+        }
+      },
+      cancelModal() {
+        this.show = false;
+        this.dataApi.goods = [],
+          this.goods = []
+      },
+      onSelected(data) {
+        this.goods = data;
+      },
+      // 状态
+      toStatus(val) {
+        switch (val * 1) {
+          case 0:
+            return '暂无'
+            break;
+          case 1:
+            return '在途'
+            break;
+          case 2:
+            return '在库'
+            break;
+          default:
+            break;
+        }
+      },
+      //  格式化时间
+      toTime(val) {
+        let date = new Date(val);
+        let y = date.getFullYear();
+        let m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        let d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        let h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        let minute = date.getMinutes();
+        let second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute ;
+      },
+      getList(params) {
+        this.$http.post(this.api.findCargoInfoList, params).then(res => {
+          if (res.code === 1000) {
+            this.list = res.data.data,
+              this.totalCount = res.data.totalCount
+          }
+        })
+      },
       resetFilter() {
         this.pageApi = {
           currentPage: 1,
@@ -331,48 +457,14 @@
           cargoStatus: '',
           model: '',
           costPrice: '',
-          wareHouseName: '',
           productNumber: '',
           ownerName: '',
-          ownerId: ''
         }
         this.getList(this.handleFilter)
-      },
-      // 状态
-      toStatus(val) {
-        switch (val * 1) {
-          case 0:
-            return '暂无'
-            break;
-          case 1:
-            return '在途'
-            break;
-          case 2:
-            return '在库'
-            break;
-          default:
-            break;
-        }
-      },
-      getList(params) {
-        this.$http.post(this.api.findCargoInfoList, params).then(res => {
-          if (res.code === 1000) {
-            this.list = res.data.data,
-              this.totalCount = res.data.totalCount
-          }
-        })
       },
       changePage(page) {
         this.pageApi.currentPage = page;
         this.getList(this.handleFilter)
-      },
-      //  详情
-      openModel(item) {
-        this.editItem = item || {}
-        this.show = true
-      },
-      closeModel() {
-        this.show = false;
       },
       //   品类
       getTypeList() {
@@ -405,46 +497,52 @@
             this.proPlaceList = res.data;
           }
         })
+      },
+      async asyncGoods() {
+        await this.getData()
+        this.getTypeList();
+        this.getSurfaceList();
+        this.getMaterialList();
+        this.getProPlaceList();
       }
     },
     created() {
-      this.getTypeList();
-      this.getSurfaceList();
-      this.getMaterialList();
-      this.getProPlaceList();
-      this.getList(this.handleFilter);
+      this.getData();
     }
   }
 </script>
 
 <style lang='less' scoped>
   .card {
-    position: relative;
     margin-bottom: 20px;
-    .card-contnet {
+    .status-header {
+      display: inline-block;
+      padding-left: 40px;
+      font-weight: normal;
+    }
+    .detail-wrapper {
       position: relative;
-      padding-bottom: 40px;
-    }
-    .page-count {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
-  }
-  
-  .splits {
-    color: #999;
-    display: inline-block;
-    padding: 0 5px;
-  }
-  
-  .row-list {
-    margin-bottom: 15px;
-    .pic-lists {
-      width: 200px;
-      img {
-        max-width: 100%;
+      .row-list {
+        margin-bottom: 15px;
+      }
+      .extra-form {
+        position: absolute;
+        top: -58px;
+        left: 150px;
+        ;
       }
     }
+    .totalNum {
+      span {
+        display: inline-block;
+        margin-right: 30px;
+      }
+    }
+  }
+  
+  .remrak-warpper {
+    display: inline-block;
+    font-weight: normal;
+    padding-left: 50px;
   }
 </style>

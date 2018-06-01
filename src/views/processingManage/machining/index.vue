@@ -8,8 +8,8 @@
         </FormItem>
         <FormItem label="仓库名称：">
           <Select v-model="pageApi.storeHouseName" style="width: 160px;">
-                <Option v-for="(item,index) in wareHouseList" :value="item" :key="index">{{ item }}</Option>
-              </Select>
+            <Option v-for="(item,index) in wareHouseList" :value="item" :key="index">{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="加工公司名称：">
           <Input type="text" v-model="pageApi.companyName" placeholder="请输入..."></Input>
@@ -19,8 +19,8 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
-                <Option v-for="item in [{name:'待加工',value: '1'},{name:'加工中',value: '2'},{name:'待入库',value: '3'},{name:'已入库',value: '4'},{name:'已取消',value: '5'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-              </Select>
+            <Option v-for="item in [{name:'待加工',value: '1'},{name:'加工中',value: '2'},{name:'待入库',value: '3'},{name:'已入库',value: '4'},{name:'已取消',value: '5'},{name:'入库重申',value: '6'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+          </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -51,6 +51,7 @@
             <Col class-name="col" span="3">
             <Button size="small" type="warning" @click="goDetail(item)">详情</Button>
             <Button size="small" type="warning" @click="goJoinDetail(item)" v-if="item.status == '2'">加工入库开单</Button>
+            <Button size="small" type="warning" @click="goJoinDetail(item)" v-if="item.status == '6'">编辑加工入库开单</Button>
             <Button size="small" type="warning" @click="goJoinDetail(item)" v-if="item.status == '3' || item.status == '4' || item.status == '5'">加工入库开单详情</Button>
             </Col>
           </Row>
@@ -116,6 +117,9 @@
           case 5:
             return '已取消'
             break;
+          case 6:
+            return '入库重申'
+            break;
         }
       }
     },
@@ -154,6 +158,7 @@
           endTime: '',
           status: ''
         }
+        this.dataValue = ['', '']
         this.getList(this.handleFilter)
       },
       getWareHouse() {

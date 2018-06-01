@@ -94,6 +94,15 @@ const router = new Router({
         component: resolve => require(['@/views/processingManage/machining/joinDetail/index'], resolve),
       }]
     }, {
+      path: 'saleManage',
+      name: 'saleManage',
+      component: resolve => require(['@/views/saleManage/index'], resolve),
+      children: [{
+        path: 'saleOrder',
+        name: 'saleOrder',
+        component: resolve => require(['@/views/saleManage/saleOrder/index'], resolve),
+      }]
+    }, {
       path: 'stock',
       name: 'stock',
       component: resolve => require(['@/views/stock/index'], resolve),
@@ -119,6 +128,10 @@ const router = new Router({
         path: 'warehouse',
         name: 'warehouse',
         component: resolve => require(['@/views/stock/warehouse/index'], resolve),
+      },{
+        path: 'stockOut',
+        name: 'stockOut',
+        component: resolve => require(['@/views/stock/stockOut/index'], resolve),
       }]
     }, {
       path: 'system',

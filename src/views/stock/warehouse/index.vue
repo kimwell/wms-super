@@ -20,8 +20,8 @@
             <Col class-name="col" span="2">库存上限</Col>
             <Col class-name="col" span="2">实际库存</Col>
             <Col class-name="col" span="3">库位</Col>
-            <Col class-name="col" span="2">库管员</Col>
-            <Col class-name="col" span="6">地址</Col>
+            <Col class-name="col" span="3">库管员</Col>
+            <Col class-name="col" span="5">地址</Col>
             <Col class-name="col" span="1">序号</Col>
             <Col class-name="col" span="2">状态</Col>
             <Col class-name="col" span="2">操作</Col>
@@ -31,12 +31,12 @@
             <Col class-name="col" span="2">{{item.inventory}}</Col>
             <Col class-name="col" span="2">{{item.realWeight}}吨</Col>
             <Col class-name="col" span="3"></Col>
-            <Col class-name="col" span="2">
-              <span v-for="(sub,sindex) in item.warehouseManager" :key="sindex">
+            <Col class-name="col" span="3">
+              <Tag color="blue" v-for="(sub,sindex) in item.kgName" :key="sindex">
                 {{sub}}
-              </span>
+              </Tag>
             </Col>
-            <Col class-name="col" span="6">{{item.provinceName}}{{item.cityName}}{{item.areaName}}{{item.address}}</Col>
+            <Col class-name="col" span="5">{{item.provinceName}}{{item.cityName}}{{item.areaName}}{{item.address}}</Col>
             <Col class-name="col" span="1">{{item.orderNum}}</Col>
             <Col class-name="col" span="2">{{item.status == '1' ? '有效':'存档'}}</Col>
             <Col class-name="col" span="2">
@@ -152,13 +152,6 @@
       }
     },
     methods: {
-      toKG(val){
-        this.kgList.forEach(el =>{
-          if(val === el.id){
-            return el.name
-          }
-        })
-      },
       changePage(page){
         this.pageApi.currentPage = page;
         this.getList();
@@ -167,8 +160,16 @@
         this.$http.post(this.api.findWareHouse, this.pageApi).then(res => {
           if (res.code === 1000) {
             res.data.data.forEach(el =>{
+              el.kgName = [];
               if(el.warehouseManager !=''){
-                el.warehouseManager = el.warehouseManager.split(',')
+                el.warehouseManager = el.warehouseManager.split(',');
+                this.kgList.forEach(kg =>{
+                  el.warehouseManager.map(sub =>{
+                    if(kg.id === sub){
+                      el.kgName.push(kg.name);
+                    }
+                  })
+                })
               }else{
                 el.warehouseManager = []
               }
@@ -285,7 +286,7 @@
       getAllKg(){
         this.$http.post(this.api.findSysKG).then(res =>{
           if(res.code === 1000){
-            this.kgList = res.data
+            this.kgList = res.data;
           }
         })
       }

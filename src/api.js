@@ -933,6 +933,12 @@ export const findStorageInList= '/sys/storageIn/findStorageInList'
  */
 export const storageIn= '/sys/storageIn/storageIn'
 
+
+
+/**
+ * 入库单查询
+ */
+export const findStorageIn= '/sys/storageIn/findStorageIn'
 // -----------------------------------货品管理---------------------------------
 
 
@@ -989,3 +995,45 @@ export const findProcess= '/sys/processTicket/findProcess'
  * 加工单加工
  */
 export const saveProcess= '/sys/processTicket/process'
+
+
+export const cargoInfoDetail= '/common/cargoInfo/detail'
+/*
+*加工单入库
+*/
+export const saveProcessIn= '/sys/processTicket/processIn'
+
+/*
+*查询银行名称
+*/
+export const bankName= '/api/bankCard/bankName'
+
+
+// -----------------------------------销售单---------------------------------
+
+/*
+*销售单列表查询
+*/
+export const findSaleTicketList= '/sys/saleTicketBg/findSaleTicketList'
+
+/*
+*销售单查询
+*/
+export const findSaleTicket= '/sys/saleTicketBg/findSaleTicket'
+
+// -----------------------------------出库单管理---------------------------------
+
+/*
+*出库单列表查询
+*/
+export const findOutBoundList= '/sys/saleTicketBg/findOutBoundList'
+
+/*
+*出库单查询
+*/
+export const findOunBound= '/sys/saleTicketBg/findOunBound'
+
+/*
+*出库单出库
+*/
+export const saleTicketOut= '/sys/saleTicketBg/saleTicketOut'

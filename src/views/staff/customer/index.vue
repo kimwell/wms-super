@@ -47,6 +47,9 @@
           </FormItem>
           </Col>
         </Row>
+        <FormItem label="联系人：">
+          <Input v-model="dataApi.contactPeople" placeholder="请输入"></Input>
+        </FormItem>
         <FormItem label="单位地址：">
           <ajaxAdress ref="city" @on-pick="selectCity" :value="placeHolder" style="width: 150px;margin-right:10px;display:inline-block;"></ajaxAdress>
           <Input v-model="dataApi.address" placeholder="请输入详细地址" style="width: 304px;"></Input>
@@ -97,9 +100,9 @@
             </div>
             <div class="idCard-wrap">
               <div class="idCard-item" v-for="(item,index) in dataApi.bankCardString" :key="index">
-                <Input v-model="item.bankName" style="width:185px;" placeholder="请输入开户行">
+                <Input v-model="item.cardNo" @on-blur="autoCardName(index)" style="width:225px;margin:0 15px;" placeholder="请输入开户账号"></Input>
+                <Input v-model="item.bankName" style="width:115px;" placeholder="请输入开户行">
                 </Input>
-                <Input v-model="item.cardNo" style="width:185px;margin:0 15px;" placeholder="请输入开户账号"></Input>
                 <Button type="error" @click="delIDCard(index)">删除</Button>
               </div>
             </div>
@@ -279,6 +282,7 @@
           buserName: '',
           buserId: '',
           id: '',
+          contactPeople: '',
           bankCardString: [{
             customerId: '',
             bankName: '',
@@ -287,7 +291,6 @@
             phone: ''
           }]
         },
-        activeIndex: 0,
         rules: {
           buserName: [{
             required: true,
@@ -322,9 +325,9 @@
             let _this = this;
             if (arr.length) {
               return h('div', arr.map(function(item) {
-                return h('span', {
-                  style: {
-                    marginRight: '5px'
+                return h('Tag', {
+                  props:{
+                    color:"blue"
                   },
                 }, _this.strNature(item))
               }))
@@ -395,7 +398,6 @@
                 },
                 on: {
                   click: () => {
-                    this.activeIndex = params.index;
                     this.openModel(true, params.row)
                   }
                 }
@@ -426,9 +428,6 @@
           phone: this.pageApi.phone,
           buserName: this.pageApi.buserName,
         }
-      },
-      activeItem() {
-        return this.list.length != 0 ? this.list[this.activeIndex] : {}
       },
       placeHolder() {
         return this.dataApi.province != '' ? `${this.dataApi.province}/${this.dataApi.city}/${this.dataApi.area}` : '请选择地区'
@@ -524,6 +523,18 @@
       delIDCard(index) {
         this.dataApi.bankCardString.splice(index, 1)
       },
+      autoCardName(index){
+          let str = this.dataApi.bankCardString[index].cardNo;
+          if(str != ''){
+            this.$http.post(this.api.bankName,{card: str}).then(res =>{
+              if(res.code === 1000){
+                if(res.data !=''){
+                  this.dataApi.bankCardString[index].bankName = res.data;
+                }
+              }
+            })
+          }
+      },
       //  删除客户
       deleteItem(item) {
         this.$Modal.confirm({
@@ -549,44 +560,45 @@
         if (isEdit) {
           this.editItem = item || {};
           this.dataApi = {
-            id: this.activeItem.id,
-            address: this.activeItem.address,
-            area: this.activeItem.area,
-            areaPlace: this.activeItem.areaPlace,
-            bankCardString: this.activeItem.bankCardString != '' ? this.activeItem.bankCardString : [{
+            id: this.editItem.id,
+            address: this.editItem.address,
+            area: this.editItem.area,
+            areaPlace: this.editItem.areaPlace,
+            bankCardString: this.editItem.bankCardString.length > 0 ? this.editItem.bankCardString : [{
               customerId: '',
               bankName: '',
               cardNo: '',
               realName: '',
               phone: ''
             }],
-            belongBuserName: this.activeItem.belongBuserName,
-            city: this.activeItem.city,
-            companyName: this.activeItem.companyName,
-            contact: this.activeItem.contact,
-            creditAmount: this.activeItem.creditAmount,
-            customerRole: this.activeItem.customerRole.split(','),
-            customerType: this.activeItem.customerType,
-            department: this.activeItem.department,
-            fax: this.activeItem.fax,
-            interestDay: this.activeItem.interestDay,
-            interestPercent: this.activeItem.interestPercent,
-            interestWay: this.activeItem.interestWay.toString(),
-            legalPerson: this.activeItem.legalPerson,
-            operator: this.activeItem.operator,
-            paymentDayType: this.activeItem.paymentDayType,
-            paymentDays: this.activeItem.paymentDays,
-            phone: this.activeItem.phone,
-            postCode: this.activeItem.postCode,
-            province: this.activeItem.province,
-            remark: this.activeItem.remark,
-            spell: this.activeItem.spell,
-            supplierType: this.activeItem.supplierType,
-            taxNo: this.activeItem.taxNo,
-            buserName: `${this.activeItem.buserName}-${this.activeItem.buserId}`,
-            buserId: this.activeItem.buserId
+            belongBuserName: this.editItem.belongBuserName,
+            city: this.editItem.city,
+            companyName: this.editItem.companyName,
+            contact: this.editItem.contact,
+            creditAmount: this.editItem.creditAmount,
+            customerRole: this.editItem.customerRole.split(','),
+            customerType: this.editItem.customerType,
+            department: this.editItem.department,
+            fax: this.editItem.fax,
+            interestDay: this.editItem.interestDay,
+            interestPercent: this.editItem.interestPercent,
+            interestWay: this.editItem.interestWay.toString(),
+            legalPerson: this.editItem.legalPerson,
+            operator: this.editItem.operator,
+            paymentDayType: this.editItem.paymentDayType,
+            paymentDays: this.editItem.paymentDays,
+            phone: this.editItem.phone,
+            postCode: this.editItem.postCode,
+            province: this.editItem.province,
+            remark: this.editItem.remark,
+            spell: this.editItem.spell,
+            supplierType: this.editItem.supplierType,
+            taxNo: this.editItem.taxNo,
+            buserName: `${this.editItem.buserName}-${this.editItem.buserId}`,
+            buserId: this.editItem.buserId,
+            contactPeople: this.editItem.contactPeople
           }
-          this.buserName = this.activeItem.buserName
+          this.buserName = this.editItem.buserName
         } else {
           this.dataApi = {
             id: '',
@@ -618,6 +630,7 @@
             area: '',
             buserName: '',
             buserId: '',
+            contactPeople: '',
             bankCardString: [{
               customerId: '',
               bankName: '',

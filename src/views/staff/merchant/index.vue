@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page-containter">
     <Card :bordered="false" class="card">
       <p slot="title">商户管理</p>
       <Button slot="extra" type="primary" @click="openModel(false)">新增商户</Button>
@@ -45,7 +45,7 @@
     <Modal v-model="panelShow" :closable="false" :mask-closable="false" :title="isEdit ? '编辑商户':'新增商户'">
       <Form :label-width="110" :ref="ref" :model="itemApi" :rules="rules">
         <FormItem label="公司名称：" prop="companyName">
-          <Poptip trigger="focus" content="content" placement="bottom">
+          <Poptip trigger="focus" content="content" placement="bottom" style="width: 100%;">
             <Input v-model="itemApi.companyName" placeholder="请输入" />
             <div class="api" slot="content">
               <div class="apiList" v-for="item in companyList" @click="selectItem(item)">{{item.companyName}}</div>
@@ -466,12 +466,8 @@
 </script>
 
 <style lang='less' scoped>
-  .ivu-modal-content /deep/ .ivu-poptip {
-    display: block;
-  }
-  
-  .ivu-modal-content /deep/ .ivu-poptip-rel {
-    display: block;
+  .page-containter /deep/.ivu-poptip /deep/ .ivu-poptip-rel {
+    width: 100%;
   }
   
   .apiList {

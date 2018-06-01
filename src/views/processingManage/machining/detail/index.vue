@@ -3,8 +3,8 @@
     <Card :bordered="false" class="card">
       <p slot="title">加工单详情<span class="status-header">状态：{{item.status | toStatus}}</span></p>
       <div slot="extra">
-        <Button size="small" v-if="item.status == '1'" @click="onPrecess" type="warning">确认加工</Button>
-        <Button size="small" type="warning" @click="goBack">返回</Button>
+        <Button v-if="item.status == '1'" @click="onPrecess" type="warning">确认加工</Button>
+        <Button type="warning" @click="goBack">返回</Button>
       </div>
       <div class="detail-wrapper">
         <Row class="row-list">
@@ -32,7 +32,7 @@
         </Row>
         <Row class="row-list">
           <Col span="6">规格：{{item.specification !=''? item.specification: `${item.height}*${item.width}*${item.length}`}}</Col>
-          <Col span="6">公差：{{item.tolerance}}</Col>
+          <Col span="6">公差：{{item.tolerance | isEmpty('-')}}</Col>
           <Col span="6">产地：{{item.proPlaceName}}</Col>
           <Col span="6">表面：{{item.surfaceName}}</Col>
         </Row>

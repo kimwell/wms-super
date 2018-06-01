@@ -18,8 +18,8 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
-                  <Option v-for="item in [{name:'待确认',value: '1'},{name:'已入库',value: '2'},{name:'已完成',value: '3'},{name:'已取消',value: '4'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-                </Select>
+                    <Option v-for="item in [{name:'待确认',value: '1'},{name:'已入库',value: '2'},{name:'已完成',value: '3'},{name:'已取消',value: '4'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+                  </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -54,6 +54,61 @@
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
     </Card>
+    <Modal v-model="show" width="950" title="入库单详情">
+      <Row class="row-list">
+        <Col span="6">公司名称：{{detailItem.company}}</Col>
+        <Col span="6">开单人：{{detailItem.createUser}}</Col>
+        <Col span="6">审核人：{{detailItem.checkName}}</Col>
+        <Col span="6">负责人：{{detailItem.responseName}}</Col>
+      </Row>
+      <Row class="row-list">
+        <Col span="6">供应商：{{detailItem.sellCompany}}</Col>
+        <Col span="6">开单日期：{{detailItem.createTime | dateformat}}</Col>
+        <Col span="6">车牌号：{{detailItem.carId}}</Col>
+        <Col span="6">物流状态：{{detailItem.status}}</Col>
+      </Row>
+      <Row class="row-list">
+        <Col span="6">费用：{{detailItem.money}}</Col>
+        <Col span="6">仓库：{{detailItem.storeHouseName}}</Col>
+        <Col span="6">备注：{{detailItem.remark}}</Col>
+      </Row>
+      <Table width="100%" border :columns="goodsDetailColumns" :data="detailItem.storageInGoods"></Table>
+    </Modal>
+        <Modal title="当前合并货品" width="800" v-model="goodsDetailShow" :mask-closable="false">
+        <div v-if="detailData">
+          <Row class="row-list">
+            <Col span="6">产品编号：{{detailData.productNumber}}</Col>
+            <Col span="6">货物名称：{{detailData.cargoName}}</Col>
+            <Col span="6">表面：{{detailData.surface}}</Col>
+            <Col span="6">物流状态：{{detailData.status | toMegerStatus}}</Col>
+          </Row>
+          <Row class="row-list">
+            <Col span="6" v-if="detailData.wareHouseCargoSet">仓库：{{detailData.wareHouseCargoSet[0].wareHouseName}}</Col>
+            <Col span="6">型号：{{detailData.model}}</Col>
+            <Col span="6">公差：{{detailData.tolerance}}</Col>
+            <Col span="6">库存数量：{{detailData.warehouseNumber}}</Col>
+          </Row>
+          <Row class="row-list">
+            <Col span="6">日期：{{detailData.createTime | dateformat}}</Col>
+            <Col span="6">品类：{{detailData.category}}</Col>
+            <Col span="6">规格：{{detailData.specifications != "" ? detailData.specifications :`${detailData.height}*${detailData.width}*${detailData.length}`}}</Col>
+            <Col span="6">库存重量：{{detailData.warehouseWeights}}</Col>
+          </Row>
+          <Row class="row-list">
+            <Col span="6">产地：{{detailData.proPlacesName}}</Col>
+            <Col span="6">材质：{{detailData.material}}</Col>
+            <Col span="6">卷号：{{detailData.coiledSheetNum}}</Col>
+            <Col span="6">预入库重量：{{detailData.weights}}</Col>
+          </Row>
+          <Row class="row-list">
+            <Col span="6">成本价：{{detailData.costPrice}}</Col>
+            <Col span="6">备注：{{detailData.remark}}</Col>
+          </Row>
+        </div>
+      <div slot="footer">
+        <Button @click="goodsDetailShow = false" >关闭</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -78,7 +133,154 @@
           storageInId: '',
           remark: ''
         },
-        loading: false
+        show: false,
+        detailItem: {},
+        goodsDetailColumns: [{
+            title: "序号",
+            key: "cargoName",
+            width: 100,
+            render: (h, params) => {
+              let str = params.row._index;
+              return h("div", str);
+            }
+          },
+          {
+            title: "货物名称",
+            key: "cargoName",
+            width: 100
+          },
+          {
+            title: "型号",
+            key: "model",
+            width: 100
+          },
+          {
+            title: "产地",
+            key: "proPlacesName",
+            width: 100
+          },
+          {
+            title: "规格",
+            key: "specifications",
+            width: 180,
+            render: (h, params) => {
+              let str =
+                params.row.specifications != "" ?
+                params.row.specifications :
+                `${params.row.height}*${params.row.width}*${
+                        params.row.length
+                      }`;
+              return h("div", str);
+            }
+          },
+          {
+            title: "公差",
+            key: "tolerance",
+            width: 100
+          },
+          {
+            title: "单件重量",
+            key: "singleWeight",
+            width: 100
+          },
+          {
+            title: "产品单位",
+            key: "numberUnit",
+            width: 100,
+            render: (h, params) => {
+              let str = `${params.row.numberUnit}/${params.row.weightUnit}`;
+              return h("div", str);
+            }
+          },
+          {
+            title: "卷号",
+            key: "coiledSheetNum",
+            width: 180,
+          },
+          {
+            title: "数量",
+            key: "number",
+            width: 120,
+          },
+          {
+            title: "理计重量",
+            key: "meterWeight",
+            width: 120,
+          },
+          {
+            title: "过磅重量",
+            key: "poundWeight",
+            width: 120,
+          },
+          {
+            title: "过磅单重",
+            key: "poundSingleWeight",
+            width: 120,
+          },
+          {
+            title: "卷重",
+            key: "coiledWeight",
+            width: 120,
+          },
+          {
+            title: "原卷重",
+            key: "oldCoiledWeight",
+            width: 120,
+          },
+          {
+            title: "成本价",
+            key: "costPrice",
+            width: 120,
+          },
+          {
+            title: "成本金额",
+            key: "costNumber",
+            width: 120,
+          },
+          {
+            title: "销售底价",
+            key: "floorPrice",
+            width: 120,
+          },
+          {
+            title: "备注",
+            key: "remark",
+            width: 120,
+          },
+          {
+            title: "入库后是否自动合并",
+            key: "merge",
+            width: 120,
+            fixed: 'right',
+            render: (h, params) => {
+              let _this = this;
+              let status = params.row.merge;
+              if (status) {
+                return h("div", [
+                  h(
+                    "Button", {
+                      props: {
+                        type: "warning",
+                        size: "small"
+                      },
+                      on: {
+                        click: () => {
+                          _this.activeGoods = params;
+                          _this.getcargoInfoDetail(params)
+                        }
+                      }
+                    },
+                    "显示产品编号"
+                  )
+                ]);
+              } else {
+                return h("div", '不合并');
+              }
+            }
+          }
+        ],
+        goodsDetailShow: false,
+        detailData: {}
       }
     },
     filters: {
@@ -98,6 +300,21 @@
             break
           default:
             break
+        }
+      },
+      toMegerStatus(val){
+        switch (val * 1) {
+          case 0:
+            return "暂无";
+            break;
+          case 1:
+            return "在途";
+            break;
+          case 2:
+            return "在库";
+            break;
+          default:
+            break;
         }
       }
     },
@@ -164,19 +381,38 @@
           //  确认入库
           this.intoData.storageInId = item.id;
           this.intoData.remark = '要入库了哈';
-          this.$http.post(this.api.storageIn,this.intoData).then(res => {
-            if(res.code === 1000){
+          this.$http.post(this.api.storageIn, this.intoData).then(res => {
+            if (res.code === 1000) {
               this.$Message.success('入库成功')
               this.getList(this.handleFilter)
-            }else{
+            } else {
               this.$Message.error(res.message)
             }
           })
         } else if (flag === 3) {
           //  详情
-  
+          this.getDetail(item)
+          this.show = true;
         }
-      }
+      },
+      getDetail(item) {
+        this.$http.post(this.api.findStorageIn, {
+          storageInId: item.id
+        }).then(res => {
+          if (res.code === 1000) {
+            this.detailItem = res.data;
+          }
+        })
+      },
+      //  合并货品详情
+      getcargoInfoDetail(data) {
+        this.goodsDetailShow = true;
+        this.$http.post(this.api.cargoInfoDetail,{id: data.row.cargoId}).then(res =>{
+          if(res.code === 1000){
+            this.detailData = res.data;
+          }
+        })
+      },
     },
     created() {
       this.getList(this.handleFilter);
@@ -215,5 +451,9 @@
       right: 0;
       bottom: 0;
     }
+  }
+  
+  .row-list {
+    margin-bottom: 16px;
   }
 </style>

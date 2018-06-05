@@ -8,7 +8,7 @@ let commHost = ''
 export let exportExcel = ''
 if (process.env.NODE_ENV == 'development') {
   ws = 'ws://192.168.0.251/websocket';
-  commHost = 'http://192.168.0.164:8080'
+  commHost = 'http://192.168.0.251:7070'
   exportExcel = 'http://192.168.0.164:8080/export.jsp'
 } else {
   ws = 'ws://' + host + '/websocket';
@@ -1037,3 +1037,119 @@ export const findOunBound= '/sys/saleTicketBg/findOunBound'
 *出库单出库
 */
 export const saleTicketOut= '/sys/saleTicketBg/saleTicketOut'
+
+
+// -----------------------------------财务管理---------------------------------
+
+/*
+*查询费用科目列表
+*/
+export const findFeeTypeList= '/sys/feeType/findFeeTypeList'
+
+/*
+*保存费用科目
+*/
+export const saveFeeType= '/sys/feeType/saveFeeType'
+
+/*
+*更新费用科目名称
+*/
+export const updateFeeType= '/sys/feeType/updateFeeType'
+
+/*
+*更新费用科目名称
+*/
+export const deleteFeeType= '/sys/feeType/deleteFeeType'
+
+
+/*
+*修改费用科目状态
+*/
+export const modifyFeeType= '/sys/feeType/modifyFeeType'
+
+
+/*
+*查询所有费用科目
+*/
+export const findFeeType= '/sys/feeType/findFeeType'
+
+
+
+/*
+*客户账户列表分页查询
+*/
+export const customerAccountPage= '/common/customerAccount/page'
+
+
+/*
+*客户交易记录
+*/
+export const customerAccountHistory= '/common/customerAccount/history'
+
+/*
+*查询供应商账户列表
+*/
+export const buserAccountPage= '/sys/buserAccount/page'
+
+
+/*
+*供应商交易记录
+*/
+export const buserAccountHistory= '/common/buserAccount/history'
+
+
+
+/*
+*收款单列表
+*/
+export const receiptOrderPage= '/sys/receiptOrder/page'
+
+
+/*
+*新增收款单
+*/
+export const receiptOrderIn= '/sys/receiptOrder/in'
+
+
+
+/*
+*取消收款单
+*/
+export const receiptOrderCancel= '/sys/receiptOrder/cancel'
+
+
+/*
+*客户名称提示
+*/
+export const findCustomerList= '/common/customer/find'
+
+
+/*
+*客户名称提示
+*/
+export const findbankCards= '/common/customer/bankCards'
+
+
+/*
+* 公司账号
+*/
+export const findPlatBankCard = '/common/bankCard/findPlatBankCard'
+
+
+
+/*
+* 付款单列表
+*/
+export const paymentOrderPage = '/sys/paymentOrder/page'
+
+
+/*
+* 取消付款单
+*/
+export const paymentOrderCancel = '/sys/paymentOrder/cancel'
+
+
+/*
+* 新增付款单
+*/
+export const paymentOrderOut = '/sys/paymentOrder/out'

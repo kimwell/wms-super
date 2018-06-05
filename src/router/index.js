@@ -103,6 +103,27 @@ const router = new Router({
         component: resolve => require(['@/views/saleManage/saleOrder/index'], resolve),
       }]
     }, {
+      path: 'financialManagement',
+      name: 'financialManagement',
+      component: resolve => require(['@/views/financialManagement/index'], resolve),
+      children: [{
+        path: 'balanceManagement',
+        name: 'balanceManagement',
+        component: resolve => require(['@/views/financialManagement/balanceManagement/index'], resolve),
+      },{
+        path: 'costSubject',
+        name: 'costSubject',
+        component: resolve => require(['@/views/financialManagement/costSubject/index'], resolve),
+      },{
+        path: 'receiptOrder',
+        name: 'receiptOrder',
+        component: resolve => require(['@/views/financialManagement/receiptOrder/index'], resolve),
+      },{
+        path: 'paymentOrder',
+        name: 'paymentOrder',
+        component: resolve => require(['@/views/financialManagement/paymentOrder/index'], resolve),
+      }]
+    }, {
       path: 'stock',
       name: 'stock',
       component: resolve => require(['@/views/stock/index'], resolve),

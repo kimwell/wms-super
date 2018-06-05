@@ -13,7 +13,7 @@
     "axios": "^0.16.1",
     "dateformat-util": "^1.0.5",
     "highlightjs": "^9.8.0",
-    "iview": "^2.9.2",
+    "iview": "^2.14.1",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "lodash": "^4.17.4",

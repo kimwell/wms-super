@@ -28,20 +28,24 @@
       <div class="card-contnet">
         <div class="table-contnet">
           <Row class-name="head">
-            <Col class-name="col" span="6">入库单号</Col>
+            <Col class-name="col" span="3">入库单号</Col>
             <Col class-name="col" span="3">仓库名称</Col>
             <Col class-name="col" span="3">供应商名称</Col>
             <Col class-name="col" span="3">开单日期</Col>
             <Col class-name="col" span="3">状态</Col>
-            <Col class-name="col" span="6">操作</Col>
+            <Col class-name="col" span="3">最近更新人</Col>
+            <Col class-name="col" span="3">最近更新时间</Col>
+            <Col class-name="col" span="3">操作</Col>
           </Row>
           <Row v-for="(item,index) in list" :key="item.id">
-            <Col class-name="col" span="6">{{item.id}}</Col>
+            <Col class-name="col" span="3">{{item.id}}</Col>
             <Col class-name="col" span="3">{{item.storeHouseName}}</Col>
             <Col class-name="col" span="3">{{item.sellCompany}}</Col>
             <Col class-name="col" span="3">{{item.storageInDate | dateformat}}</Col>
             <Col class-name="col" span="3">{{item.status | toStatus}}</Col>
-            <Col class-name="col" span="6">
+            <Col class-name="col" span="3">{{item.updateUser}}</Col>
+            <Col class-name="col" span="3">{{item.updateTime | dateformat}}</Col>
+            <Col class-name="col" span="3">
             <Button size="small" type="warning" @click="itemHandle(item,1)">打印</Button>
             <Button v-if="item.status == 1" size="small" type="warning" @click="itemHandle(item,2)">确认入库</Button>
             <Button size="small" type="warning" @click="itemHandle(item,3)">详情</Button>

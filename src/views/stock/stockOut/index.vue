@@ -413,7 +413,7 @@
               if (res.code === 1000) {
                 this.$Message.success('出库成功');
                 this.show = false;
-                this.getList();
+                this.getList(this.handleFilter);
               } else {
                 this.$Message.error(res.message)
               }

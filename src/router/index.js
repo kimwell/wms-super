@@ -147,6 +147,18 @@ const router = new Router({
         path: 'transactionData',
         name: 'transactionData',
         component: resolve => require(['@/views/dataAnalysisManagement/transactionData/index'], resolve),
+      },{
+        path: 'goodsSales',
+        name: 'goodsSales',
+        component: resolve => require(['@/views/dataAnalysisManagement/goodsSales/index'], resolve),
+      },{
+        path: 'hotSales',
+        name: 'hotSales',
+        component: resolve => require(['@/views/dataAnalysisManagement/hotSales/index'], resolve),
+      },{
+        path: 'InventoryStatistics',
+        name: 'InventoryStatistics',
+        component: resolve => require(['@/views/dataAnalysisManagement/InventoryStatistics/index'], resolve),
       }]
     },{
       path: 'stock',

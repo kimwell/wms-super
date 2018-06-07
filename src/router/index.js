@@ -140,6 +140,15 @@ const router = new Router({
         component: resolve => require(['@/views/financialManagement/supplierAmountManagement/add/index'], resolve),
       }]
     }, {
+      path: 'dataAnalysisManagement',
+      name: 'dataAnalysisManagement',
+      component: resolve => require(['@/views/dataAnalysisManagement/index'], resolve),
+      children: [{
+        path: 'transactionData',
+        name: 'transactionData',
+        component: resolve => require(['@/views/dataAnalysisManagement/transactionData/index'], resolve),
+      }]
+    },{
       path: 'stock',
       name: 'stock',
       component: resolve => require(['@/views/stock/index'], resolve),

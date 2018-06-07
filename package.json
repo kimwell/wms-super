@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "dateformat-util": "^1.0.5",
+    "echarts": "^4.1.0",
     "highlightjs": "^9.8.0",
     "iview": "^2.14.1",
     "less": "^2.7.2",

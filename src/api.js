@@ -1175,3 +1175,34 @@ export const buserAccountDetail ='/common/buserAccount/detail'
 * 客户分配/结算金额列表
 */
 export const distributeSettlementPage ='/sys/distributeSettlement/page'
+
+
+/*
+* 查询客户可分配余额
+*/
+export const customerAccountFind ='/sys/customerAccount/find'
+
+
+/*
+* 财务查询待分配供应商列表
+*/
+export const distributionPages ='/sys/distribution/page'
+
+/*
+* 财务分配金额给供应商
+*/
+export const doDistribute ='/sys/distribution/doDistribute'
+
+
+/*
+* 财务分配金额给供应商
+*/
+export const distributeSettleLog ='/sys/distribution/distributeSettleLog'
+
+
+// -----------------------------------数据分析---------------------------------
+
+/*
+*交易数据汇总
+*/
+export const saleStatics = '/sys/saleTicketStaticsBg/saleStatics'

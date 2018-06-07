@@ -192,7 +192,7 @@
       top: 0;
       left: 0;
       z-index: 21;
-      width: 200px;
+      width: 210px;
       overflow: auto;
       background-color: #1c2438;
       /deep/ .ivu-menu-vertical .ivu-menu-submenu-title,
@@ -204,7 +204,7 @@
       box-sizing: border-box;
       position: fixed;
       display: block;
-      padding-left: 200px;
+      padding-left: 210px;
       width: 100%;
       height: auto;
       z-index: 20;
@@ -216,7 +216,7 @@
       top: 60px;
       right: 0;
       bottom: 0;
-      left: 200px;
+      left: 210px;
       overflow: auto;
       background-color: #f0f0f0;
       z-index: 1;

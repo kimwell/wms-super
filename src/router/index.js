@@ -122,6 +122,22 @@ const router = new Router({
         path: 'paymentOrder',
         name: 'paymentOrder',
         component: resolve => require(['@/views/financialManagement/paymentOrder/index'], resolve),
+      },{
+        path: 'addPaymentOrder',
+        name: 'addPaymentOrder',
+        component: resolve => require(['@/views/financialManagement/paymentOrder/add/index'], resolve),
+      },{
+        path: 'distributeSettlementManagement',
+        name: 'distributeSettlementManagement',
+        component: resolve => require(['@/views/financialManagement/distributeSettlementManagement/index'], resolve),
+      },{
+        path: 'supplierAmountManagement',
+        name: 'supplierAmountManagement',
+        component: resolve => require(['@/views/financialManagement/supplierAmountManagement/index'], resolve),
+      },{
+        path: 'supplierAmountAdd',
+        name: 'supplierAmountAdd',
+        component: resolve => require(['@/views/financialManagement/supplierAmountManagement/add/index'], resolve),
       }]
     }, {
       path: 'stock',

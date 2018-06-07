@@ -45,13 +45,11 @@
     <Modal v-model="panelShow" :closable="false" :mask-closable="false" :title="isEdit ? '编辑商户':'新增商户'">
       <Form :label-width="110" :ref="ref" :model="itemApi" :rules="rules">
         <FormItem label="公司名称：" prop="companyName">
-          <Poptip trigger="focus" content="content" placement="bottom" style="width: 100%;">
-            <Input v-model="itemApi.companyName" placeholder="请输入" />
-            <div class="api" slot="content">
-              <div class="apiList" v-for="item in companyList" @click="selectItem(item)">{{item.companyName}}</div>
-              <div class="apiList" v-if="companyList.length == 0">暂无匹配</div>
-            </div>
-          </Poptip>
+            <AutoComplete v-model="itemApi.companyName" @on-search="remoteMethod" placeholder="请输入">
+              <Option v-for="option in companyList" :value="option.companyName" :key="option.id">
+                {{option.companyName}}
+              </Option>
+            </AutoComplete>
         </FormItem>
         <FormItem label="联系人：" prop="contact">
           <Input v-model="itemApi.contact" placeholder="请输入"></Input>

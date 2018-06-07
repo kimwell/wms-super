@@ -1153,3 +1153,25 @@ export const paymentOrderCancel = '/sys/paymentOrder/cancel'
 * 新增付款单
 */
 export const paymentOrderOut = '/sys/paymentOrder/out'
+
+/*
+* 财务查询待分配供应商列表
+*/
+export const distributionPage = '/sys/distribution/page'
+
+/*
+* 选择结算客户
+*/
+export const chooseSettleCustomer ='/sys/paymentOrder/chooseSettleCustomer'
+
+
+/*
+* 查询供应商账户详情
+*/
+export const buserAccountDetail ='/common/buserAccount/detail'
+
+
+/*
+* 客户分配/结算金额列表
+*/
+export const distributeSettlementPage ='/sys/distributeSettlement/page'

@@ -19,9 +19,9 @@
           <div class="table-contnet">
             <Row class-name="head">
               <Col class-name="col" span="3">客户名称</Col>
-              <Col class-name="col" span="2">进账金额</Col>
+              <Col class-name="col" span="1">进账金额</Col>
               <Col class-name="col" span="3">客户账号</Col>
-              <Col class-name="col" span="2">平台账号</Col>
+              <Col class-name="col" span="3">平台账号</Col>
               <Col class-name="col" span="2">进账时间</Col>
               <Col class-name="col" span="2">银行账号流水号</Col>
               <Col class-name="col" span="2">附件</Col>
@@ -32,9 +32,9 @@
             </Row>
             <Row v-for="(item,index) in list " :key="index">
               <Col class-name="col" span="3">{{item.customerName}}</Col>
-              <Col class-name="col" span="2">{{item.amount}}</Col>
+              <Col class-name="col" span="1">{{item.amount}}</Col>
               <Col class-name="col" span="3">{{item.customerBankCardNo}}</Col>
-              <Col class-name="col" span="2">{{item.bankCardNo}}</Col>
+              <Col class-name="col" span="3">{{item.bankCardNo}}</Col>
               <Col class-name="col" span="2">{{item.inTime | dateformat}}</Col>
               <Col class-name="col" span="2">{{item.bankTradeNo}}</Col>
               <Col class-name="col" span="2">
@@ -77,7 +77,7 @@
           <Input type="text" v-model="dataApi.customerBankName" style="width: 300px;" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="公司账号：" prop="bankCardNo">
-          <AutoComplete v-model="dataApi.bankCardNo" @on-change="bankCardNoChange" style="width: 300px;" placeholder="请输入...">
+          <AutoComplete v-model="dataApi.bankCardNo" style="width: 300px;" placeholder="请输入...">
             <Option v-for="item in bankCardList" :value="item.card" :key="item.card">{{ item.card }}</Option>
           </AutoComplete>
         </FormItem>
@@ -256,13 +256,9 @@
           })
         }
       },
-      bankCardNoChange(data){
-        // this.dataApi.bankCardNo = data;
-      },
       customerChange(data){
         this.bankList.forEach(el =>{
           if(el.cardNo == data){
-            console.log(el)
             this.dataApi.customerBankName = el.bankName
           }
         })
@@ -290,6 +286,9 @@
         this.$http.post(this.api.findPlatBankCard).then(res =>{
           if(res.code === 1000){
             this.bankCardList = res.data.cardInfo != ''? JSON.parse(res.data.cardInfo) : [];
+            this.bankCardList.forEach(el =>{
+              el.card = el.card.toString();
+            })
           }
         })
       },

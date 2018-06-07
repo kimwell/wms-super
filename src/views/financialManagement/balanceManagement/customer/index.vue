@@ -79,7 +79,7 @@
               <Col class-name="col" span="24">暂无数据</Col>
             </Row>
           </div>
-          <Page class="page-count" size="small" :total="totalCount" show-total :current="detailApi.currentPage" :page-size="detailApi.pageSize" @on-change="detailChangePage"></Page>
+          <Page class="page-count" size="small" :total="detailTotalCount" show-total :current="detailApi.currentPage" :page-size="detailApi.pageSize" @on-change="detailChangePage"></Page>
         </div>
       </div>
       <div slot="footer">

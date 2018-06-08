@@ -1121,7 +1121,7 @@ export const receiptOrderCancel= '/sys/receiptOrder/cancel'
 /*
 *客户名称提示
 */
-export const findCustomerList= '/common/customer/find'
+export const findCustomerList= '/sys/customer/find'
 
 
 /*
@@ -1206,3 +1206,13 @@ export const distributeSettleLog ='/sys/distribution/distributeSettleLog'
 *交易数据汇总
 */
 export const saleStatics = '/sys/saleTicketStaticsBg/saleStatics'
+
+/*
+*货品销售统计
+*/
+export const cargoStatics = '/sys/saleTicketStaticsBg/cargoStatics'
+
+/*
+*热门销售统计
+*/
+export const hotStatics = '/sys/saleTicketStaticsBg/hotStatics'

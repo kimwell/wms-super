@@ -25,8 +25,8 @@
         </FormItem>
         <FormItem v-if="dataApi.isBuser == 'true'" label="供应商名称：" prop="customerName">
           <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-              <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-            </Select>
+            <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
+          </Select>
         </FormItem>
         <FormItem label="客户账户：" prop="customerBankCardNo">
           <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -50,7 +50,9 @@
             <div class="chooseList" v-for="(item,index) in selectAllList" :key="index">
               <span>{{item.customerName}}</span>
               <span>待结算总额：{{item.waitSettleAmount}}元</span>
-              <span>本次结算金额：<Input type="text" v-model="item.amount" style="width: 60px;" placeholder="请输入..."></Input>元</span>
+              <span>本次结算金额：
+                  <InputNumber  style="width: 160px;" :max="item.waitSettleAmount" :min="0" v-model="item.amount" placeholder="请输入...">
+                  </InputNumber>元</span>
             </div>
           </div>
         </FormItem>
@@ -187,9 +189,16 @@
       inTime() {
         return this.dataApi.inTime != '' ? this.dataApi.inTime.getTime() : ''
       },
+      totalMoney(){
+        let strs = 0;
+        this.selectAllList.forEach(el => {
+          strs += Number(el.amount)
+        })
+        return strs.toFixed(2)
+      }
     },
     watch: {
-      'dataApi.isBuser' (newVal, oldVal) {
+      'dataApi.isBuser' () {
         this.companyList = [];
         this.bankList = [];
         this.bankCardList = [];
@@ -310,7 +319,7 @@
       selectAction() {
         if (this.selectList.length > 0) {
           this.selectList.forEach(el => {
-            el.amount = ''
+            el.amount = 0;
           })
           this.selectAllList = this.selectList;
           this.settlementShow = false;

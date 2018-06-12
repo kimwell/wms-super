@@ -4,13 +4,13 @@
       <div class="filter-wrapper">
         <div class="filter-item">
           <Select v-model="filterApi.buser" filterable remote :remote-method="remoteMethod" placeholder="选择供应商" style="width: 200px;" :loading="queryLoading">
-                <Option v-for="(option, index) in companyList" :value="`${option.companyName}`" :key="index">{{option.companyName}}</Option>
-              </Select>
+            <Option v-for="(option, index) in companyList" :value="`${option.companyName}`" :key="index">{{option.companyName}}</Option>
+          </Select>
         </div>
         <div class="filter-item">
           <Select v-model="filterApi.type" style="width:200px;" placeholder="选择仓库">
-                <Option v-for="(item,index) in typeData" :value="item.id" :key="index">{{ item.name }}</Option>
-              </Select>
+            <Option v-for="(item,index) in typeData" :value="item.id" :key="index">{{ item.name }}</Option>
+          </Select>
         </div>
         <div class="filter-item">
           排行数前:
@@ -18,15 +18,15 @@
         </div>
         <div class="filter-item">
           <Select v-model="filterApi.storeHouse" style="width:200px;" placeholder="选择仓库">
-                <Option v-for="item in storeHouse" :value="item" :key="item">{{ item }}</Option>
-              </Select>
+            <Option v-for="item in storeHouse" :value="item" :key="item">{{ item }}</Option>
+          </Select>
         </div>
         <div class="filter-item">
           <DatePicker type="daterange" :options="dateOption" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
         </div>
       </div>
       <p slot="title">热门销售统计</p>
-      <Table border :columns="filterColums" :data="list"></Table>
+      <Table :columns="filterColums" :data="list"></Table>
     </Card>
   </div>
 </template>
@@ -98,7 +98,11 @@
           title: '排名',
           render: (h, params) => {
             let str = params.row._index + 1;
-            return h("span", str);
+            return h("span", {
+              attrs: {
+                class: `row-index${str}`
+              }
+            }, str);
           }
         }, {
           title: '客户',
@@ -256,7 +260,7 @@
   }
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
   .filter-wrapper {
     position: absolute;
     right: 16px;
@@ -265,5 +269,26 @@
       display: inline-block;
       margin-left: 10px;
     }
+  }
+  
+  .row-index1,
+  .row-index2,
+  .row-index3 {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+  }
+  .row-index1 {
+    background-color: #FF4C53
+  }
+  .row-index2 {
+    background-color: #FFCD17
+  }
+  .row-index3 {
+    background-color: #11C26D
   }
 </style>

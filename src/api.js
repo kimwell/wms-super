@@ -1216,3 +1216,9 @@ export const cargoStatics = '/sys/saleTicketStaticsBg/cargoStatics'
 *热门销售统计
 */
 export const hotStatics = '/sys/saleTicketStaticsBg/hotStatics'
+
+
+/*
+*库存货品统计
+*/
+export const wareStatics = '/sys/saleTicketStaticsBg/wareStatics'

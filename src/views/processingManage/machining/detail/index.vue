@@ -27,7 +27,7 @@
         <Row class="row-list">
           <Col span="6">货物名称：{{item.cargoName}}</Col>
           <Col span="6">剩余重量：{{item.remainWeight}}</Col>
-          <Col span="6">原重量：{{item.processWeight}}</Col>
+          <Col span="6">原重量：{{item.weight}}</Col>
           <Col span="6">卷号：{{item.coiledSheetNum}}</Col>
         </Row>
         <Row class="row-list">

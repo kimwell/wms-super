@@ -88,7 +88,7 @@
               <Col class-name="col" span="4">{{types === 1 ? '分配时间':'结算时间'}}</Col>
               <Col class-name="col" span="6">备注</Col>
             </Row>
-            <Row class-name="head" v-for="(item,index) in detailList" :key="index">
+            <Row v-for="(item,index) in detailList" :key="index">
               <Col class-name="col" span="5">{{item.amount}}</Col>
               <Col class-name="col" span="5">{{item.saleTicketId}}</Col>
               <Col class-name="col" span="4">{{item.createUser}}</Col>

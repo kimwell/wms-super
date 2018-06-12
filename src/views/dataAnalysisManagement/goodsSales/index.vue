@@ -15,8 +15,23 @@
               </div>
             </div>
           </div>
+          <div class="chart-body">
+            <div class="chart-item">
+              <div class="chart-item-title">销售额</div>
+              <div class="chart-item-main">
+                <chartTemp :listData="list" :types="2" ids="xseChart"></chartTemp>
+              </div>
+            </div>
+            <div class="chart-item">
+              <div class="chart-item-title">销售重量</div>
+              <div class="chart-item-main">
+                <chartTemp :listData="list" :types="3" ids="xswChart"></chartTemp>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="card-body-aside">
+          <div class="card-body-aside-title">条件搜索</div>
           <commFilter @on-change="doFilter" ref="childFilter"></commFilter>
         </div>
       </div>
@@ -26,9 +41,11 @@
 
 <script>
   import commFilter from '../dataAnalysisFilter/index'
+  import chartTemp from '../chartTemp/index.vue'
   export default {
     components: {
-      commFilter
+      commFilter,
+      chartTemp
     },
     data() {
       return {
@@ -49,6 +66,7 @@
           name: '销售重量(KG)',
           count: 0,
         }],
+        list: [],
         dataValue: ['', ''],
         dateOption: {
           shortcuts: [{
@@ -87,7 +105,7 @@
               }
             }
           ]
-        },
+        }
       }
     },
     computed: {
@@ -133,15 +151,20 @@
       getData(params) {
         this.$http.post(this.api.cargoStatics, params).then(res => {
           if (res.code === 1000) {
-            console.log(res)
+            this.list = res.data.list;
+            this.flexData[0].count = res.data.xs;
+            this.flexData[1].count = res.data.zf;
+            this.flexData[2].count = res.data.xsje;
+            this.flexData[3].count = res.data.zfje;
+            this.flexData[4].count = res.data.xszl;
           }
         })
-      },
+      }
     },
     mounted() {
       this.$refs.childFilter.searchFilter()
     },
-    created(){
+    created() {
       this.dataValue[0] = this.todayEnd;
       this.dataValue[1] = this.todayStart;
       this.timeRange.startTime = this.dataValue[0] != '' ? this.dataValue[0].getTime() : '';
@@ -211,6 +234,13 @@
       top: 0;
       width: 246px;
       padding-top: 16px;
+      background-color: #fff;
+      .card-body-aside-title {
+        margin: 10px 16px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #374750
+      }
     }
   }
   
@@ -218,5 +248,20 @@
     position: absolute;
     right: 16px;
     top: 10px;
+  }
+  
+  .chart-body {
+    .chart-item {
+      padding: 20px;
+      border-bottom: 1px solid #E4EAEC;
+      &:last-child {
+        border-bottom: 0;
+      }
+      .chart-item-title {
+        font-weight: bold;
+        color: #374750;
+        margin-bottom: 10px;
+      }
+    }
   }
 </style>

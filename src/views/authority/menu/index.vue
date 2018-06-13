@@ -3,7 +3,7 @@
     <Card :bordered="false" class="card">
       <p slot="title">菜单管理</p>
       <Button slot="extra" type="primary" @click="openModel(false)">新增菜单</Button>
-      <menuZtree :list.sync='ztreeDataSource' :func="nodeClick" :is-open='true'></menuZtree>
+      <menuZtree :list.sync='ztreeDataSource' :func="nodeClick" :is-open='false'></menuZtree>
     </Card>
     <!-- 添加修改面板 -->
     <Modal v-model="panelShow" :title="isEdit ? '编辑':'新增'">
@@ -11,8 +11,16 @@
         <FormItem label="菜单名称：" prop="menuName">
           <Input v-model="itemApi.menuName" placeholder="请输入"></Input>
         </FormItem>
-        <FormItem label="菜单别名：">
-          <Input v-model="itemApi.alias" placeholder="请输入"></Input>
+        <FormItem label="菜单类型：">
+          <!-- <Input v-model="itemApi.alias" placeholder="请输入"></Input> -->
+          <RadioGroup v-model="itemApi.alias">
+            <Radio label="超管">
+              <span>超管</span>
+            </Radio>
+            <Radio label="用户">
+              <span>用户</span>
+            </Radio>
+          </RadioGroup>
         </FormItem>
         <FormItem label="菜单地址：">
           <Input v-model="itemApi.url" placeholder="请输入"></Input>
@@ -58,7 +66,7 @@
           openType: 1,
           levels: "",
           id: "",
-          alias: ''
+          alias: '超管'
         },
         ruleValidate: {
           menuName: [{
@@ -91,7 +99,7 @@
             openType: 1,
             levels: "",
             id: "",
-            alias: ''
+            alias: '超管'
           };
         } else if (o == 2) {
           // 编辑
@@ -164,7 +172,7 @@
           openType: 1,
           levels: "",
           id: "",
-          alias: ''
+          alias: '超管'
         };
       }
     },

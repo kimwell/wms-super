@@ -19,7 +19,7 @@
             <div class="chart-item">
               <div class="chart-item-title">库存总重量(KG)</div>
               <div class="chart-item-main">
-                <chartTemp :listData="list" :types="1" ids="kcChart"></chartTemp>
+                <chartTemp :listData="list" :types="1" ids="kcChart" ref="chartFef"></chartTemp>
               </div>
             </div>
           </div>
@@ -191,6 +191,11 @@
     },
     mounted() {
       this.$refs.childFilter.searchFilter();
+      window.onresize = () => {
+      setTimeout(() => {
+          this.$refs.chartFef.myChart.resize();
+      }, 100)
+      }
     },
     created() {
       this.dataValue[0] = this.todayEnd;

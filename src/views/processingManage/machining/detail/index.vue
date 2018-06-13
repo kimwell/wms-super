@@ -56,7 +56,7 @@
             <Col class-name="col" span="5">重量</Col>
           </Row>
           <Row v-for="(sub,index) in item.processTicketInfos" :key="index">
-            <Col class-name="col" span="4">{{index}}</Col>
+            <Col class-name="col" span="4">{{index + 1}}</Col>
             <Col class-name="col" span="5">{{`${sub.height}*${sub.width}*${sub.length}`}}</Col>
             <Col class-name="col" span="5">{{sub.tolerance}}</Col>
             <Col class-name="col" span="5">{{sub.number}}</Col>

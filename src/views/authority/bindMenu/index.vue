@@ -5,7 +5,7 @@
       <Button slot="extra" type="primary" @click="bindMenu(false)">绑定菜单</Button>
       <Row>
         <Col span="18" push="6">
-          <Tree :data="menuDataSource" ref="Tree" @on-check-change="checkHandle"  show-checkbox></Tree>
+          <Tree :data="menuDataSource" ref="Tree" @on-check-change="checkHandle" expand="false" show-checkbox></Tree>
         </Col>
         <Col span="6" pull="18">
           <ztree :list.sync='ztreeDataSource' :func="nodeClick" :is-open='true'></ztree>

@@ -24,6 +24,9 @@
         <div class="filter-item">
           <DatePicker type="daterange" :options="dateOption" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
         </div>
+        <div class="filter-item">
+            <Button type="text" @click="resetData">清除筛选</Button>
+        </div>
       </div>
       <p slot="title">热门销售统计</p>
       <Table :columns="filterColums" :data="list"></Table>
@@ -227,6 +230,20 @@
             this.list = res.data
           }
         })
+      },
+
+      //  清除筛选
+      resetData(){
+          this.filterApi = {
+              pageSize: 10,
+              startTime: '',
+              endTime: '',
+              type: 1,
+              param: '',
+              storeHouse: ''
+          };
+          this.dataValue = ['',''];
+          this.getList(this.handleFilter)
       },
       //  供应商
       remoteMethod(query) {

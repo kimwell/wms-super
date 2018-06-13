@@ -62,7 +62,7 @@
         </div>
         <div>
           <Table width="100%" v-if="item.status === '2'" border :columns="goodsColumns" :data="dataApi.goods"></Table>
-          <Table width="100%"  v-if="item.status === '3'" border :columns="goodsDetailColumns" :data="item.processIns"></Table>
+          <Table width="100%"  v-if="item.status === '3' || item.status === '4'" border :columns="goodsDetailColumns" :data="item.processIns"></Table>
         </div>
       </div>
     </Card>
@@ -79,8 +79,8 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.cargoStatus" style="width: 130px;">
-                                            <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-                                          </Select>
+            <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="品类：">
           <Select v-model="pageApi.category" style="width: 130px;">
@@ -1009,7 +1009,7 @@
           cargoStatus: this.pageApi.cargoStatus,
           model: this.pageApi.model,
           costPrice: this.pageApi.costPrice,
-          wareHouseName: this.item.storeHouseName,
+          wareHouseName: this.pageApi.wareHouseName,
           productNumber: this.pageApi.productNumber,
           ownerName: this.pageApi.ownerName,
           ownerId: this.item.customerId

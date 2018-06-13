@@ -176,12 +176,6 @@
     },
     mounted() {
       this.chartInit();
-      let _this = this;
-      window.onresize = function(){
-        setTimeout(() =>{
-          _this.chartInit()
-        },300)
-      }
     }
   }
 </script>

@@ -343,6 +343,8 @@
               if (res.code === 1000) {
                 this.$Message.success('保存成功')
                 this.$router.push('paymentOrder');
+              }else{
+                this.$Message.error(res.message);
               }
             })
           } else {

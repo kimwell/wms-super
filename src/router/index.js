@@ -138,6 +138,10 @@ const router = new Router({
         path: 'supplierAmountAdd',
         name: 'supplierAmountAdd',
         component: resolve => require(['@/views/financialManagement/supplierAmountManagement/add/index'], resolve),
+      },{
+        path: 'scrapList',
+        name: 'scrapList',
+        component: resolve => require(['@/views/financialManagement/scrapList/index'], resolve),
       }]
     }, {
       path: 'dataAnalysisManagement',

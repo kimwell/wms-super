@@ -89,7 +89,7 @@
       </Row>
       <Row class="row-list">
         <Col span="8">卷号：{{editItem.coiledSheetNum}}</Col>
-        <Col span="8">状态：{{editItem.cargoStatus}}</Col>
+        <Col span="8">状态：{{editItem.cargoStatus | tranStatus}}</Col>
         <Col span="8">在库重量：{{editItem.warehouseWeights}}</Col>
       </Row>
       <Row class="row-list">
@@ -295,6 +295,23 @@
       },
       productImg() {
         return this.editItem.productImg != undefined ? this.editItem.productImg.split(',') : []
+      }
+    },
+    filters:{
+      tranStatus(val){
+        switch (val * 1) {
+          case 0:
+            return '暂无'
+            break;
+          case 1:
+            return '在途'
+            break;
+          case 2:
+            return '在库'
+            break;
+          default:
+            break;
+        }
       }
     },
     watch: {

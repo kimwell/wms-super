@@ -36,8 +36,8 @@
       <Form :mode="detailApi" :label-width="80" inline>
         <FormItem label="金额：">
           <Select v-model="detailApi.toZero" style="width: 100px;">
-              <Option v-for="item in [{value: 1,label: '正'},{value: 0,label: '负'}]" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+                <Option v-for="item in [{value: 1,label: '正'},{value: 0,label: '负'}]" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
         </FormItem>
         <FormItem label="费用科目：">
           <Input type="text" v-model="detailApi.feeType" placeholder="请输入..."></Input>
@@ -73,7 +73,17 @@
               <div v-else>暂无</div>
               </Col>
               <Col class-name="col" span="3">{{item.tradeTime | dateformat}}</Col>
-              <Col class-name="col" span="3">{{item.remark}}</Col>
+              <Col class-name="col" span="3">
+              <Tooltip placement="top" v-if="item.remark != ''">
+                <Button type="text" style="width: 100px;overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;">{{item.remark}}</Button>
+                <div slot="content">
+                  <p class="remark-p">{{item.remark}}</p>
+                </div>
+              </Tooltip>
+              <span v-else>暂无</span>
+              </Col>
             </Row>
             <Row v-if="detailList.length == 0">
               <Col class-name="col" span="24">暂无数据</Col>
@@ -233,6 +243,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        &:last-child{
+          overflow:inherit;
+        }
       }
     }
     .page-count {
@@ -241,7 +254,9 @@
       bottom: 0;
     }
   }
-  
+  .remark-p{
+    white-space: normal;
+  }
   .showImg {
     text-align: center;
     img {

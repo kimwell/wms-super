@@ -1199,6 +1199,16 @@ export const doDistribute ='/sys/distribution/doDistribute'
 */
 export const distributeSettleLog ='/sys/distribution/distributeSettleLog'
 
+/*
+* 付款单列表
+*/
+export const cancelPaymentPage ='/sys/cancelTicketBg/payment/page'
+
+
+/*
+* 收款单列表
+*/
+export const cancelReceiptPage ='/sys/cancelTicketBg/receipt/page'
 
 // -----------------------------------数据分析---------------------------------
 

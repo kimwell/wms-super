@@ -61,10 +61,14 @@ export default {
     treeMenu() {
       var recurFunc = data => {
         data.forEach(i => {
-          i.title = i.menuName;
+          if(i.alias != ''){
+            i.title = `${i.menuName}(${i.alias})`;
+          }else{
+            i.title = `${i.menuName}`;
+          }
           this.$set(i, "checked", false);
           this.$set(i, "indeterminate", false);
-          this.$set(i, "expand", true);
+          this.$set(i, "expand", false);
           if (i.children) {
             recurFunc(i.children);
           }

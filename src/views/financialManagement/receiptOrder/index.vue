@@ -19,7 +19,7 @@
           <div class="table-contnet">
             <Row class-name="head">
               <Col class-name="col" span="3">客户名称</Col>
-              <Col class-name="col" span="1">进账金额</Col>
+              <Col class-name="col" span="2">进账金额</Col>
               <Col class-name="col" span="3">客户账号</Col>
               <Col class-name="col" span="3">平台账号</Col>
               <Col class-name="col" span="2">进账时间</Col>
@@ -28,11 +28,11 @@
               <Col class-name="col" span="2">操作人</Col>
               <Col class-name="col" span="2">操作时间</Col>
               <Col class-name="col" span="2">备注</Col>
-              <Col class-name="col" span="2">操作</Col>
+              <Col class-name="col" span="1">操作</Col>
             </Row>
             <Row v-for="(item,index) in list " :key="index">
               <Col class-name="col" span="3">{{item.customerName}}</Col>
-              <Col class-name="col" span="1">{{item.amount}}</Col>
+              <Col class-name="col" span="2">{{item.amount}}</Col>
               <Col class-name="col" span="3">{{item.customerBankCardNo}}</Col>
               <Col class-name="col" span="3">{{item.bankCardNo}}</Col>
               <Col class-name="col" span="2">{{item.inTime | dateformat}}</Col>
@@ -44,7 +44,7 @@
               <Col class-name="col" span="2">{{item.updateUser}}</Col>
               <Col class-name="col" span="2">{{item.updateTime | dateformat}}</Col>
               <Col class-name="col" span="2">{{item.remark}}</Col>
-              <Col class-name="col" span="2">
+              <Col class-name="col" span="1">
               <Button size="small" type="warning" @click="deleteItem(item)">作废</Button>
               </Col>
             </Row>
@@ -285,7 +285,7 @@
       getBankCard(){
         this.$http.post(this.api.findPlatBankCard).then(res =>{
           if(res.code === 1000){
-            this.bankCardList = res.data.cardInfo != ''? JSON.parse(res.data.cardInfo) : [];
+            this.bankCardList = res.data != ''? JSON.parse(res.data.cardInfo) : [];
             this.bankCardList.forEach(el =>{
               el.card = el.card.toString();
             })

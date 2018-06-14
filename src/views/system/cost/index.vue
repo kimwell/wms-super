@@ -50,19 +50,19 @@
           <Input type="text" v-model="itemApi.costName" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="单价" prop="number">
-          <Input type="text" v-model="itemApi.number" placeholder="请输入..."></Input>
+          <Input type="text" v-model.number="itemApi.number" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="计算税率" prop="tax">
-          <Input type="text" v-model="itemApi.tax" placeholder="请输入..."></Input>
+          <Input type="text" v-model.number="itemApi.tax" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="所属公司" prop="companyName">
           <Select v-if="!isEdit" v-model="itemApi.companyName" filterable remote :remote-method="remoteMethod" :loading="queryLoading">
-                <Option v-for="(option, index) in companyList" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-              </Select>
+            <Option v-for="(option, index) in companyList" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
+          </Select>
           <span v-else>{{itemApi.companyName}}</span>
         </FormItem>
         <FormItem label="排序" prop="sortIndex">
-          <Input type="text" v-model="itemApi.sortIndex" placeholder="请输入..."></Input>
+          <Input type="text" v-model.number="itemApi.sortIndex" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="备注">
           <Input type="text" v-model="itemApi.remark" placeholder="请输入..."></Input>
@@ -117,18 +117,39 @@
           }],
           number: [{
             required: true,
-            message: '不能为空',
-            trigger: 'blur'
+            message: '请输入正确的单价',
+            trigger: 'blur',
+            type: 'number'
+          }, {
+            validator: (rule, value, callback) => {
+              var reg = /^[1-9]\d*(?:\.\d{1,2}|\d*)$/;
+              if (!reg.test(value)) {
+                return callback(new Error('请输入正确的单价'));
+              } else {
+                callback();
+              }
+            }
           }],
           tax: [{
             required: true,
-            message: '不能为空',
-            trigger: 'blur'
+            message: '请输入正确的税率',
+            trigger: 'blur',
+            type: 'number',
+          }, {
+            validator: (rule, value, callback) => {
+              var reg = /^[1-9]\d*(?:\.\d{1,2}|\d*)$/;
+              if (!reg.test(value)) {
+                return callback(new Error('请输入正确的税率'));
+              } else {
+                callback();
+              }
+            }
           }],
-          sortIndex:[{
+          sortIndex: [{
             required: true,
             message: '不能为空',
-            trigger: 'blur'
+            trigger: 'blur',
+            type: 'number'
           }]
         },
         companyList: [],
@@ -199,9 +220,9 @@
             id: item.id,
             buserId: item.buserId,
             costName: item.costName,
-            number: item.number.toString(),
-            sortIndex: item.sortIndex.toString(),
-            tax: item.tax.toString(),
+            number: item.number,
+            sortIndex: item.sortIndex,
+            tax: item.tax,
             remark: item.remark,
             companyName: item.companyName
           };

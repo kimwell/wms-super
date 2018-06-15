@@ -1232,3 +1232,20 @@ export const hotStatics = '/sys/saleTicketStaticsBg/hotStatics'
 *库存货品统计
 */
 export const wareStatics = '/sys/saleTicketStaticsBg/wareStatics'
+
+
+/*
+*超管作废单列表
+*/
+export const findCancelTicketList = '/sys/cancelTicketBg/findCancelTicketList'
+
+
+/*
+*超管作废单详情
+*/
+export const findCancelTicket = '/sys/cancelTicketBg/findCancelTicket'
+
+/*
+*超管作废单确认入库
+*/
+export const cancelTicketIn = '/sys/cancelTicketBg/cancelTicketIn'

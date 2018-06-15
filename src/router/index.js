@@ -194,6 +194,14 @@ const router = new Router({
         path: 'stockOut',
         name: 'stockOut',
         component: resolve => require(['@/views/stock/stockOut/index'], resolve),
+      },{
+        path: 'stockCancel',
+        name: 'stockCancel',
+        component: resolve => require(['@/views/stock/stockCancel/index'], resolve),
+      },{
+        path: 'stockCancelDetail/:id/',
+        name: 'stockCancelDetail',
+        component: resolve => require(['@/views/stock/stockCancel/detail/index'], resolve),
       }]
     }, {
       path: 'system',

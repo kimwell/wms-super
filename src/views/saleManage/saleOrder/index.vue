@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card :bordered="false" class="card">
-      <p slot="title">加工单管理</p>
+      <p slot="title">销售单管理</p>
       <Form :mode="pageApi" :label-width="80" inline>
         <FormItem label="销售单号：">
           <Input type="text" v-model="pageApi.saleTicketId" placeholder="请输入..."></Input>
@@ -63,7 +63,7 @@
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
     </Card>
-    <Modal title="当前合并货品" width="960" v-model="show" :mask-closable="false">
+    <Modal title="销售单详情" width="960" v-model="show" :mask-closable="false">
       <div class="row-wrapper">
         <h3>基本信息 <span>{{detailItem.status | toStatus}}</span></h3>
         <Row class="row-list">

@@ -232,7 +232,8 @@
           wareHouseName: "",
           productNumber: "",
           ownerName: "",
-          ownerId: ""
+          ownerId: "",
+          hasCoiledSheetNum: '1'
         },
         activeGoods: {},
         goodsDetailColumns:[{
@@ -1012,7 +1013,8 @@
           wareHouseName: this.pageApi.wareHouseName,
           productNumber: this.pageApi.productNumber,
           ownerName: this.pageApi.ownerName,
-          ownerId: this.item.customerId
+          ownerId: this.item.customerId,
+          hasCoiledSheetNum: '1'
         };
       },
       mergeFilter() {
@@ -1241,7 +1243,8 @@
           costPrice: '',
           wareHouseName: '',
           productNumber: '',
-          internalNumber: ''
+          internalNumber: '',
+          hasCoiledSheetNum: '1'
         }
         this.getmergeData(this.mergeFilter)
       },

@@ -142,6 +142,10 @@ const router = new Router({
         path: 'scrapList',
         name: 'scrapList',
         component: resolve => require(['@/views/financialManagement/scrapList/index'], resolve),
+      },{
+        path: 'scrapDetail/:id/',
+        name: 'scrapDetail',
+        component: resolve => require(['@/views/financialManagement/scrapList/scrapDetail/index'], resolve),
       }]
     }, {
       path: 'dataAnalysisManagement',

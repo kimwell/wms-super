@@ -7,7 +7,7 @@
       <FormItem label="公司名称：">
         <Input type="text" v-model="pageApi.companyName" placeholder="请输入..."></Input>
       </FormItem>
-      <FormItem label="进账时间：">
+      <FormItem :label="types === 1 ? '进账时间：':'出账时间：'">
         <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
       </FormItem>
       <FormItem>

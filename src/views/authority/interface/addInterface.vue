@@ -111,6 +111,10 @@
                                 this.resetData();
                                 this.loading = false;
                                 this.show.is = false;
+                            }else{
+                                this.$Message.error(res.message)
+                                this.loading = false;
+                                this.show.is = false;
                             }
                         })
                     } else {

@@ -15,8 +15,8 @@
       </FormItem>
       <FormItem label="状态：">
         <Select v-model="pageApi.status" style="width: 100px;">
-          <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
+                <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
       </FormItem>
       <FormItem label="退货时间：">
         <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
@@ -62,11 +62,22 @@
       <div slot="footer">
       </div>
     </Modal>
+    <Modal v-model="panelShow" width="600" :mask-closable="false" :title="isFK ? '新增付款单':'新增收款单'">
+      <zfModal :isFK="isFK" ref="sfModal" @on-close="onClose" :itemData="currentItem"></zfModal>
+      <div slot="footer">
+        <Button @click="panelShow = false">取消</Button>
+        <Button type="primary" @click="handleAction">确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
+import zfModal from './zfModal'
   export default {
+    components:{
+      zfModal
+    },
     data() {
       return {
         pageApi: {
@@ -87,6 +98,7 @@
         saleDetail: {},
         currentItem: {},
         show: false,
+        panelShow: false,
         statusData: [{
           value: 1,
           label: '待退货入库'
@@ -108,8 +120,8 @@
         }],
         list: [],
         totalCount: 0,
-        columns:[
-          {
+        isFK: false,
+        columns: [{
             title: "序号",
             key: "cargoName",
             width: 60,
@@ -137,8 +149,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                          params.row.length
-                        }`;
+                                params.row.length
+                              }`;
               return h("div", str);
             }
           },
@@ -341,7 +353,9 @@
           width: 200,
           render: (h, params) => {
             let status = params.row.status;
+            //  当待退回供应商金额和待退回客户金额为0时 付款单
             let aPay = params.row.customerGet === 0 && params.row.sellGet === 0;
+            //  当待客户支付金额和待供应商支付金额为0时 收款单
             let aRepit = params.row.customerPay === 0 && params.row.sellPay === 0;
             let arr = [
               h('Button', {
@@ -357,39 +371,45 @@
                     this.goDetail(params.row)
                   }
                 }
-              }, '详情'),
-              h('Button', {
-                props: {
-                  type: 'warning',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.actionItem(true,params.row)
-                  }
-                }
-              }, '收款单'),
-              h('Button', {
-                props: {
-                  type: 'warning',
-                  size: 'small'
-                },
-                on: {
-                  click: () => {
-                    this.actionItem(false,params.row)
-                  }
-                }
-              }, '付款单')
+              }, '详情')
             ];
-            // if(status != '3' || !aRepit){
-            //   arr.splice(1,2);
-            // }
-            // if(status != '1' || status != '2' || status != '3' || aPay){
-            //   arr.splice(1,1);
-            // }
+            //  付款单
+            if (status != '3' && aPay) {
+              let payArr = [
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.actionItem(true, params.row)
+                    }
+                  }
+                }, '付款单')
+              ];
+              arr.push(payArr);
+            }
+            //  收款单
+            if (status != '1' || status != '2' || status != '3' && aRepit) {
+              let payArr = [
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.actionItem(false, params.row)
+                    }
+                  }
+                }, '收款单')
+              ];
+              arr.push(payArr);
+            }
             return h('div', arr);
           }
         }]
@@ -470,7 +490,7 @@
         this.getList(this.handleFilter)
       },
       goDetail(data) {
-        this.$router.push('./scrapDetail/'+data.id)
+        this.$router.push('./scrapDetail/' + data.id)
       },
       salesDetail(data) {
         this.$http.post(this.api.findSaleTicket, {
@@ -482,8 +502,18 @@
         })
         this.show = true
       },
-      actionItem(isFK,data){
+      actionItem(isFK, data) {
+        //  false收款单 true付款单
+        this.isFK = isFK;
         this.currentItem = data || {};
+        this.panelShow = true;
+      },
+      //  保存收付款单
+      handleAction(){
+        this.$refs.sfModal.save();
+      },
+      onClose(data){
+        this.panelShow = data;
       }
     },
     created() {
@@ -524,9 +554,10 @@
     text-align: right;
     margin-top: 20px;
   }
-  .row-wrapper{
+  
+  .row-wrapper {
     margin-bottom: 20px;
-    .numbers{
+    .numbers {
       color: #008947;
       font-weight: bold;
     }

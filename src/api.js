@@ -1250,3 +1250,29 @@ export const findCancelTicket = '/sys/cancelTicketBg/findCancelTicket'
 */
 export const cancelTicketIn = '/sys/cancelTicketBg/cancelTicketIn'
 
+
+/*
+*供应商银行卡
+*/
+export const getCompanyCard = '/sys/buserInfoBg/getCompanyCard'
+
+
+/*
+*新增付款单
+*/
+export const cancelTicketBgPayment = '/sys/cancelTicketBg/payment'
+
+/*
+*新增收款单
+*/
+export const cancelTicketBgReceipt = '/sys/cancelTicketBg/receipt'
+
+/*
+*取消付款单
+*/
+export const paymentCancel = '/sys/cancelTicketBg/payment/cancel'
+
+/*
+*取消收款单
+*/
+export const receiptCancel = '/sys/cancelTicketBg/receipt/cancel'

@@ -15,11 +15,41 @@
       </FormItem>
     </Form>
     <Table width="100%" :columns="tableHeader" :data="list"></Table>
+    <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
+    <Modal v-model="show" width="800" :mask-closable="false" title="查看附件">
+      <div class="showImg">
+        <img :src="showImg">
+      </div>
+      <div slot="footer">
+        <Button @click="show = false">关闭</Button>
+      </div>
+    </Modal>
+    <Modal v-model="cancelShow" width="600" :mask-closable="false" :title="types === 1 ? '作废收款单':'作废付款单'">
+      <Form  :model="dataApi" ref="formRef" :label-width="100" :rules="ruleInline">
+      <FormItem label="作废备注：" prop="deleteRemark">
+        <Input type="text" v-model="dataApi.deleteRemark" style="width: 300px;" placeholder="请输入..."></Input>
+      </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button @click="cancelShow = false">取消</Button>
+        <Button type="primary" @click="handleAction">确定</Button>
+      </div>
+    </Modal>
+    <Modal v-model="detailShow" width="600" :mask-closable="false" :title="this.types === 1 ? '收款单详情':'付款单详情'">
+      <detailModal :activeData="activeItem"></detailModal>
+      <div slot="footer">
+        <Button @click="detailShow = false">关闭</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
+import detailModal from './detailModal'
   export default {
+    components:{
+      detailModal
+    },
     props: {
       types: Number
     },
@@ -33,52 +63,118 @@
           companyName: '',
           cancelTicketId: ''
         },
+        dataApi: {
+          id: '',
+          deleteRemark: ''
+        },
+        ruleInline: {
+          deleteRemark: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'change'
+          }],
+        },
+        show:false,
+        showImg:  '',
+        cancelShow: false,
+        detailShow: false,
+        activeItem: {},
         list: [],
         totalCount: 0,
         dataValue: ['', ''],
         tableHeader:[{
           title: '作废单编号',
-          key: 'createUser',
-          minWidth: 200
+          key: 'cancelTicketId',
+          minWidth: 200,
+          render: (h, params) => {
+            let str = params.row.cancelTicketId;
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'text',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.salesDetail(params.row)
+                  }
+                }
+              }, str),
+            ]);
+          }
         },{
           title: '公司名称',
-          key: 'createUser',
+          key: 'customerName',
           minWidth: 200
         },{
           title: this.types === 1 ? '进账金额':'出账金额',
-          key: 'createUser',
-          minWidth: 200
+          key: 'amount',
+          minWidth: 100
         },{
           title: '客户账号',
-          key: 'createUser',
+          key: 'customerBankCardNo',
           minWidth: 200
         },{
           title: '平台账号',
-          key: 'createUser',
+          key: 'bankCardNo',
           minWidth: 200
         },{
           title: this.types === 1 ? '进账时间':'出账时间',
-          key: 'createUser',
-          minWidth: 200
+          key: 'inTime',
+          minWidth: 150,
+          render: (h,params) =>{
+            let t = this.formatDateTime(params.row.inTime)
+            return h('span',t)
+          }
         },{
           title: '银行账号流水号',
-          key: 'createUser',
+          key: 'bankTradeNo',
           minWidth: 200
         },{
           title: '附件',
-          key: 'createUser',
-          minWidth: 100
+          key: 'fileAddress',
+          minWidth: 100,
+          render: (h, params) => {
+            let fileAddress = params.row.fileAddress;
+            if(fileAddress != ''){
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.previewImg( params.row.fileAddress)
+                  }
+                }
+              }, '查看'),
+            ]);
+            }else{
+              return h('span','暂无')
+            }
+          }
         },{
           title: '操作人',
           key: 'createUser',
-          minWidth: 200
+          minWidth: 150
         },{
           title: '操作时间',
-          key: 'createUser',
-          minWidth: 200
+          key: 'updateTime',
+          minWidth: 150,
+          render: (h,params) =>{
+            let t = this.formatDateTime(params.row.updateTime)
+            return h('span',t)
+          }
         },{
           title: '备注',
-          key: 'createUser',
+          key: 'remark',
           minWidth: 200
         }, {
           title: '操作',
@@ -97,7 +193,7 @@
                 },
                 on: {
                   click: () => {
-                    // this.goDetail( params.row)
+                    this.goDetail( params.row)
                   }
                 }
               }, '详情'),
@@ -108,7 +204,7 @@
                 },
                 on: {
                   click: () => {
-                    // this.deleteItem(params.row)
+                    this.deleteItem(params.row)
                   }
                 }
               }, '作废')
@@ -141,6 +237,21 @@
       },
     },
     methods: {
+      formatDateTime(t) {
+        var date = new Date(t);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+      },
       resetFilter() {
         this.pageApi = {
           currentPage: 1,
@@ -161,6 +272,44 @@
             this.totalCount = res.data.totalCount;
           }
         })
+      },
+      changePage(data){
+        this.dataApi.currentPage = page;
+        this.getList(this.handleFilter)
+      },
+      previewImg(data){
+        this.show = true;
+        this.showImg = data;
+      },
+      salesDetail(data){
+        this.$router.push('./scrapDetail/' + data.cancelTicketId)
+      },
+      goDetail(data){
+        this.activeItem = data || {};
+        this.detailShow = true;
+      },
+      deleteItem(data){
+        this.cancelShow = true;
+        this.dataApi.id = data.id;
+      },
+      handleAction(){
+        this.$refs.formRef.validate((valid) => {
+          if(valid){
+            let saveApi = this.types === 1 ? this.api.receiptCancel : this.dataApi.paymentCancel;
+            let params = this.$clearData(this.dataApi)
+            this.$http.post(saveApi,params).then(res =>{
+              if(res.code === 1000){
+                this.$Message.success('作废成功');
+                this.cancelShow = false;
+                this.getList(this.handleFilter);
+              }else{
+                this.$Message.error(res.message);
+              }
+            })
+          }else{
+            this.$Message.error('备注不能为空')
+          }
+        })
       }
     },
     created() {
@@ -170,5 +319,11 @@
 </script>
 
 <style lang='less' scoped>
-  
+  .showImg{
+    img{
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+  }
 </style>

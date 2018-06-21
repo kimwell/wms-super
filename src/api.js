@@ -945,7 +945,7 @@ export const findStorageIn= '/sys/storageIn/findStorageIn'
 /**
  * 分页查询货品
  */
-export const findCargoInfoList= '/common/cargoInfo/page'
+export const findCargoInfoList= '/sys/cargoInfo/page'
 
 
 // -----------------------------------仓库管理---------------------------------
@@ -984,7 +984,7 @@ export const findProcessTicketList= '/sys/processTicket/findProcessTicketList'
 /**
  * 查询仓库
  */
-export const findAWareHouse= '/common/wareHouse/list'
+export const findAWareHouse= '/sys/wareHouse/list'
 
 /**
  * 加工单详情查询
@@ -1078,7 +1078,7 @@ export const findFeeType= '/sys/feeType/findFeeType'
 /*
 *客户账户列表分页查询
 */
-export const customerAccountPage= '/common/customerAccount/page'
+export const customerAccountPage= '/sys/customerAccount/page'
 
 
 /*

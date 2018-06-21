@@ -12,7 +12,7 @@
           <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
         </FormItem>
         <FormItem>
-          <Button type="warning" @click.native="resetFilter">清除</Button>
+          <Button type="warning" @click="resetFilter">清除</Button>
         </FormItem>
       </Form>
       <Row >

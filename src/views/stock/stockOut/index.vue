@@ -13,7 +13,9 @@
           <Input type="text" v-model="pageApi.buyCompanyName" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="仓库名称：">
-          <Input type="text" v-model="pageApi.storeHouseName" placeholder="请输入..."></Input>
+          <Select v-model="pageApi.storeHouseName" style="width: 150px;">
+            <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
@@ -66,7 +68,7 @@
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
     </Card>
-    <Modal title="当前合并货品" width="960" v-model="show" :mask-closable="false">
+    <Modal title="出库单详情" width="960" v-model="show" :mask-closable="false">
       <div class="row-wrapper">
         <h3>基本信息
           <span>出库单号：{{detailItem.outBound.id}}</span>
@@ -136,6 +138,7 @@
           carId: '',
           remark: ''
         },
+        storeHouseList: [],
         dataValue: ['', ''],
         statusData: [{
           label: '待支付',
@@ -207,7 +210,7 @@
             key: "cargoName",
             width: 100,
             render: (h, params) => {
-              let str = params.row._index;
+              let str = params.index + 1;
               return h("div", str);
             }
           },
@@ -393,6 +396,13 @@
           }
         })
       },
+      getStoreHouse(){
+        this.$http.post(this.api.findAWareHouse).then(res =>{
+          if(res.code === 1000){
+            this.storeHouseList = res.data;
+          }
+        })
+      },
       goDetail(data) {
         this.show = true;
         this.outApi.outBoundId = data.id;
@@ -426,6 +436,7 @@
     },
     created() {
       this.getList(this.handleFilter);
+      this.getStoreHouse();
     }
   }
 </script>

@@ -255,7 +255,7 @@
         dataApi: {
           companyName: '',
           address: '',
-          customerRole: [],
+          customerRole: ['1'],
           customerType: '',
           department: '',
           supplierType: '',
@@ -604,7 +604,7 @@
             id: '',
             companyName: '',
             address: '',
-            customerRole: [],
+            customerRole: ['1'],
             customerType: '',
             department: '',
             supplierType: '',

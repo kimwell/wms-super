@@ -14,7 +14,7 @@
           <Row class-name="head">
             <Col class-name="col" span="6">客户公司名称</Col>
             <Col class-name="col" span="6">账户余额(元)</Col>
-            <Col class-name="col" span="6">未完成分配订单数</Col>
+            <Col class-name="col" span="6">待结算订单总数</Col>
             <Col class-name="col" span="6">操作</Col>
           </Row>
           <Row v-for="(item,index) in list " :key="index">

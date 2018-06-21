@@ -20,13 +20,13 @@
         </FormItem>
         <FormItem v-if="dataApi.isBuser == 'false'" label="客户名称：" prop="customerName">
           <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-              <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
-            </Select>
+                  <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
+                </Select>
         </FormItem>
         <FormItem v-if="dataApi.isBuser == 'true'" label="供应商名称：" prop="customerName">
           <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-            <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-          </Select>
+                <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
+              </Select>
         </FormItem>
         <FormItem label="客户账户：" prop="customerBankCardNo">
           <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -51,8 +51,8 @@
               <span>{{item.customerName}}</span>
               <span>待结算总额：{{item.waitSettleAmount}}元</span>
               <span>本次结算金额：
-                  <InputNumber  style="width: 160px;" :max="item.waitSettleAmount" :min="0" v-model="item.amount" placeholder="请输入...">
-                  </InputNumber>元</span>
+                      <InputNumber style="width: 160px;" :max="item.waitSettleAmount" :min="0" v-model="item.amount" placeholder="请输入...">
+                      </InputNumber>元</span>
             </div>
           </div>
         </FormItem>
@@ -189,12 +189,15 @@
       inTime() {
         return this.dataApi.inTime != '' ? this.dataApi.inTime.getTime() : ''
       },
-      totalMoney(){
-        let strs = 0;
+      totalMoney() {
+        let nums = 0;
         this.selectAllList.forEach(el => {
-          strs += Number(el.amount)
+          nums += Number(el.amount)
         })
-        return strs.toFixed(2)
+        return nums
+      },
+      allSellMoney() {
+        return this.totalMoney > this.detail.account
       }
     },
     watch: {
@@ -210,6 +213,7 @@
         this.dataApi.amount = '';
         this.dataApi.customerBankName = '';
         this.dataApi.paymentOrderAmountItem = [];
+        this.selectAllList = [];
       }
     },
     methods: {
@@ -223,7 +227,7 @@
       getBankCard() {
         this.$http.post(this.api.findPlatBankCard).then(res => {
           if (res.code === 1000) {
-            this.bankCardList = res.data.cardInfo != '' ? JSON.parse(res.data.cardInfo) : [];
+            this.bankCardList = res.data != '' ? JSON.parse(res.data.cardInfo) : [];
             this.bankCardList.forEach(el => {
               el.card = el.card.toString();
             })
@@ -343,7 +347,7 @@
               if (res.code === 1000) {
                 this.$Message.success('保存成功')
                 this.$router.push('paymentOrder');
-              }else{
+              } else {
                 this.$Message.error(res.message);
               }
             })
@@ -353,7 +357,7 @@
         })
       },
       goBack() {
-        this.$router.push('paymentOrder')
+        this.$router.go(-1)
       }
     },
     created() {

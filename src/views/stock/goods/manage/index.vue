@@ -37,19 +37,24 @@
               <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
             </Select>
         </FormItem>
-        <FormItem label="厚度：">
+        <FormItem label="仓库：">
+          <Select v-model="pageApi.wareHouseName" style="width: 130px;">
+              <Option v-for="(item,index) in wareHouseList" :value="item" :key="item.index">{{ item }}</Option>
+            </Select>
+        </FormItem>
+        <FormItem label="厚度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.heightBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
           <Input type="text" v-model="pageApi.heightEnd" style="width:60px;" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="宽度：">
+        <FormItem label="宽度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.widthBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
           <Input type="text" v-model="pageApi.widthEnd" style="width:60px;" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="长度：">
+        <FormItem label="长度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.lengthBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
           <Input type="text" v-model="pageApi.lengthEnd" style="width:60px;" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="规格：">
+        <FormItem label="规格："  v-if="!isBJ">
           <Input type="text" v-model="pageApi.specifications" style="width:80px;" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="公差：">
@@ -262,6 +267,7 @@
         surfaceList: [],
         materialList: [],
         proPlaceList: [],
+        wareHouseList: []
       }
     },
     computed: {
@@ -295,6 +301,9 @@
       },
       productImg() {
         return this.editItem.productImg != undefined ? this.editItem.productImg.split(',') : []
+      },
+      isBJ(){
+        return this.pageApi.category == '不锈钢卷' || this.pageApi.category == '不锈钢板'
       }
     },
     filters:{
@@ -422,6 +431,14 @@
             this.proPlaceList = res.data;
           }
         })
+      },
+      // 仓库
+      getWareHouse(){
+        this.$http.post(this.api.findAWareHouse).then(res =>{
+          if(res.code === 1000){
+            this.wareHouseList = res.data;
+          }
+        })
       }
     },
     created() {
@@ -429,6 +446,7 @@
       this.getSurfaceList();
       this.getMaterialList();
       this.getProPlaceList();
+      this.getWareHouse();
       this.getList(this.handleFilter);
     }
   }

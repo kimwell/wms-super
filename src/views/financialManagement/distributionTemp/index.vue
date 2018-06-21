@@ -207,6 +207,7 @@
           aType: this.types,
           updateUser: ''
         }
+        this.dataValue = ['','']
         this.getList(this.handleFilter)
       },
       resetDetail(){

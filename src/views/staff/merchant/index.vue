@@ -4,7 +4,7 @@
       <p slot="title">商户管理</p>
       <Button slot="extra" type="primary" @click="openModel(false)">新增商户</Button>
       <Form :mode="listApi" :label-width="80" inline>
-        <FormItem label="商户公司">
+        <FormItem label="商户名称：">
           <Input type="text" v-model="listApi.companyName" @on-change="onFilter" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem>
@@ -110,15 +110,15 @@
           <Input v-model="accountData.realName" placeholder="用户真实姓名"></Input>
         </FormItem>
         <FormItem label="账号" prop="mobile">
-          <Input v-model="accountData.mobile" ref="mobile" placeholder="账号"></Input>
+          <Input v-model="accountData.mobile" autocomplete="off" ref="mobile" placeholder="账号"></Input>
         </FormItem>
         <FormItem label="密码" prop="password">
-          <Input v-model="accountData.userPsd" type="password" :placeholder="roleEdit ? '如需修改密码，请在此输入新密码' : '用户密码'"></Input>
+          <Input v-model="accountData.userPsd" autocomplete="off" type="password" :placeholder="roleEdit ? '如需修改密码，请在此输入新密码' : '用户密码'"></Input>
         </FormItem>
         <FormItem label="设置角色" prop="roleIds">
           <Select v-model="accountData.roleIds" multiple placeholder="请选择">
-                       <Option v-for="role in roleList" :key="role.id" :value="role.id">{{ role.name }}</Option>
-                    </Select>
+              <Option v-for="role in roleList" :key="role.id" :value="role.id">{{ role.name }}</Option>
+          </Select>
         </FormItem>
       </Form>
       <div slot="footer">
@@ -397,25 +397,28 @@
           realName: '',
           saasCompanyId: '',
           mainCompanyId: '',
-          roleIds: []
+          roleIds: this.accountData.roleIds
         }
+        this.$refs.userInfo.resetFields();
       },
+      //  编辑绑定账号
       bindAccount(data, roleEdit) {
         this.roleEdit = roleEdit;
-        this.modalShow = true;
+        this.accountData.roleIds = []
         if (roleEdit) {
           data.roleInfos.forEach(el => {
             this.accountData.roleIds.push(el.roleId)
           })
           this.accountData.mainCompanyId = data.mainCompanyId,
-            this.accountData.saasCompanyId = data.saasCompanyId,
-            this.accountData.mobile = data.mobile,
-            this.accountData.userName = data.userName,
-            this.accountData.realName = data.realName
+          this.accountData.saasCompanyId = data.saasCompanyId,
+          this.accountData.mobile = data.mobile,
+          this.accountData.userName = data.userName,
+          this.accountData.realName = data.realName
         } else {
           this.accountData.mainCompanyId = data.companyId;
           this.accountData.saasCompanyId = data.id
         }
+        this.modalShow = true;
       },
       //  绑定账号
       accountHandle() {

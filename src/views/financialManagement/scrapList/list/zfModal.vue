@@ -23,8 +23,8 @@
       </FormItem>
       <FormItem v-if="dataApi.cType == '1'" label="供应商名称：" prop="buserName">
         <Select v-model="dataApi.buserName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-                <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-              </Select>
+                    <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
+                  </Select>
       </FormItem>
       <FormItem v-if="dataApi.cType == '1'" label="供应商银行账户：" prop="buserBankCardNo">
         <AutoComplete v-model="dataApi.buserBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -36,8 +36,8 @@
       </FormItem>
       <FormItem v-if="dataApi.cType == '2'" label="客户名称：" prop="customerName">
         <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-                <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
-              </Select>
+                    <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
+                  </Select>
       </FormItem>
       <FormItem v-if="dataApi.cType == '2'" label="客户银行账户：" prop="customerBankCardNo">
         <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -155,7 +155,7 @@
             type: 'number'
           }, {
             validator: (rule, value, callback) => {
-              var reg =/^((?!0)\d+(\.\d{1,2})?)$/g;
+              var reg = /^((?!0)\d+(\.\d{1,2})?)$/g;
               if (!reg.test(value)) {
                 return callback(new Error('请输入正确的入账金额'));
               } else {
@@ -185,6 +185,15 @@
       },
       sellPay() {
         return this.itemData.sellPay === 0;
+      },
+      customerNum() {
+        return this.itemData.customerPay - this.dataApi.amount === 0
+      },
+      sellNum() {
+        return this.itemData.sellPay - this.dataApi.amount === 0
+      },
+      isZero() {
+        return this.itemData.customerPay - this.dataApi.amount === 0 && this.itemData.sellPay - this.dataApi.amount === 0 && this.itemData.customerGet === 0 && this.itemData.sellGet === 0;
       }
     },
     watch: {
@@ -321,6 +330,19 @@
         })
       },
       save() {
+        if (this.isZero) {
+          this.$Modal.confirm({
+            title: "再次确认",
+            content: "提交后，客户和供应商金额结算已完成，状态将变为已完成，确认是否提交？",
+            onOk: () => {
+              this.saveData();
+            }
+          })
+        } else {
+          this.saveData();
+        }
+      },
+      saveData() {
         let params = this.$clearData(this.dataApi);
         params.inTime = this.inTime;
         params.cancelTicketId = this.itemData.id;
@@ -330,12 +352,12 @@
           params.buserId = sp[1];
         }
         let saveApi = this.isFK ? this.api.cancelTicketBgPayment : this.api.cancelTicketBgReceipt;
-        this.$http.post(saveApi,params).then(res =>{
-          if(res.code === 1000){
-            this.$emit('on-close',false)
+        this.$http.post(saveApi, params).then(res => {
+          if (res.code === 1000) {
+            this.$emit('on-close', false)
             this.$Message.success('保存成功');
             this.clearData();
-          }else{
+          } else {
             this.$Message.error(res.message);
           }
         })

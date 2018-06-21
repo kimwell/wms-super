@@ -102,15 +102,20 @@
               <Col class-name="col" span="3">序号</Col>
               <Col class-name="col" span="6">费用名称</Col>
               <Col class-name="col" span="6">数量</Col>
-              <Col class-name="col" span="6">单价</Col>
+              <Col class-name="col" span="3">单价</Col>
               <Col class-name="col" span="3">金额</Col>
+              <Col class-name="col" span="3">税</Col>
             </Row>
             <Row v-for="(item,index) in detailItem.saleTicketCosts" :key="index">
-              <Col class-name="col" span="3">{{index}}</Col>
+              <Col class-name="col" span="3">{{index+1}}</Col>
               <Col class-name="col" span="6">{{item.costName}}</Col>
               <Col class-name="col" span="6">{{item.number}}</Col>
-              <Col class-name="col" span="6">{{item.price}}</Col>
+              <Col class-name="col" span="3">{{item.price}}</Col>
               <Col class-name="col" span="3">{{item.money}}</Col>
+              <Col class-name="col" span="3">{{item.tax}}</Col>
+            </Row>
+            <Row v-if="detailItem.saleTicketCosts.length === 0" >
+              <Col class-name="col" span="24">暂无</Col>
             </Row>
           </div>
         </div>

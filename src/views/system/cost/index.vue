@@ -3,11 +3,11 @@
     <Card :bordered="false" class="card">
       <p slot="title">费用管理</p>
       <Button slot="extra" type="primary" @click="openPanel(false)">新增费用</Button>
-      <Form :mode="dataApi" :label-width="80" inline>
-        <FormItem label="费用名称">
+      <Form :mode="dataApi" :label-width="100" inline>
+        <FormItem label="费用名称：">
           <Input type="text" v-model="dataApi.costName" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="商家名称">
+        <FormItem label="所属公司名称：">
           <Input type="text" v-model="dataApi.companyName" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem>
@@ -19,7 +19,7 @@
           <Row class-name="head">
             <Col class-name="col" span="4">费用名称</Col>
             <Col class-name="col" span="4">单价/元</Col>
-            <Col class-name="col" span="3">计算税率</Col>
+            <Col class-name="col" span="3">计算税率/%</Col>
             <Col class-name="col" span="5">所属公司名称</Col>
             <Col class-name="col" span="3">排序</Col>
             <Col class-name="col" span="3">备注</Col>

@@ -19,27 +19,27 @@
             <Col class-name="col" span="4">仓库名称</Col>
             <Col class-name="col" span="2">库存上限</Col>
             <Col class-name="col" span="2">实际库存</Col>
-            <Col class-name="col" span="3">库位</Col>
-            <Col class-name="col" span="3">库管员</Col>
+            <!-- <Col class-name="col" span="3">库位</Col> -->
+            <Col class-name="col" span="4">库管员</Col>
             <Col class-name="col" span="5">地址</Col>
-            <Col class-name="col" span="1">序号</Col>
+            <Col class-name="col" span="2">序号</Col>
             <Col class-name="col" span="2">状态</Col>
-            <Col class-name="col" span="2">操作</Col>
+            <Col class-name="col" span="3">操作</Col>
           </Row>
           <Row v-for="(item,index) in list" :key="item.id">
             <Col class-name="col" span="4">{{item.name}}</Col>
             <Col class-name="col" span="2">{{item.inventory}}</Col>
             <Col class-name="col" span="2">{{item.realWeight}}吨</Col>
-            <Col class-name="col" span="3"></Col>
-            <Col class-name="col" span="3">
+            <!-- <Col class-name="col" span="3"></Col> -->
+            <Col class-name="col" span="4">
               <Tag color="blue" v-for="(sub,sindex) in item.kgName" :key="sindex">
                 {{sub}}
               </Tag>
             </Col>
             <Col class-name="col" span="5">{{item.provinceName}}{{item.cityName}}{{item.areaName}}{{item.address}}</Col>
-            <Col class-name="col" span="1">{{item.orderNum}}</Col>
+            <Col class-name="col" span="2">{{item.orderNum}}</Col>
             <Col class-name="col" span="2">{{item.status == '1' ? '有效':'存档'}}</Col>
-            <Col class-name="col" span="2">
+            <Col class-name="col" span="3">
             <Button size="small" type="warning" @click="openModel(true,item)">编辑</Button>
             <Button size="small" type="error" @click="deleteItem(item)">删除</Button>
             </Col>
@@ -56,11 +56,13 @@
         <FormItem label="仓库名称:" prop="name">
           <Input v-model="dataApi.name" placeholder="请输入"></Input>
         </FormItem>
-        <FormItem label="仓库地址:">
+        <FormItem label="仓库地址:"  style="display:inline-block;" prop="areaName">
           <adressPick ref="adressPick" @on-pick="changeAdress" :value="placePlaceholder" style="width:180px;display:inline-block;"></adressPick>
-          <Input v-model="dataApi.address" style="width:214px;" placeholder="详细地址"></Input>
         </FormItem>
-        <FormItem label="库管员:">
+        <FormItem style="display:inline-block;" prop="address">
+          <Input v-model="dataApi.address" style="width:214px;margin-left: -90px;" placeholder="详细地址"></Input>
+        </FormItem>
+        <FormItem label="库管员:" prop="warehouseManager">
         <CheckboxGroup v-model="dataApi.warehouseManager">
           <Checkbox v-for="(item,index) in kgList" :key="index" :label="item.id">
               <span>{{item.name}}-{{item.mobile}}</span>
@@ -142,6 +144,23 @@
             required: true,
             message: '不能为空',
             trigger: 'blur'
+          }],
+          address: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'blur'
+          }],
+          areaName:[{
+            required: true,
+            message: '不能为空',
+            trigger: 'change'
+          }],
+          warehouseManager: [{
+            required: true, 
+            type: 'array', 
+            min: 1, 
+            message: '至少选择一个库管员', 
+            trigger: 'change' 
           }]
         }
       }
@@ -235,6 +254,7 @@
       close(){
         this.show = false;
         this.$refs.adressPick.init();
+        this.$refs.userInfo.resetFields();
       },
       //  添加、编辑保存
       modalHandle() {

@@ -118,7 +118,7 @@
             return '已取消'
             break;
           case 6:
-            return '入库重申'
+            return '入库重审'
             break;
         }
       }

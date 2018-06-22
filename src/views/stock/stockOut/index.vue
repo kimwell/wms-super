@@ -274,7 +274,7 @@
           },
           {
             title: "过磅重量",
-            key: "poundWeight",
+            key: "poundSingleWeight",
             width: 100,
           },
           {

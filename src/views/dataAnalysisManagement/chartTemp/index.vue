@@ -134,7 +134,7 @@
         };
         // 基于准备好的dom，初始化echarts实例
         this.myChart = echarts.init(document.getElementById(this.ids));
-        this.myChart.setOption(option);
+        this.myChart.setOption(option,true);
         this.draw();
       },
       draw() {

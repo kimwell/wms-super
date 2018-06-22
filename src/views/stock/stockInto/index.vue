@@ -144,7 +144,7 @@
             key: "cargoName",
             width: 100,
             render: (h, params) => {
-              let str = params.row._index;
+              let str = params.index+1;
               return h("div", str);
             }
           },

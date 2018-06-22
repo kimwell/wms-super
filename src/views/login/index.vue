@@ -37,7 +37,8 @@
                     mobile: '',
                     password: '',
                     roleId: '',
-                    terminal: 1
+                    terminal: 1,
+                    loginType: 1
                 },
                 isLoading: false,
                 roleList: []

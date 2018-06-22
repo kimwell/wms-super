@@ -175,7 +175,7 @@
                         if (this.type !='' || this.itemApi.typeName != '' || this.itemApi.article != '' || this.itemApi.coverImage != '') {
                             this.$Modal.confirm({
                                 title: '保存提示',
-                                content: '确认发布新闻？',
+                                content: '确认保存新闻？',
                                 onOk: () => {
                                     let params = JSON.parse(JSON.stringify(this.itemApi))
                                     params.status = status;

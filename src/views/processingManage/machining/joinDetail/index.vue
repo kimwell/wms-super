@@ -52,10 +52,10 @@
       <div class="detail-wrapper">
         <div class="extra-form" v-if="item.status === '2'" >
           <Form :mode="dataApi" :label-width="100" inline>
-            <FormItem label="收卷值：">
+            <FormItem label="余卷过磅重量：">
               <Input type="text" v-model="dataApi.coildSheetWeight" placeholder="请输入..."></Input>
             </FormItem>
-            <FormItem label="收卷备注：">
+            <FormItem label="余卷备注：">
               <Input type="text" v-model="dataApi.remark" placeholder="请输入..."></Input>
             </FormItem>
           </Form>
@@ -241,7 +241,7 @@
             key: "cargoName",
             width: 100,
             render: (h, params) => {
-              let str = params.row._index;
+              let str = params.index + 1;
               return h("div", str);
             }
           },

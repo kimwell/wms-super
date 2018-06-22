@@ -46,6 +46,10 @@
             <div class="item-nums">{{item.cjRate}}%</div>
           </div>
           <div class="item-list">
+            <div>有效下单率</div>
+            <div class="item-nums">{{item.yxRate}}%</div>
+          </div>
+          <div class="item-list">
             <div>作废率</div>
             <div class="item-nums">{{item.zfRate}}%</div>
           </div>

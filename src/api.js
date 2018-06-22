@@ -814,6 +814,12 @@ export const delBusiness = '/sys/auth/business/delBusiness'
 
 export const  bindAccount= '/sys/auth/business/bindAccount'
 
+/**
+ * 编辑商户绑定用户
+ * 
+ */
+
+export const  bindAccountUpdate= '/sys/auth/business/bindAccountUpdate'
 
 /**
  * 商户-根据商户编号查找帐号

@@ -131,7 +131,7 @@
         detailList: [],
         detailTotalCount: 0,
         fileShow: false,
-        imgSrc: ''
+        imgSrc: '',
       }
     },
     computed: {

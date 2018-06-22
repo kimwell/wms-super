@@ -90,7 +90,7 @@
       <Row class="row-list">
         <Col span="8">密度：{{editItem.density}}</Col>
         <Col span="8">理算方法：{{editItem.formula}}</Col>
-        <Col span="8">单价重量：{{editItem.singleWeight}}</Col>
+        <Col span="8">单件重量：{{editItem.singleWeight}}</Col>
       </Row>
       <Row class="row-list">
         <Col span="8">卷号：{{editItem.coiledSheetNum}}</Col>
@@ -105,15 +105,14 @@
       <Row class="row-list">
         <Col span="8">仓库重量控制值：{{editItem.weightSwitchVal}}</Col>
         <Col span="8">成本价格：{{editItem.costPrice}}</Col>
-        <Col span="8">销售价格：{{editItem.salePrice}}</Col>
+        <Col span="8">货品库存数量：{{editItem.warehouseNumber}}</Col>
       </Row>
       <Row class="row-list">
-        <Col span="8">货品库存数量：{{editItem.warehouseNumber}}</Col>
         <Col span="8">内部编号：{{editItem.internalNumber}}</Col>
+        <Col span="8">产品编号：{{editItem.productNumber}}</Col>
         <Col span="8">备注：{{editItem.remark | isEmpty('暂无')}}</Col>
       </Row>
       <Row class="row-list">
-        <Col span="8">产品编号：{{editItem.productNumber}}</Col>
         <Col span="8">产品图片：
         <div class="pic-lists" v-for="item in productImg" :key="item">
           <img :src="item">

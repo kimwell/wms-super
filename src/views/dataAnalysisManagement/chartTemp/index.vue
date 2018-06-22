@@ -36,7 +36,7 @@
           } else if (this.types === 2) {
             //  销售额
             data.x.push(el.d);
-            data.y.push(el.xszl * 1)
+            data.y.push(el.xsje * 1)
           } else if (this.types === 3) {
             //  销售重量
             data.x.push(el.d);
@@ -138,7 +138,7 @@
         this.draw();
       },
       draw() {
-        let data = this.$clearData(this.chartData)
+        let data = this.$clearData(this.chartData);
         let _this = this;
         this.myChart.setOption({
           xAxis: {
@@ -176,6 +176,12 @@
     },
     mounted() {
       this.chartInit();
+    },
+    beforeDestroy () {
+      if (!this.myChart) { return }
+      this.myChart.clear()
+      this.myChart.dispose()
+      this.myChart = null
     }
   }
 </script>

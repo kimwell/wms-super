@@ -16,7 +16,7 @@
       </Form>
       <div class="card">
         <div class="card-contnet">
-          <div class="table-contnet">
+          <!-- <div class="table-contnet">
             <Row class-name="head">
               <Col class-name="col" span="3">客户名称</Col>
               <Col class-name="col" span="1">出账金额</Col>
@@ -51,7 +51,8 @@
             <Row v-if="list.length == 0">
               <Col class-name="col" span="24">暂无数据</Col>
             </Row>
-          </div>
+          </div> -->
+          <Table border :columns="tableHeader" :data="list"></Table>
           <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
         </div>
       </div>
@@ -106,7 +107,110 @@
           }]
         },
         prevShow: false,
-        prevImgSrc: ''
+        prevImgSrc: '',
+        tableHeader: [{
+          title: "客户名称",
+          key: "customerName",
+          minWidth: 200
+        }, {
+          title: "出账金额",
+          key: "amount",
+          minWidth: 150
+        }, {
+          title: "客户账号",
+          key: "customerBankCardNo",
+          minWidth: 200
+        }, {
+          title: "平台账号",
+          key: "bankCardNo",
+          minWidth: 200
+        }, {
+          title: "出账时间",
+          key: "inTime",
+          minWidth: 150,
+          render: (h, params) => {
+            let str = this.formatDateTime(params.row.inTime);
+            return h('span', str)
+          }
+        }, {
+          title: "银行账号流水号",
+          key: "bankTradeNo",
+          minWidth: 200
+        }, {
+          title: "附件",
+          key: "fileAddress",
+          minWidth: 100,
+          render: (h, params) => {
+            let str = params.row.fileAddress;
+            if (str != '') {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.prevImgSrc = str
+                      this.prevShow = true
+                    }
+                  }
+                }, '查看附件')
+              ]);
+            } else {
+              return h('span', '暂无')
+            }
+          }
+        }, {
+          title: "操作人",
+          key: "updateUser",
+          minWidth: 150
+        }, {
+          title: "操作时间",
+          key: "updateTime",
+          minWidth: 150,
+          render: (h, params) => {
+            let str = this.formatDateTime(params.row.updateTime);
+            return h('span', str)
+          }
+        }, {
+          title: "备注",
+          key: "remark",
+          minWidth: 200
+        }, {
+          title: "操作",
+          key: "actinos",
+          width: 150,
+          fixed: 'right',
+          render: (h, params) => {
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.deleteItem(params.row)
+                  }
+                }
+              }, '作废'),
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                  }
+                }
+              }, '详情')
+            ]);
+          }
+        }]
       }
     },
     computed: {
@@ -122,10 +226,10 @@
       inTime() {
         return this.dataApi.inTime != '' ? this.dataApi.inTime.getTime() : ''
       },
-      allPlus(){
+      allPlus() {
         let arr = 0;
-        if(this.selectAllList.length !=0){
-          this.selectAllList.forEach(el =>{
+        if (this.selectAllList.length != 0) {
+          this.selectAllList.forEach(el => {
             console.log(el)
             return arr += Number(el.account)
           })
@@ -144,6 +248,21 @@
       }
     },
     methods: {
+      formatDateTime(t) {
+        var date = new Date(t);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+      },
       getList(params) {
         this.$http.post(this.api.paymentOrderPage, params).then(res => {
           if (res.code === 1000) {
@@ -244,5 +363,4 @@
       max-width: 100%;
     }
   }
-
 </style>

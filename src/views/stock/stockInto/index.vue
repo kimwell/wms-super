@@ -7,7 +7,9 @@
           <Input type="text" v-model="pageApi.storageInId" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="仓库名称：">
-          <Input type="text" v-model="pageApi.storeHouseName" placeholder="请输入..."></Input>
+          <Select v-model="pageApi.storeHouseName" style="width: 150px;">
+                <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
+              </Select>
         </FormItem>
         <FormItem label="供应商名称：">
           <Input type="text" v-model="pageApi.sellId" placeholder="请输入..."></Input>
@@ -18,8 +20,8 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
-                    <Option v-for="item in [{name:'待确认',value: '1'},{name:'已入库',value: '2'},{name:'已完成',value: '3'},{name:'已取消',value: '4'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-                  </Select>
+                        <Option v-for="item in [{name:'待确认',value: '1'},{name:'已入库',value: '2'},{name:'已完成',value: '3'},{name:'已取消',value: '4'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+                      </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -78,39 +80,50 @@
       </Row>
       <Table width="100%" border :columns="goodsDetailColumns" :data="detailItem.storageInGoods"></Table>
     </Modal>
-        <Modal title="当前合并货品" width="800" v-model="goodsDetailShow" :mask-closable="false">
-        <div v-if="detailData">
-          <Row class="row-list">
-            <Col span="6">产品编号：{{detailData.productNumber}}</Col>
-            <Col span="6">货物名称：{{detailData.cargoName}}</Col>
-            <Col span="6">表面：{{detailData.surface}}</Col>
-            <Col span="6">物流状态：{{detailData.status | toMegerStatus}}</Col>
-          </Row>
-          <Row class="row-list">
-            <Col span="6" v-if="detailData.wareHouseCargoSet">仓库：{{detailData.wareHouseCargoSet[0].wareHouseName}}</Col>
-            <Col span="6">型号：{{detailData.model}}</Col>
-            <Col span="6">公差：{{detailData.tolerance}}</Col>
-            <Col span="6">库存数量：{{detailData.warehouseNumber}}</Col>
-          </Row>
-          <Row class="row-list">
-            <Col span="6">日期：{{detailData.createTime | dateformat}}</Col>
-            <Col span="6">品类：{{detailData.category}}</Col>
-            <Col span="6">规格：{{detailData.specifications != "" ? detailData.specifications :`${detailData.height}*${detailData.width}*${detailData.length}`}}</Col>
-            <Col span="6">库存重量：{{detailData.warehouseWeights}}</Col>
-          </Row>
-          <Row class="row-list">
-            <Col span="6">产地：{{detailData.proPlacesName}}</Col>
-            <Col span="6">材质：{{detailData.material}}</Col>
-            <Col span="6">卷号：{{detailData.coiledSheetNum}}</Col>
-            <Col span="6">预入库重量：{{detailData.weights}}</Col>
-          </Row>
-          <Row class="row-list">
-            <Col span="6">成本价：{{detailData.costPrice}}</Col>
-            <Col span="6">备注：{{detailData.remark}}</Col>
-          </Row>
-        </div>
+    <Modal title="当前合并货品" width="800" v-model="goodsDetailShow" :mask-closable="false">
+      <div v-if="detailData">
+        <Row class="row-list">
+          <Col span="6">产品编号：{{detailData.productNumber}}</Col>
+          <Col span="6">货物名称：{{detailData.cargoName}}</Col>
+          <Col span="6">表面：{{detailData.surface}}</Col>
+          <Col span="6">物流状态：{{detailData.status | toMegerStatus}}</Col>
+        </Row>
+        <Row class="row-list">
+          <Col span="6" v-if="detailData.wareHouseCargoSet">仓库：{{detailData.wareHouseCargoSet[0].wareHouseName}}</Col>
+          <Col span="6">型号：{{detailData.model}}</Col>
+          <Col span="6">公差：{{detailData.tolerance}}</Col>
+          <Col span="6">库存数量：{{detailData.warehouseNumber}}</Col>
+        </Row>
+        <Row class="row-list">
+          <Col span="6">日期：{{detailData.createTime | dateformat}}</Col>
+          <Col span="6">品类：{{detailData.category}}</Col>
+          <Col span="6">规格：{{detailData.specifications != "" ? detailData.specifications :`${detailData.height}*${detailData.width}*${detailData.length}`}}</Col>
+          <Col span="6">库存重量：{{detailData.warehouseWeights}}</Col>
+        </Row>
+        <Row class="row-list">
+          <Col span="6">产地：{{detailData.proPlacesName}}</Col>
+          <Col span="6">材质：{{detailData.material}}</Col>
+          <Col span="6">卷号：{{detailData.coiledSheetNum}}</Col>
+          <Col span="6">预入库重量：{{detailData.weights}}</Col>
+        </Row>
+        <Row class="row-list">
+          <Col span="6">成本价：{{detailData.costPrice}}</Col>
+          <Col span="6">备注：{{detailData.remark}}</Col>
+        </Row>
+      </div>
       <div slot="footer">
-        <Button @click="goodsDetailShow = false" >关闭</Button>
+        <Button @click="goodsDetailShow = false">关闭</Button>
+      </div>
+    </Modal>
+    <Modal v-model="modalShow" :closable="false" :mask-closable="false" title="确定入库">
+      <Form ref="intoForm" :model="intoData" :rules="intoRle" :label-width="90">
+        <FormItem label="备注" prop="remark">
+          <Input v-model="intoData.remark" placeholder="请输入备注"></Input>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button @click="modalShow = false">取消</Button>
+        <Button type="primary" @click="storageInto">确定</Button>
       </div>
     </Modal>
   </div>
@@ -137,14 +150,23 @@
           storageInId: '',
           remark: ''
         },
+        intoRle: {
+          remark: [{
+            required: true,
+            message: '备注不能为空',
+            trigger: 'blur'
+          }]
+        },
+        storeHouseList: [],
         show: false,
+        modalShow: false,
         detailItem: {},
         goodsDetailColumns: [{
             title: "序号",
             key: "cargoName",
             width: 100,
             render: (h, params) => {
-              let str = params.index+1;
+              let str = params.index + 1;
               return h("div", str);
             }
           },
@@ -172,8 +194,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                        params.row.length
-                      }`;
+                            params.row.length
+                          }`;
               return h("div", str);
             }
           },
@@ -306,7 +328,7 @@
             break
         }
       },
-      toMegerStatus(val){
+      toMegerStatus(val) {
         switch (val * 1) {
           case 0:
             return "暂无";
@@ -383,21 +405,38 @@
   
         } else if (flag === 2) {
           //  确认入库
+          this.modalShow = true;
           this.intoData.storageInId = item.id;
-          this.intoData.remark = '要入库了哈';
-          this.$http.post(this.api.storageIn, this.intoData).then(res => {
-            if (res.code === 1000) {
-              this.$Message.success('入库成功')
-              this.getList(this.handleFilter)
-            } else {
-              this.$Message.error(res.message)
-            }
-          })
         } else if (flag === 3) {
           //  详情
           this.getDetail(item)
           this.show = true;
         }
+      },
+      // 确认 入库
+      storageInto() {
+        this.$refs.intoForm.validate((valid) => {
+          if (valid) {
+            this.$http.post(this.api.storageIn, this.intoData).then(res => {
+              if (res.code === 1000) {
+                this.modalShow = false;
+                this.$Message.success('入库成功')
+                this.getList(this.handleFilter)
+              } else {
+                this.$Message.error(res.message)
+              }
+            })
+          } else {
+            this.$Message.error('表单验证失败!');
+          }
+        })
+      },
+      getStoreHouse() {
+        this.$http.post(this.api.findAWareHouse).then(res => {
+          if (res.code === 1000) {
+            this.storeHouseList = res.data;
+          }
+        })
       },
       getDetail(item) {
         this.$http.post(this.api.findStorageIn, {
@@ -411,8 +450,10 @@
       //  合并货品详情
       getcargoInfoDetail(data) {
         this.goodsDetailShow = true;
-        this.$http.post(this.api.cargoInfoDetail,{id: data.row.cargoId}).then(res =>{
-          if(res.code === 1000){
+        this.$http.post(this.api.cargoInfoDetail, {
+          id: data.row.cargoId
+        }).then(res => {
+          if (res.code === 1000) {
             this.detailData = res.data;
           }
         })
@@ -420,6 +461,7 @@
     },
     created() {
       this.getList(this.handleFilter);
+      this.getStoreHouse();
     }
   }
 </script>

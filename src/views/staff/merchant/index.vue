@@ -409,11 +409,12 @@
           data.roleInfos.forEach(el => {
             this.accountData.roleIds.push(el.roleId)
           })
-          this.accountData.mainCompanyId = data.mainCompanyId,
-          this.accountData.saasCompanyId = data.saasCompanyId,
-          this.accountData.mobile = data.mobile,
-          this.accountData.userName = data.userName,
-          this.accountData.realName = data.realName
+          this.accountData.mainCompanyId = data.mainCompanyId;
+          this.accountData.saasCompanyId = data.saasCompanyId;
+          this.accountData.mobile = data.mobile;
+          this.accountData.userName = data.userName;
+          this.accountData.realName = data.realName;
+          this.accountData.userId = data.userId;
         } else {
           this.accountData.mainCompanyId = data.companyId;
           this.accountData.saasCompanyId = data.id
@@ -425,7 +426,8 @@
         this.$refs.userInfo.validate((valid) => {
           if (valid) {
             let params = JSON.stringify(this.accountData);
-            this.$http.post(this.api.bindAccount, {
+            let urlApi = this.roleEdit ? this.api.bindAccountUpdate : this.api.bindAccount
+            this.$http.post(urlApi, {
               jsonInfo: params
             }).then(res => {
               if (res.code === 1000) {

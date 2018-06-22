@@ -16,42 +16,44 @@
       </Form>
       <div class="card">
         <div class="card-contnet">
-          <div class="table-contnet">
-            <Row class-name="head">
-              <Col class-name="col" span="3">客户名称</Col>
-              <Col class-name="col" span="2">进账金额</Col>
-              <Col class-name="col" span="3">客户账号</Col>
-              <Col class-name="col" span="3">平台账号</Col>
-              <Col class-name="col" span="2">进账时间</Col>
-              <Col class-name="col" span="2">银行账号流水号</Col>
-              <Col class-name="col" span="2">附件</Col>
-              <Col class-name="col" span="2">操作人</Col>
-              <Col class-name="col" span="2">操作时间</Col>
-              <Col class-name="col" span="2">备注</Col>
-              <Col class-name="col" span="1">操作</Col>
-            </Row>
-            <Row v-for="(item,index) in list " :key="index">
-              <Col class-name="col" span="3">{{item.customerName}}</Col>
-              <Col class-name="col" span="2">{{item.amount}}</Col>
-              <Col class-name="col" span="3">{{item.customerBankCardNo}}</Col>
-              <Col class-name="col" span="3">{{item.bankCardNo}}</Col>
-              <Col class-name="col" span="2">{{item.inTime | dateformat}}</Col>
-              <Col class-name="col" span="2">{{item.bankTradeNo}}</Col>
-              <Col class-name="col" span="2">
-              <Button v-if="item.fileAddress != ''" size="small" type="warning" @click.native="previewImg(item.fileAddress)">查看</Button>
-              <span v-else>暂无</span>
-              </Col>
-              <Col class-name="col" span="2">{{item.updateUser}}</Col>
-              <Col class-name="col" span="2">{{item.updateTime | dateformat}}</Col>
-              <Col class-name="col" span="2">{{item.remark}}</Col>
-              <Col class-name="col" span="1">
-              <Button size="small" type="warning" @click="deleteItem(item)">作废</Button>
-              </Col>
-            </Row>
-            <Row v-if="list.length == 0">
-              <Col class-name="col" span="24">暂无数据</Col>
-            </Row>
-          </div>
+          <!-- <div class="table-contnet">
+              <Row class-name="head">
+                <Col class-name="col" span="3">客户名称</Col>
+                <Col class-name="col" span="2">进账金额</Col>
+                <Col class-name="col" span="3">客户账号</Col>
+                <Col class-name="col" span="3">平台账号</Col>
+                <Col class-name="col" span="2">进账时间</Col>
+                <Col class-name="col" span="2">银行账号流水号</Col>
+                <Col class-name="col" span="2">附件</Col>
+                <Col class-name="col" span="2">操作人</Col>
+                <Col class-name="col" span="2">操作时间</Col>
+                <Col class-name="col" span="2">备注</Col>
+                <Col class-name="col" span="1">操作</Col>
+              </Row>
+              <Row v-for="(item,index) in list " :key="index">
+                <Col class-name="col" span="3">{{item.customerName}}</Col>
+                <Col class-name="col" span="2">{{item.amount}}</Col>
+                <Col class-name="col" span="3">{{item.customerBankCardNo}}</Col>
+                <Col class-name="col" span="3">{{item.bankCardNo}}</Col>
+                <Col class-name="col" span="2">{{item.inTime | dateformat}}</Col>
+                <Col class-name="col" span="2">{{item.bankTradeNo}}</Col>
+                <Col class-name="col" span="2">
+                <Button v-if="item.fileAddress != ''" size="small" type="warning" @click.native="previewImg(item.fileAddress)">查看</Button>
+                <span v-else>暂无</span>
+                </Col>
+                <Col class-name="col" span="2">{{item.updateUser}}</Col>
+                <Col class-name="col" span="2">{{item.updateTime | dateformat}}</Col>
+                <Col class-name="col" span="2">{{item.remark}}</Col>
+                <Col class-name="col" span="1">
+                <Button size="small" type="warning" @click="deleteItem(item)">作废</Button>
+                </Col>
+              </Row>
+              <Row v-if="list.length == 0">
+                <Col class-name="col" span="24">暂无数据</Col>
+              </Row>
+            </div> -->
+  
+          <Table border :columns="tableHeader" :data="list"></Table>
           <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
         </div>
       </div>
@@ -65,8 +67,8 @@
         </FormItem>
         <FormItem label="客户名称：" prop="customerName">
           <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-            <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
-          </Select>
+              <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
+            </Select>
         </FormItem>
         <FormItem label="客户账户：" prop="customerBankCardNo">
           <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -213,7 +215,111 @@
           id: '',
           deleteRemark: ''
         },
-        bankCardList: []
+        bankCardList: [],
+        tableHeader: [{
+          title: "客户名称",
+          key: "customerName",
+          minWidth: 200
+        }, {
+          title: "进账金额",
+          key: "amount",
+          minWidth: 150
+        }, {
+          title: "客户账号",
+          key: "customerBankCardNo",
+          minWidth: 200
+        }, {
+          title: "平台账号",
+          key: "bankCardNo",
+          minWidth: 200
+        }, {
+          title: "进账时间",
+          key: "inTime",
+          minWidth: 150,
+          render: (h,params) => {
+            let str = this.formatDateTime(params.row.inTime);
+            return h('span',str)
+          }
+        }, {
+          title: "银行账号流水号",
+          key: "bankTradeNo",
+          minWidth: 200
+        }, {
+          title: "附件",
+          key: "fileAddress",
+          minWidth: 100,
+          render: (h, params) => {
+            let str = params.row.fileAddress;
+            if(str != ''){
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    this.prevImgSrc = str
+                    this.prevShow = true
+                  }
+                }
+              }, '查看附件')
+            ]);
+            }else{
+              return h('span','暂无')
+            }
+          }
+        }, {
+          title: "操作人",
+          key: "updateUser",
+          minWidth: 150
+        }, {
+          title: "操作时间",
+          key: "updateTime",
+          minWidth: 150,
+          render: (h,params) => {
+            let str = this.formatDateTime(params.row.updateTime);
+            return h('span',str)
+          }
+        }, {
+          title: "备注",
+          key: "remark",
+          minWidth: 200
+        }, {
+          title: "操作",
+          key: "actinos",
+          width: 150,
+          fixed: 'right',
+          render: (h, params) => {
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.deleteItem(params.row)
+                  }
+                }
+              }, '作废'),
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    
+                  }
+                }
+              }, '详情')
+            ]);
+          }
+        }]
       }
     },
     computed: {
@@ -242,6 +348,21 @@
       }
     },
     methods: {
+      formatDateTime(t) {
+        var date = new Date(t);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+      },
       //  选择客户名称
       selectOnChange(data) {
         if (data != '') {
@@ -256,9 +377,9 @@
           })
         }
       },
-      customerChange(data){
-        this.bankList.forEach(el =>{
-          if(el.cardNo == data){
+      customerChange(data) {
+        this.bankList.forEach(el => {
+          if (el.cardNo == data) {
             this.dataApi.customerBankName = el.bankName
           }
         })
@@ -282,11 +403,11 @@
           }
         })
       },
-      getBankCard(){
-        this.$http.post(this.api.findPlatBankCard).then(res =>{
-          if(res.code === 1000){
-            this.bankCardList = res.data != ''? JSON.parse(res.data.cardInfo) : [];
-            this.bankCardList.forEach(el =>{
+      getBankCard() {
+        this.$http.post(this.api.findPlatBankCard).then(res => {
+          if (res.code === 1000) {
+            this.bankCardList = res.data != '' ? JSON.parse(res.data.cardInfo) : [];
+            this.bankCardList.forEach(el => {
               el.card = el.card.toString();
             })
           }
@@ -359,11 +480,6 @@
             this.$Message.error('表单验证失败!');
           }
         })
-      },
-      //  查看附件
-      previewImg(data) {
-        this.prevShow = true
-        this.prevImgSrc = data;
       },
       //  作废
       deleteItem(data) {

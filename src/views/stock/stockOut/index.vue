@@ -107,6 +107,14 @@
           </FormItem>
         </Form>
       </div>
+      <div class="row-wrapper" v-if="detailItem.saleTicket.status == '4'">
+        <h3>出库确认信息</h3>
+        <Row class="row-list">
+          <Col span="6">提货车主：{{detailItem.outBound.carMan}}</Col>
+          <Col span="6">提货车号：{{detailItem.outBound.carId}}</Col>
+          <Col span="6">备注：{{detailItem.outBound.remark}}</Col>
+        </Row>
+      </div>
       <div slot="footer">
         <div  v-if="detailItem.saleTicket.status == '3'">
           <Button type="text" @click="show = false">取消</Button>
@@ -268,32 +276,27 @@
             width: 100,
           },
           {
-            title: "理计重量",
-            key: "ljWeight",
-            width: 100
+            title: "理计重量(KG)",
+            key: "meterWeight",
+            width: 120
           },
           {
-            title: "过磅重量",
+            title: "过磅重量(KG)",
+            key: "poundWeight",
+            width: 120,
+          },
+          {
+            title: "过磅单重(KG)",
             key: "poundSingleWeight",
-            width: 100,
+            width: 120
           },
           {
-            title: "过磅单重",
-            key: "gbWeight",
-            width: 100
-          },
-          {
-            title: "卷重",
-            key: "coiledWeight",
-            width: 100,
-          },
-          {
-            title: "单价",
+            title: "单价(元/KG)",
             key: "price",
-            width: 100,
+            width: 120,
           },
           {
-            title: "税",
+            title: "税(%)",
             key: "tax",
             width: 100,
           },
@@ -301,6 +304,10 @@
             title: "金额",
             key: "money",
             width: 100,
+            render:(h,params) =>{
+              let str = `￥${params.row.money}`;
+              return h("span", str);
+            }
           },
           {
             title: "库存量",

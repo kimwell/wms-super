@@ -3,9 +3,11 @@
         <div class="sign-in">
             <h1>超管后台管理系统</h1>
             <div class="form-item-select">
-                <Select v-model="formInline.roleId" size="large">
-                    <Option v-for="item in roleList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                </Select>
+                <RadioGroup v-model="formInline.roleId">
+                    <Radio v-for="item in roleList" :value="item.id" :key="item.id" :label="item.id">
+                        <span>{{ item.name }}</span>
+                    </Radio>
+                </RadioGroup>
             </div>
             <div class="form-item">
                 <div class="form-item-content">
@@ -91,8 +93,15 @@
                 }
             },
             getRoleList() {
-                this.$http.post(this.api.findRoleList,{loginType:1}).then(res => {
+                this.$http.post(this.api.findRoleList, {
+                    loginType: 1
+                }).then(res => {
                     if (res.code === 1000) {
+                        res.data.forEach(el =>{
+                            if(el.name == '超级管理员'){
+                                this.formInline.roleId = el.id;
+                            }
+                        })
                         this.roleList = res.data;
                     }
                 })
@@ -144,7 +153,7 @@
             box-shadow: 0 0 0 30px #fff inset;
             -webkit-text-fill-color: #555
         }
-        .form-item-select{
+        .form-item-select {
             margin-bottom: 22px;
         }
         .form-item {

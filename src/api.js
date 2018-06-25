@@ -38,6 +38,13 @@ export const login = '/login/userLogin';
 export const findRoleList = '/login/findRoleList';
 
 /**
+ * 获取所有角色列表
+ */
+export const findRoleListByModel = '/login/findRoleListByModel';
+
+
+
+/**
  * 获取用户信息
  */
 export const getUser = '/api/user/findCurrentUser';

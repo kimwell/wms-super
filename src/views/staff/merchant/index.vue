@@ -452,8 +452,9 @@
         this.resetAccount();
       },
       getRoleList() {
-        this.$http.post(this.api.findRoleList, {
-          loginType: 2
+        this.$http.post(this.api.findRoleListByModel, {
+          loginType: 2,
+          integer: 1
         }).then(res => {
           if (res.code === 1000) {
             this.roleList = res.data;

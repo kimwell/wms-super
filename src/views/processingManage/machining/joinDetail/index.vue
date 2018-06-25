@@ -167,7 +167,7 @@
             <Col span="6">物流状态：{{detailItem.status | toMegerStatus}}</Col>
           </Row>
           <Row class="row-list">
-            <Col span="6" v-if="detailItem.wareHouseCargoSet">仓库：{{detailItem.wareHouseCargoSet[0].wareHouseName}}</Col>
+            <Col span="6" v-if="detailItem.wareHouseCargoSet.length != 0">仓库：{{detailItem.wareHouseCargoSet[0].wareHouseName}}</Col>
             <Col span="6">型号：{{detailItem.model}}</Col>
             <Col span="6">公差：{{detailItem.tolerance}}</Col>
             <Col span="6">库存数量：{{detailItem.warehouseNumber}}</Col>
@@ -781,7 +781,6 @@
             width: 180,
             fixed: "right",
             render: (h, params) => {
-              console.log(params)
               let _this = this;
               let status = params.row.autoStauts;
               let merge = params.row.merge;
@@ -844,8 +843,11 @@
             key: "wareHouseCargoSet",
             width: 150,
             render: (h, params) => {
-              let str = params.row.wareHouseCargoSet[0].wareHouseName;
-              return h("div", str);
+              if(params.row.wareHouseCargoSet.length > 0){
+                return h("div", params.row.wareHouseCargoSet[0].wareHouseName);
+              }else{
+                return h("div", '');
+              }
             }
           },
           {
@@ -987,7 +989,9 @@
           internalNumber: ''
         },
         goodsDetailShow: false,
-        detailItem:{},
+        detailItem:{
+          wareHouseCargoSet: []
+        },
         pageFilterData:{
           row: {}
         }
@@ -1105,7 +1109,6 @@
       },
       mergeFilter: {
         handler: _.debounce(function(val, oldVal) {
-          console.log(val)
           // 是否是翻页操作
           if (val.currentPage == oldVal.currentPage) this.mergeApi.currentPage = 1;
           this.getmergeData(this.mergeFilter);

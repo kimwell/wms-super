@@ -26,8 +26,8 @@
       <div class="detail-wrapper">
         <Row class="row-list">
           <Col span="6">货物名称：{{item.cargoName}}</Col>
-          <Col span="6">剩余重量：{{item.remainWeight}}</Col>
-          <Col span="6">原重量：{{item.weight}}</Col>
+          <Col span="6">剩余重量：{{item.remainWeight}}KG</Col>
+          <Col span="6">原重量：{{item.weight}}KG</Col>
           <Col span="6">卷号：{{item.coiledSheetNum}}</Col>
         </Row>
         <Row class="row-list">
@@ -53,7 +53,7 @@
             <Col class-name="col" span="5">规格</Col>
             <Col class-name="col" span="5">公差</Col>
             <Col class-name="col" span="5">数量</Col>
-            <Col class-name="col" span="5">重量</Col>
+            <Col class-name="col" span="5">重量(KG)</Col>
           </Row>
           <Row v-for="(sub,index) in item.processTicketInfos" :key="index">
             <Col class-name="col" span="4">{{index + 1}}</Col>

@@ -26,8 +26,8 @@
       <div class="detail-wrapper">
         <Row class="row-list">
           <Col span="6">货物名称：{{item.cargoName}}</Col>
-          <Col span="6">剩余重量：{{item.remainWeight}}</Col>
-          <Col span="6">原重量：{{item.weight}}</Col>
+          <Col span="6">剩余重量：{{item.remainWeight}}KG</Col>
+          <Col span="6">原重量：{{item.weight}}KG</Col>
           <Col span="6">卷号：{{item.coiledSheetNum}}</Col>
         </Row>
         <Row class="row-list">
@@ -45,7 +45,7 @@
       </div>
     </Card>
     <Card :bordered="false" class="card">
-      <p slot="title">加工单货物明细</p>
+      <p slot="title">加工入库货物明细</p>
       <div slot="extra">
         <Button type="warning" v-if="item.status === '2'" @click="selectGoods">选择库存货物</Button>
       </div>
@@ -304,17 +304,17 @@
             width: 120,
           },
           {
-            title: "理计重量",
+            title: "理计重量(KG)",
             key: "meterWeight",
             width: 120,
           },
           {
-            title: "过磅重量",
+            title: "过磅重量(KG)",
             key: "poundWeight",
             width: 120,
           },
           {
-            title: "过磅单重",
+            title: "过磅单重(KG)",
             key: "poundSingleWeight",
             width: 120,
           },
@@ -332,16 +332,25 @@
             title: "成本价",
             key: "costPrice",
             width: 120,
+            render: (h,params) =>{
+              return h('span',`￥${params.row.costPrice}`)
+            }
           },
           {
             title: "成本金额",
             key: "costNumber",
             width: 120,
+            render: (h,params) =>{
+              return h('span',`￥${params.row.costNumber}`)
+            }
           },
           {
             title: "销售底价",
             key: "floorPrice",
             width: 120,
+            render: (h,params) =>{
+              return h('span',`￥${params.row.floorPrice}`)
+            }
           },
           {
             title: "备注",
@@ -1360,7 +1369,7 @@
         params.goods = JSON.stringify(params.goods)
           this.$Modal.confirm({
             title: '加工单入库',
-            content: '确认将加工单入库？',
+            content: '确认开始加工？',
             onOk: () => {
               this.$http.post(this.api.saveProcessIn,params).then(res =>{
                 if(res.code === 1000){

@@ -143,6 +143,13 @@
             let str = `${params.row.zfRate}%`;
             return h("span", str);
           }
+        }, {
+          title: '有效下单率',
+          key: 'yxRate',
+          render: (h, params) => {
+            let str = `${params.row.yxRate}%`;
+            return h("span", str);
+          }
         }],
         storeHouse: [],
         dataValue: ['', ''],

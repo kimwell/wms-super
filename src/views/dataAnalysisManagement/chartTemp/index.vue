@@ -48,9 +48,9 @@
     },
     watch: {
       'chartData': {
-        handler: _.debounce(function(val, oldVal) {
+        handler(val, oldVal) {
           this.chartInit();
-        }, 200),
+        },
         deep: true
       }
     },
@@ -134,11 +134,11 @@
         };
         // 基于准备好的dom，初始化echarts实例
         this.myChart = echarts.init(document.getElementById(this.ids));
-        this.myChart.setOption(option,true);
+        this.myChart.setOption(option);
         this.draw();
       },
       draw() {
-        let data = this.$clearData(this.chartData);
+        let data = this.$clearData(this.chartData)
         let _this = this;
         this.myChart.setOption({
           xAxis: {
@@ -148,14 +148,14 @@
             formatter: function(params) {
               params = params[0];
               let showStr = '';
-              if(_this.types === 1){
-                  showStr = [
-                   _this.listData[params.dataIndex].date + '<br/>',
+              if (_this.types === 1) {
+                showStr = [
+                  _this.listData[params.dataIndex].date + '<br/>',
                   '库存总重量：' + _this.listData[params.dataIndex].allWeight + 'KG<br/>',
                   '在库重量：' + _this.listData[params.dataIndex].wareWeight + 'KG<br/>',
                   '在途重量：' + _this.listData[params.dataIndex].preWeight + 'KG<br/>',
                 ].join('');
-              }else if(_this.types === 2 || _this.types === 3){
+              } else if (_this.types === 2 || _this.types === 3) {
                 showStr = [
                   _this.listData[params.dataIndex].d + '<br/>',
                   '销售单数：' + _this.listData[params.dataIndex].xs + '<br/>',
@@ -176,12 +176,6 @@
     },
     mounted() {
       this.chartInit();
-    },
-    beforeDestroy () {
-      if (!this.myChart) { return }
-      this.myChart.clear()
-      this.myChart.dispose()
-      this.myChart = null
     }
   }
 </script>

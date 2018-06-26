@@ -192,7 +192,7 @@
       totalMoney() {
         let nums = 0;
         this.selectAllList.forEach(el => {
-          nums += Number(el.amount)
+          nums += parseInt(el.amount)
         })
         return nums
       },
@@ -325,7 +325,7 @@
           this.selectList.forEach(el => {
             el.amount = 0;
           })
-          this.selectAllList = this.selectList;
+          this.selectAllList = [...this.selectList];
           this.settlementShow = false;
         } else {
           this.$Message.error('请选择结算客户')
@@ -334,6 +334,9 @@
       modalHandle(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
+            if(this.allSellMoney){
+              this.$Message.error('入账总金额不能大于供应商金额');
+            }else{
             let params = this.$clearData(this.dataApi)
             if (this.dataApi.isBuser == 'true') {
               let strs = params.customerName.split('-')
@@ -343,14 +346,15 @@
             params.inTime = this.inTime;
             params.paymentOrderAmountItem = JSON.stringify(this.selectAllList)
             console.log(params)
-            this.$http.post(this.api.paymentOrderOut, params).then(res => {
-              if (res.code === 1000) {
-                this.$Message.success('保存成功')
-                this.$router.push('paymentOrder');
-              } else {
-                this.$Message.error(res.message);
-              }
-            })
+            // this.$http.post(this.api.paymentOrderOut, params).then(res => {
+            //   if (res.code === 1000) {
+            //     this.$Message.success('保存成功')
+            //     this.$router.push('paymentOrder');
+            //   } else {
+            //     this.$Message.error(res.message);
+            //   }
+            // })
+            }
           } else {
             this.$Message.error('表单验证失败!');
           }
@@ -374,6 +378,7 @@
   }
   
   .chooseList {
+    margin-bottom: 10px;
     span {
       display: inline-block;
       margin-right: 10px;

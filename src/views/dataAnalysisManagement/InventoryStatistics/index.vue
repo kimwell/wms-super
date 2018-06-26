@@ -54,49 +54,47 @@
           name: '在途重量(KG)',
           count: 0,
         }],
-        list: [
-          {
-          allWeight:88,
-          date:"1970-01-01",
-          preWeight:0,
-          wareWeight:0,
-        },{
+        list: [{
+          allWeight: 88,
+          date: "1970-01-01",
+          preWeight: 0,
+          wareWeight: 0,
+        }, {
           allWeight: 2000,
-          date:"1970-01-01",
-          preWeight:0,
-          wareWeight:0,
-        },{
+          date: "1970-01-01",
+          preWeight: 0,
+          wareWeight: 0,
+        }, {
           allWeight: 8000,
-          date:"1970-01-01",
-          preWeight:100,
-          wareWeight:0,
-        },{
+          date: "1970-01-01",
+          preWeight: 100,
+          wareWeight: 0,
+        }, {
           allWeight: 390,
-          date:"1970-01-01",
-          preWeight:0,
-          wareWeight:0,
-        },{
-          allWeight:8888,
-          date:"1970-01-01",
-          preWeight:0,
-          wareWeight:0,
-        },{
+          date: "1970-01-01",
+          preWeight: 0,
+          wareWeight: 0,
+        }, {
+          allWeight: 8888,
+          date: "1970-01-01",
+          preWeight: 0,
+          wareWeight: 0,
+        }, {
           allWeight: 2000,
-          date:"1970-01-01",
-          preWeight:0,
-          wareWeight:0,
-        },{
+          date: "1970-01-01",
+          preWeight: 0,
+          wareWeight: 0,
+        }, {
           allWeight: 8000,
-          date:"1970-01-01",
-          preWeight:100,
-          wareWeight:0,
-        },{
+          date: "1970-01-01",
+          preWeight: 100,
+          wareWeight: 0,
+        }, {
           allWeight: 390,
-          date:"1970-01-01",
-          preWeight:0,
-          wareWeight:0,
-        }
-        ],
+          date: "1970-01-01",
+          preWeight: 0,
+          wareWeight: 0,
+        }],
         dataValue: ['', ''],
         dateOption: {
           shortcuts: [{
@@ -192,9 +190,9 @@
     mounted() {
       this.$refs.childFilter.searchFilter();
       window.onresize = () => {
-      setTimeout(() => {
+        setTimeout(() => {
           this.$refs.chartFef.myChart.resize();
-      }, 100)
+        }, 100)
       }
     },
     created() {

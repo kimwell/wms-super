@@ -2,7 +2,11 @@
   <div>
     <Form :mode="filterApi" :label-width="80">
       <FormItem label="供应商：">
-        <Input type="text" v-model="filterApi.sellCompanyName" placeholder="请输入..."></Input>
+        <!-- <Input type="text" v-model="filterApi.sellCompanyName" placeholder="请输入..."></Input> -->
+
+      <Select v-model="filterApi.sellCompanyName" filterable remote :remote-method="remoteMethod" placeholder="选择供应商" :loading="queryLoading">
+        <Option v-for="(option, index) in companyList" :value="`${option.companyName}`" :key="index">{{option.companyName}}</Option>
+      </Select>
       </FormItem>
       <FormItem label="客户：">
         <Input type="text" v-model="filterApi.buyCompanyName" placeholder="请输入..."></Input>
@@ -114,6 +118,8 @@
           lengthMax: '',
           lengthMin: ''
         },
+        companyList: [],
+        queryLoading: false
       }
     },
     computed: {
@@ -189,6 +195,30 @@
             lengthMin: ''
           },
           this.$emit('on-change', this.filters);
+      },
+      //  供应商
+      remoteMethod(query) {
+        if (query != '') {
+          this.queryLoading = true;
+          let params = {
+            pageSize: 99,
+            currentPage: 1,
+            qq: '',
+            fax: '',
+            contactNum: '',
+            contact: '',
+            companyName: query
+          }
+          this.$http.post(this.api.findBusinessList, params).then(res => {
+            if (res.code === 1000) {
+              this.queryLoading = false;
+              this.companyList = res.data.list;
+            }
+          })
+        } else {
+          this.companyList = [];
+          this.filterApi.buser = '';
+        }
       }
     },
     created() {

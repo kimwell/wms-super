@@ -8,8 +8,6 @@
           <Input type="text" v-model="pageApi.name" @on-blur="onBlur" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem>
-        </FormItem>
-        <FormItem>
           <Button type="warning" @click.native="resetFilter">清除</Button>
         </FormItem>
       </Form>
@@ -167,7 +165,7 @@
     },
     computed :{
       placePlaceholder(){
-        return this.dataApi.provinceName != '' ? `${this.dataApi.provinceName}/${this.dataApi.cityName}/${this.dataApi.areaName}`:'请选择'
+        return this.dataApi.provinceName != '' ? `${this.dataApi.provinceName}/${this.dataApi.cityName}/${this.dataApi.areaName}`:'请选择地区'
       }
     },
     methods: {

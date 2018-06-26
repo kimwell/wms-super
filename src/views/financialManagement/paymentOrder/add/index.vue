@@ -150,11 +150,6 @@
             message: '不能为空',
             trigger: 'blur'
           }],
-          bankCardNo: [{
-            required: true,
-            message: '不能为空',
-            trigger: 'change'
-          }],
           amount: [{
             required: true,
             message: '不能为空',
@@ -165,6 +160,11 @@
             type: 'date',
             message: '请选择日期',
             trigger: 'change'
+          }],
+          bankTradeNo: [{
+            required: true,
+            message: '不能为空',
+            trigger: 'blur'
           }]
         },
         feeList: [],

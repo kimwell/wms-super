@@ -8,6 +8,12 @@
       <FormItem label="原销售单号：">
         <Input type="text" v-model="pageApi.saleTicketId" placeholder="请输入..."></Input>
       </FormItem>
+      <FormItem label="退货时间：">
+        <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
+      </FormItem>
+      <FormItem label="原单下单时间：">
+        <DatePicker type="daterange" placement="bottom-end" v-model="dataValue2" placeholder="选择日期" style="width: 200px"></DatePicker>
+      </FormItem>
       <FormItem label="供应商名称：">
         <Input type="text" v-model="pageApi.sellCompany" placeholder="请输入..."></Input>
       </FormItem>
@@ -18,12 +24,6 @@
         <Select v-model="pageApi.status" style="width: 100px;">
               <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-      </FormItem>
-      <FormItem label="退货时间：">
-        <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
-      </FormItem>
-      <FormItem label="原单下单时间：">
-        <DatePicker type="daterange" placement="bottom-end" v-model="dataValue2" placeholder="选择日期" style="width: 200px"></DatePicker>
       </FormItem>
       <FormItem>
         <Button type="warning" @click.native="resetFilter">清除</Button>

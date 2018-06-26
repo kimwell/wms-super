@@ -7,6 +7,12 @@
       <FormItem label="原销售单号：">
         <Input type="text" v-model="pageApi.saleTicketId" placeholder="请输入..."></Input>
       </FormItem>
+      <FormItem label="退货时间：">
+        <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
+      </FormItem>
+      <FormItem label="原单下单时间：">
+        <DatePicker type="daterange" placement="bottom-end" v-model="dataValue2" placeholder="选择日期" style="width: 200px"></DatePicker>
+      </FormItem>
       <FormItem label="供应商名称：">
         <Input type="text" v-model="pageApi.sellCompany" placeholder="请输入..."></Input>
       </FormItem>
@@ -15,14 +21,8 @@
       </FormItem>
       <FormItem label="状态：">
         <Select v-model="pageApi.status" style="width: 100px;">
-                <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
-              </Select>
-      </FormItem>
-      <FormItem label="退货时间：">
-        <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
-      </FormItem>
-      <FormItem label="原单下单时间：">
-        <DatePicker type="daterange" placement="bottom-end" v-model="dataValue2" placeholder="选择日期" style="width: 200px"></DatePicker>
+                        <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                      </Select>
       </FormItem>
       <FormItem>
         <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -63,7 +63,8 @@
       </div>
     </Modal>
     <Modal v-model="panelShow" width="600" :mask-closable="false" :title="isFK ? '新增付款单':'新增收款单'">
-      <zfModal :isFK="isFK" ref="sfModal" @on-close="onClose" :itemData="currentItem"></zfModal>
+      <zfPayModal :isFK="isFK"  v-if="!isFK" ref="sfModal" @on-close="onClose" :itemData="currentItem"></zfPayModal>
+      <zfReceiptModal :isFK="isFK" v-if="isFK" ref="sfModal" @on-close="onClose" :itemData="currentItem"></zfReceiptModal>
       <div slot="footer">
         <Button @click="panelShow = false">取消</Button>
         <Button type="primary" @click="handleAction">确定</Button>
@@ -73,10 +74,12 @@
 </template>
 
 <script>
-import zfModal from './zfModal'
+  import zfPayModal from './zfPayModal'
+  import zfReceiptModal from './zfReceiptModal'
   export default {
-    components:{
-      zfModal
+    components: {
+      zfPayModal,
+      zfReceiptModal
     },
     data() {
       return {
@@ -149,8 +152,8 @@ import zfModal from './zfModal'
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                                params.row.length
-                              }`;
+                                        params.row.length
+                                      }`;
               return h("div", str);
             }
           },
@@ -374,41 +377,45 @@ import zfModal from './zfModal'
               }, '详情')
             ];
             //  付款单
-            if (status != '3' && aPay) {
-              let payArr = [
-                h('Button', {
-                  props: {
-                    type: 'warning',
-                    size: 'small'
-                  },
-                  style: {
-                    marginRight: '5px'
-                  },
-                  on: {
-                    click: () => {
-                      this.actionItem(true, params.row)
+            if (!aPay) {
+              if (status == '3') {
+                let payArr = [
+                  h('Button', {
+                    props: {
+                      type: 'warning',
+                      size: 'small'
+                    },
+                    style: {
+                      marginRight: '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.actionItem(true, params.row)
+                      }
                     }
-                  }
-                }, '付款单')
-              ];
-              arr.push(payArr);
+                  }, '付款单')
+                ];
+                arr.push(payArr);
+              }
             }
             //  收款单
-            if (status != '1' || status != '2' || status != '3' && aRepit) {
-              let payArr = [
-                h('Button', {
-                  props: {
-                    type: 'warning',
-                    size: 'small'
-                  },
-                  on: {
-                    click: () => {
-                      this.actionItem(false, params.row)
+            if (!aRepit) {
+              if (status != '1' || status != '2' || status != '3') {
+                let payArr = [
+                  h('Button', {
+                    props: {
+                      type: 'warning',
+                      size: 'small'
+                    },
+                    on: {
+                      click: () => {
+                        this.actionItem(false, params.row)
+                      }
                     }
-                  }
-                }, '收款单')
-              ];
-              arr.push(payArr);
+                  }, '收款单')
+                ];
+                arr.push(payArr);
+              }
             }
             return h('div', arr);
           }
@@ -509,10 +516,10 @@ import zfModal from './zfModal'
         this.panelShow = true;
       },
       //  保存收付款单
-      handleAction(){
+      handleAction() {
         this.$refs.sfModal.save();
       },
-      onClose(data){
+      onClose(data) {
         this.panelShow = data;
       }
     },

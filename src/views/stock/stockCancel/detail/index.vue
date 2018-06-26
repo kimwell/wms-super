@@ -219,7 +219,10 @@
           onOk: () => {
             let params = this.$clearData(this.dataApi)
             params.zfId = this.id;
-            params.inAttachMent = JSON.stringify(this.attachMent);
+            let arrayFilter = this.attachMent.filter(function(item) {
+                return item;
+            });
+            params.inAttachMent = JSON.stringify(arrayFilter);
             this.$http.post(this.api.cancelTicketIn, params).then(res => {
               if (res.code === 1000) {
                 this.$Message.success('操作成功');

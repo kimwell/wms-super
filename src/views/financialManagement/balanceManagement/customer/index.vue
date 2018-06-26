@@ -40,7 +40,9 @@
               </Select>
         </FormItem>
         <FormItem label="费用科目：">
-          <Input type="text" v-model="detailApi.feeType" placeholder="请输入..."></Input>
+          <Select v-model="detailApi.feeType" style="width: 100px;">
+                  <Option v-for="(item,index) in feeTypeList" :value="item" :key="index">{{ item }}</Option>
+                </Select>
         </FormItem>
         <FormItem label="交易时间：">
           <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
@@ -115,6 +117,7 @@
           pageSize: 10,
           customerName: ''
         },
+        feeTypeList: [],
         list: [],
         totalCount: 0,
         show: false,
@@ -167,6 +170,13 @@
           }
         })
       },
+      getFeeType(){
+        this.$http.get(this.api.findFeeType).then(res =>{
+          if(res.code === 1000){
+            this.feeTypeList = res.data;
+          }
+        })
+      },
       getDetail(params) {
         this.$http.post(this.api.customerAccountHistory, params).then(res => {
           if (res.code === 1000) {
@@ -215,6 +225,7 @@
     },
     created() {
       this.getList();
+      this.getFeeType();
     }
   }
 </script>

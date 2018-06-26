@@ -2,16 +2,16 @@
   <div>
     <Row class="row-list">
       <Col span="8">作废单号：<span class="numbers">{{itemData.id}}</span></Col>
-      <Col span="8">待客户支付金额：<span class="numbers">{{itemData.customerPay}}</span></Col>
-      <Col span="8">待供应商支付金额：<span class="numbers">{{itemData.sellPay }}</span></Col>
+      <Col span="8">应退回客户金额：<span class="numbers">{{itemData.customerGet}}</span></Col>
+      <Col span="8">应退回供应商金额：<span class="numbers">{{itemData.sellGet }}</span></Col>
     </Row>
     <Form ref="formInline" :model="dataApi" :label-width="140" :rules="ruleInline">
       <FormItem label="用户类型：">
         <RadioGroup v-model="dataApi.cType">
-          <Radio label="1" :disabled="sellPay">
+          <Radio label="1" :disabled="sellGet">
             <span>供应商</span>
           </Radio>
-          <Radio label="2" :disabled="customerPay">
+          <Radio label="2" :disabled="customerGet">
             <span>客户</span>
           </Radio>
         </RadioGroup>
@@ -23,8 +23,8 @@
       </FormItem>
       <FormItem v-if="dataApi.cType == '1'" label="供应商名称：" prop="buserName">
         <Select v-model="dataApi.buserName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-                    <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-                  </Select>
+          <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
+        </Select>
       </FormItem>
       <FormItem v-if="dataApi.cType == '1'" label="供应商银行账户：" prop="buserBankCardNo">
         <AutoComplete v-model="dataApi.buserBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -36,8 +36,8 @@
       </FormItem>
       <FormItem v-if="dataApi.cType == '2'" label="客户名称：" prop="customerName">
         <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-                    <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
-                  </Select>
+          <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
+        </Select>
       </FormItem>
       <FormItem v-if="dataApi.cType == '2'" label="客户银行账户：" prop="customerBankCardNo">
         <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -51,7 +51,7 @@
         <Input type="text" v-model="dataApi.bankCardNo" style="width: 300px;" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem label="入账金额：" prop="amount">
-        <InputNumber style="width: 300px;" :max="dataApi.cType == '1' ? itemData.sellPay : itemData.customerPay" :min="0" v-model="dataApi.amount" placeholder="请输入..."></InputNumber>
+        <InputNumber style="width: 300px;" :max="dataApi.cType == '1' ? itemData.sellGet : itemData.customerGet" :min="0" v-model="dataApi.amount" placeholder="请输入..."></InputNumber>
       </FormItem>
       <FormItem label="入账时间：" prop="inTime">
         <DatePicker type="datetime" v-model="dataApi.inTime" placeholder="请选择日期" style="width: 300px"></DatePicker>
@@ -89,7 +89,7 @@
     data() {
       return {
         dataApi: {
-          cType: '1',
+          cType: this.itemData.customerGet === 0 ? '1': '2',
           buserId: '',
           buserName: '',
           buserBankCardNo: '',
@@ -180,17 +180,17 @@
       inTime() {
         return this.dataApi.inTime != '' ? this.dataApi.inTime.getTime() : ''
       },
-      customerPay() {
-        return this.itemData.customerPay === 0;
+      customerGet() {
+        return this.itemData.customerGet === 0;
       },
-      sellPay() {
-        return this.itemData.sellPay === 0;
+      sellGet() {
+        return this.itemData.sellGet === 0;
       },
       customerNum() {
-        return this.itemData.customerPay - this.dataApi.amount === 0
+        return this.itemData.customerGet - this.dataApi.amount === 0
       },
       sellNum() {
-        return this.itemData.sellPay - this.dataApi.amount === 0
+        return this.itemData.sellGet - this.dataApi.amount === 0
       },
       isZero() {
         return this.itemData.customerPay - this.dataApi.amount === 0 && this.itemData.sellPay - this.dataApi.amount === 0 && this.itemData.customerGet === 0 && this.itemData.sellGet === 0;
@@ -202,7 +202,7 @@
         this.bankList = [];
         this.reset();
       },
-      'itemData.sellPay' (newVal, oldVal) {
+      'itemData.sellGet' (newVal, oldVal) {
         if (newVal === 0) {
           this.dataApi.cType = '2';
         } else {
@@ -280,9 +280,9 @@
           this.$http.post(urls, params).then(res => {
             if (res.code === 1000) {
               if (this.dataApi.cType == '1') {
-                this.bankList = JSON.parse(res.data.cardInfo)
+                this.bankList = res.data != '' ? JSON.parse(res.data.cardInfo) : []
               } else {
-                this.bankList = res.data
+                this.bankList = res.data !='' ? res.data : []
               }
             }
           })

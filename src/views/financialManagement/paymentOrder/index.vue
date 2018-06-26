@@ -16,42 +16,6 @@
       </Form>
       <div class="card">
         <div class="card-contnet">
-          <!-- <div class="table-contnet">
-            <Row class-name="head">
-              <Col class-name="col" span="3">客户名称</Col>
-              <Col class-name="col" span="1">出账金额</Col>
-              <Col class-name="col" span="3">客户账号</Col>
-              <Col class-name="col" span="3">公司账号</Col>
-              <Col class-name="col" span="2">出账时间</Col>
-              <Col class-name="col" span="2">银行账号流水号</Col>
-              <Col class-name="col" span="2">附件</Col>
-              <Col class-name="col" span="2">操作人</Col>
-              <Col class-name="col" span="2">操作时间</Col>
-              <Col class-name="col" span="2">备注</Col>
-              <Col class-name="col" span="2">操作</Col>
-            </Row>
-            <Row v-for="(item,index) in list " :key="index">
-              <Col class-name="col" span="3">{{item.customerName}}</Col>
-              <Col class-name="col" span="1">{{item.amount}}</Col>
-              <Col class-name="col" span="3">{{item.customerBankCardNo}}</Col>
-              <Col class-name="col" span="3">{{item.bankCardNo}}</Col>
-              <Col class-name="col" span="2">{{item.inTime | dateformat}}</Col>
-              <Col class-name="col" span="2">{{item.bankTradeNo}}</Col>
-              <Col class-name="col" span="2">
-              <Button v-if="item.fileAddress != ''" size="small" type="warning" @click.native="previewImg(item.fileAddress)">查看</Button>
-              <span v-else>暂无</span>
-              </Col>
-              <Col class-name="col" span="2">{{item.updateUser}}</Col>
-              <Col class-name="col" span="2">{{item.updateTime | dateformat}}</Col>
-              <Col class-name="col" span="2">{{item.remark}}</Col>
-              <Col class-name="col" span="2">
-              <Button size="small" type="warning" @click="deleteItem(item)">作废</Button>
-              </Col>
-            </Row>
-            <Row v-if="list.length == 0">
-              <Col class-name="col" span="24">暂无数据</Col>
-            </Row>
-          </div> -->
           <Table border :columns="tableHeader" :data="list"></Table>
           <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
         </div>
@@ -68,9 +32,47 @@
         <Button type="primary" @click="cancelAction">确定</Button>
       </div>
     </Modal>
+    <Modal v-model="detailShow" width="800" :mask-closable="false" title="付款详情">
+      <Row class="row-list">
+        <Col span="8">客户名称：{{activeItem.customerName}}</Col>
+        <Col span="8">出账金额：{{activeItem.amount}}</Col>
+        <Col span="8">客户账号：{{activeItem.customerBankCardNo}}</Col>
+      </Row>
+      <Row class="row-list">
+        <Col span="8">平台账号：{{activeItem.bankCardNo}}</Col>
+        <Col span="8">出账时间：{{activeItem.inTime | dateformat}}</Col>
+        <Col span="8">银行账号流水号：{{activeItem.bankTradeNo}}</Col>
+      </Row>
+      <Row class="row-list">
+        <Col span="8">附件：
+          <span v-if="activeItem.fileAddress !=''">
+            <Button type="primary" size="small" @click="previewImg(activeItem.fileAddress)">查看附件</Button>
+          </span>
+          <span v-else>暂无</span>
+        </Col>
+        <Col span="8">操作人：{{activeItem.updateUser}}</Col>
+        <Col span="8">操作时间：{{activeItem.updateTime | dateformat}}</Col>
+      </Row>
+      <Row class="row-list">
+        <Col span="8">费用科目：{{activeItem.feeType}}</Col>
+        <Col span="8">备注：{{activeItem.remark}}</Col>
+      </Row>
+      <h2 style="margin-bottom: 16px;">结算客户</h2>
+      <Row class="row-list" v-for="(item,index) in activeItem.paymentOrderAmountItems" :key="index">
+        <Col span="8">客户名称：{{item.customerName}}</Col>
+        <Col span="8">结算金额：{{item.amount}}</Col>
+        <Col span="8">待结算金额：{{item.waitSettleAmount}}</Col>
+      </Row>
+      <div slot="footer">
+        <Button @click="detailShow = false">关闭</Button>
+      </div>
+    </Modal>
     <Modal v-model="prevShow" width="800" :mask-closable="false" title="预览附件">
       <div class="showImg">
         <img :src="prevImgSrc">
+      </div>
+      <div slot="footer">
+        <Button @click="prevShow = false">关闭</Button>
       </div>
     </Modal>
   </div>
@@ -106,6 +108,8 @@
             trigger: 'blur'
           }]
         },
+        detailShow: false,
+        activeItem:{},
         prevShow: false,
         prevImgSrc: '',
         tableHeader: [{
@@ -125,6 +129,10 @@
           key: "bankCardNo",
           minWidth: 200
         }, {
+          title: '费用科目',
+          key: 'feeType',
+          minWidth: 150
+        },{
           title: "出账时间",
           key: "inTime",
           minWidth: 150,
@@ -205,6 +213,8 @@
                 },
                 on: {
                   click: () => {
+                    this.detailShow = true;
+                    this.activeItem = params.row;
                   }
                 }
               }, '详情')
@@ -361,6 +371,12 @@
     text-align: center;
     img {
       max-width: 100%;
+    }
+  }
+  .row-list{
+    margin-bottom: 16px;
+    &:last-child{
+      margin: 0;
     }
   }
 </style>

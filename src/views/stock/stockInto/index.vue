@@ -74,7 +74,7 @@
         <Col span="6">状态：{{detailItem.status | toStatus}}</Col>
       </Row>
       <Row class="row-list">
-        <Col span="6">费用：{{detailItem.money}}</Col>
+        <Col span="6">费用：{{detailItem.cost}}</Col>
         <Col span="6">仓库：{{detailItem.storeHouseName}}</Col>
         <Col span="6">备注：{{detailItem.remark}}</Col>
       </Row>
@@ -214,7 +214,7 @@
             key: "numberUnit",
             width: 100,
             render: (h, params) => {
-              let str = `${params.row.numberUnit}/${params.row.weightUnit}`;
+              let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
               return h("div", str);
             }
           },
@@ -261,11 +261,6 @@
           {
             title: "成本金额",
             key: "costNumber",
-            width: 120,
-          },
-          {
-            title: "销售底价",
-            key: "floorPrice",
             width: 120,
           },
           {

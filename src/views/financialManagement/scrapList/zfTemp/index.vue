@@ -108,27 +108,51 @@ import detailModal from './detailModal'
         },{
           title: '公司名称',
           key: 'customerName',
-          minWidth: 200
+          minWidth: 200,
+          render: (h,params) =>{
+            let t = params.row.customerName !='' ? params.row.customerName : '无'
+            return h('span',t)
+          }
+        },{
+          title: '客户银行账号',
+          key: 'customerBankCardNo',
+          minWidth: 200,
+          render: (h,params) =>{
+            let t = params.row.customerBankCardNo !='' ? params.row.customerBankCardNo : '无'
+            return h('span',t)
+          }
+        },{
+          title: '供应商名称',
+          key: 'buserNamebu',
+          minWidth: 200,
+          render: (h,params) =>{
+            let t = params.row.buserName !='' ? params.row.buserName : '无'
+            return h('span',t)
+          }
+        },{
+          title: '供应商银行账号',
+          key: 'buserBankCardNo',
+          minWidth: 200,
+          render: (h,params) =>{
+            let t = params.row.buserBankCardNo !='' ? params.row.buserBankCardNo : '无'
+            return h('span',t)
+          }
         },{
           title: this.types === 1 ? '进账金额':'出账金额',
           key: 'amount',
           minWidth: 100
         },{
-          title: '客户账号',
-          key: 'customerBankCardNo',
-          minWidth: 200
-        },{
-          title: '平台账号',
-          key: 'bankCardNo',
-          minWidth: 200
-        },{
           title: this.types === 1 ? '进账时间':'出账时间',
           key: 'inTime',
           minWidth: 150,
           render: (h,params) =>{
-            let t = this.formatDateTime(params.row.inTime)
+            let t = params.row.inTime !='' ? this.formatDateTime(params.row.inTime) : ''
             return h('span',t)
           }
+        },{
+          title: '平台账号',
+          key: 'bankCardNo',
+          minWidth: 200
         },{
           title: '银行账号流水号',
           key: 'bankTradeNo',

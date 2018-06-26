@@ -21,7 +21,7 @@ export default {
         this.$ls.set('rand', rand);
       }
       // 建立WebSocket链接
-      let ws = new WebSocket(this.api.ws + "/ironHander?userId=" + this.$store.state.loginId + rand);
+      let ws = new WebSocket(this.api.ws + "/saas?userId=" + this.$store.state.loginId + rand);
 
       ws.onopen = function (evt) {
         //  console.log("消息推送链接成功");
@@ -55,15 +55,15 @@ export default {
           requireInteraction: true
         });
         notif.onclick = () => {
-          if (data.code == 1 || data.code == 5) {
-            this.$router.push('/ironBuys');
-          } else if(data.code == 2){
-            this.$router.push('/dispatch');
-          }else if(data.code == 6 || data.code == 7 || data.code == 9){
-            this.$router.push('/order');
-          }else if(data.code == 10){
-            this.$router.push('/user/examine');
-          }
+          // if (data.code == 1 || data.code == 5) {
+          //   this.$router.push('/ironBuys');
+          // } else if(data.code == 2){
+          //   this.$router.push('/dispatch');
+          // }else if(data.code == 6 || data.code == 7 || data.code == 9){
+          //   this.$router.push('/order');
+          // }else if(data.code == 10){
+          //   this.$router.push('/user/examine');
+          // }
           window.focus();
           notif.close();
         }

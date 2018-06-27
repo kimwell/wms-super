@@ -1289,3 +1289,9 @@ export const paymentCancel = '/sys/cancelTicketBg/payment/cancel'
 *取消收款单
 */
 export const receiptCancel = '/sys/cancelTicketBg/receipt/cancel'
+
+
+/*
+*销售单打印
+*/
+export const saleTicketPrint = '/sys/saleTicketBg/saleTicketPrint'

@@ -2,7 +2,7 @@
   <div>
     <Card :bordered="false" class="card">
       <p slot="title">销售单管理</p>
-      <Form :mode="pageApi" :label-width="80" inline>
+      <Form :mode="pageApi" :label-width="90" inline>
         <FormItem label="销售单号：">
           <Input type="text" v-model="pageApi.saleTicketId" placeholder="请输入..."></Input>
         </FormItem>
@@ -17,8 +17,8 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
-                      <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select>
+              <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
         </FormItem>
         <FormItem label="供应商名称：">
           <Input type="text" v-model="pageApi.sellCompanyName" placeholder="请输入..."></Input>
@@ -53,7 +53,7 @@
             <Col class-name="col" span="1">{{item.printNum}}</Col>
             <Col class-name="col" span="3">
             <Button size="small" type="warning" @click="goDetail(item)">详情</Button>
-            <Button size="small" type="warning">打印</Button>
+            <Button size="small" v-if="item.status == '1' || item.status == '2' || item.status == '3' || item.status == '4' || item.status == '5'" @click="print(item)" type="warning">打印</Button>
             </Col>
           </Row>
           <Row v-if="list.length == 0">
@@ -114,10 +114,35 @@
               <Col class-name="col" span="3">{{item.money}}</Col>
               <Col class-name="col" span="3">{{item.tax}}</Col>
             </Row>
-            <Row v-if="detailItem.saleTicketCosts.length === 0" >
+            <Row v-if="detailItem.saleTicketCosts.length === 0">
               <Col class-name="col" span="24">暂无</Col>
             </Row>
           </div>
+        </div>
+      </div>
+      <div slot="footer">
+      </div>
+    </Modal>
+    <Modal title="打印销售单" width="400" v-model="printShow" :mask-closable="false">
+      <Spin size="large" fix v-if="spinShow">
+        <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
+        <div>正在生成打印销售单...</div>
+      </Spin>
+      <div class="card-contnet" style="padding-bottom: 10px;">
+        <div class="table-contnet">
+          <Row class-name="head">
+            <Col class-name="col" span="12">销售单号</Col>
+            <Col class-name="col" span="12">操作</Col>
+          </Row>
+          <Row v-for="(item,index) in printData" :key="item.id">
+            <Col class-name="col" span="12">{{`销售单${index +1}`}}</Col>
+            <Col class-name="col" span="12">
+              <a class="ivu-btn ivu-btn-warning ivu-btn-small" :href="item.viewUrl" target="_blank">打印</a>
+            </Col>
+          </Row>
+          <Row v-if="printData.length == 0">
+            <Col class-name="col" span="24">暂无数据</Col>
+          </Row>
         </div>
       </div>
       <div slot="footer">
@@ -141,6 +166,9 @@
           status: '',
           sellCompanyName: ''
         },
+        printShow: false,
+        spinShow: true,
+        printData: [],
         dataValue: ['', ''],
         statusData: [{
           label: '待支付',
@@ -199,8 +227,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                          params.row.length
-                        }`;
+                            params.row.length
+                          }`;
               return h("div", str);
             }
           },
@@ -257,9 +285,9 @@
             title: "单价",
             key: "price",
             width: 100,
-            render: (h,params) =>{
+            render: (h, params) => {
               let str = `￥${params.row.price}`;
-              return h('span',str)
+              return h('span', str)
             }
           },
           {
@@ -271,9 +299,9 @@
             title: "金额",
             key: "money",
             width: 100,
-            render: (h,params) =>{
+            render: (h, params) => {
               let str = `￥${params.row.money}`;
-              return h('span',str)
+              return h('span', str)
             }
           },
           {
@@ -379,6 +407,21 @@
             this.detailItem = res.data;
           }
         })
+      },
+      //  打印
+      print(item) {
+        this.printShow = true;
+        this.$http.post(this.api.saleTicketPrint, {
+          saleTicketId: item.id
+        }).then(res => {
+          if (res.code === 1000) {
+            this.spinShow = false;
+            this.printData = res.data;
+          } else {
+            // this.printShow = false;
+            this.$Message.error(res.message);
+          }
+        })
       }
     },
     created() {
@@ -391,35 +434,37 @@
   .card {
     position: relative;
     margin-bottom: 20px;
+  }
+  
+  .card-contnet {
+    position: relative;
+    padding-bottom: 40px;
+  }
+  
+  .table-contnet {
+    line-height: 40px;
+    text-align: center;
+    border-top: 1px solid #d0d0d0;
+    border-left: 1px solid #d0d0d0;
+    .head {
+      background-color: #ddd;
     }
-    .card-contnet {
-      position: relative;
-      padding-bottom: 40px;
+    .col {
+      height: 40px;
+      padding: 0 5px;
+      border-right: 1px solid #d0d0d0;
+      border-bottom: 1px solid #d0d0d0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .table-contnet {
-      line-height: 40px;
-      text-align: center;
-      border-top: 1px solid #d0d0d0;
-      border-left: 1px solid #d0d0d0;
-      .head {
-        background-color: #ddd;
-      }
-      .col {
-        height: 40px;
-        padding: 0 5px;
-        border-right: 1px solid #d0d0d0;
-        border-bottom: 1px solid #d0d0d0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
-    .page-count {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
-
+  }
+  
+  .page-count {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
   
   .row-wrapper {
     margin-bottom: 15px;
@@ -436,6 +481,22 @@
         display: inline-block;
         padding-left: 30px;
       }
+    }
+  }
+  
+  .spin-icon-load {
+    animation: ani-spin 1s linear infinite;
+  }
+  
+  @keyframes ani-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(180deg);
+    }
+    to {
+      transform: rotate(360deg);
     }
   }
 </style>

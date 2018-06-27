@@ -8,20 +8,19 @@
         </FormItem>
         <FormItem label="仓库名称：">
           <Select v-model="pageApi.storeHouseName" style="width: 150px;">
-                <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
-              </Select>
+            <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="供应商名称：">
           <Input type="text" v-model="pageApi.sellId" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="开单日期：">
-          <!-- <Input type="text" v-model="pageApi.startTime" placeholder="请输入..."></Input> -->
           <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
-                        <Option v-for="item in [{name:'待确认',value: '1'},{name:'已入库',value: '2'},{name:'已完成',value: '3'},{name:'已取消',value: '4'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-                      </Select>
+            <Option v-for="item in [{name:'待确认',value: '1'},{name:'已入库',value: '2'},{name:'已完成',value: '3'},{name:'已取消',value: '4'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+          </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -43,7 +42,7 @@
             <Col class-name="col" span="3">{{item.id}}</Col>
             <Col class-name="col" span="3">{{item.storeHouseName}}</Col>
             <Col class-name="col" span="3">{{item.sellCompany}}</Col>
-            <Col class-name="col" span="3">{{item.storageInDate | dateformat}}</Col>
+            <Col class-name="col" span="3">{{item.storageInDate | dateformat('yyyy-MM-dd')}}</Col>
             <Col class-name="col" span="3">{{item.status | toStatus}}</Col>
             <Col class-name="col" span="3">{{item.updateUser}}</Col>
             <Col class-name="col" span="3">{{item.updateTime | dateformat}}</Col>
@@ -122,7 +121,7 @@
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="modalShow = false">取消</Button>
+        <Button @click="modalClose">取消</Button>
         <Button type="primary" @click="storageInto">确定</Button>
       </div>
     </Modal>
@@ -425,6 +424,7 @@
                 this.modalShow = false;
                 this.$Message.success('入库成功')
                 this.getList(this.handleFilter)
+                this.resetintoData();
               } else {
                 this.$Message.error(res.message)
               }
@@ -449,6 +449,17 @@
             this.detailItem = res.data;
           }
         })
+      },
+      resetintoData(){
+        this.intoData ={
+          remark: '',
+          storageInId: ''
+        }
+      },
+      modalClose(){
+        this.modalShow = false,
+        this.resetintoData();
+        this.$refs.intoForm.resetFields();
       },
       //  合并货品详情
       getcargoInfoDetail(data) {

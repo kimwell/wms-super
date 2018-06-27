@@ -29,9 +29,9 @@
           </AutoComplete>
         </FormItem>
         <FormItem label="客户名称：" prop="customerName">
-          <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-                <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
-              </Select>
+          <Select v-model="dataApi.customerName" ref="setQuery" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
+            <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
+          </Select>
         </FormItem>
         <FormItem label="客户账户：" prop="customerBankCardNo">
           <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -82,7 +82,7 @@
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="cancelShow = false">取消</Button>
+        <Button @click="closeCancel">取消</Button>
         <Button type="primary" @click="cancelAction">确定</Button>
       </div>
     </Modal>
@@ -203,7 +203,7 @@
         }, {
           title: "进账时间",
           key: "inTime",
-          minWidth: 150,
+          minWidth: 180,
           render: (h, params) => {
             let str = this.formatDateTime(params.row.inTime);
             return h('span', str)
@@ -244,7 +244,7 @@
         }, {
           title: "操作时间",
           key: "updateTime",
-          minWidth: 150,
+          minWidth: 180,
           render: (h, params) => {
             let str = this.formatDateTime(params.row.updateTime);
             return h('span', str)
@@ -401,6 +401,10 @@
         this.resetData();
         this.$refs.receiptOrder.resetFields();
       },
+      closeCancel(){
+        this.cancelShow = false;
+        this.$refs.cancelForm.resetFields();
+      },
       //  查找商户
       remoteMethod(query) {
         if (query != '') {
@@ -410,7 +414,7 @@
           }).then(res => {
             if (res.code === 1000) {
               this.queryLoading = false;
-              this.companyList = res.data
+              this.companyList = res.data;
             }
           })
         } else {

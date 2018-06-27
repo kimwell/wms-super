@@ -2,7 +2,7 @@
   <div>
     <Card :bordered="false" class="card">
       <p slot="title">出库单管理</p>
-      <Form :mode="pageApi" :label-width="80" inline>
+      <Form :mode="pageApi" :label-width="100" inline>
         <FormItem label="出库单号：">
           <Input type="text" v-model="pageApi.outBoundId" placeholder="请输入..."></Input>
         </FormItem>
@@ -267,7 +267,7 @@
                 },
                 on: {
                   click: () => {
-                    // this.deleteItem(params.row)
+                    
                   }
                 }
               }, '打印')

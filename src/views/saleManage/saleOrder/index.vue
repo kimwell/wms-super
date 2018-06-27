@@ -35,7 +35,7 @@
             <Col class-name="col" span="3">供应商名称</Col>
             <Col class-name="col" span="3">客户名称</Col>
             <Col class-name="col" span="2">跟单员</Col>
-            <Col class-name="col" span="2">重量</Col>
+            <Col class-name="col" span="2">重量(KG)</Col>
             <Col class-name="col" span="2">销售总额</Col>
             <Col class-name="col" span="2">状态</Col>
             <Col class-name="col" span="1">打印次数</Col>

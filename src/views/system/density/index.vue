@@ -177,6 +177,7 @@
           material: '',
           density: ''
         }
+        this.$refs[this.ref].resetFields();
       }
     },
     created() {

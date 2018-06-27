@@ -399,6 +399,7 @@
       close() {
         this.show = false;
         this.resetData();
+        this.$refs.receiptOrder.resetFields();
       },
       //  查找商户
       remoteMethod(query) {

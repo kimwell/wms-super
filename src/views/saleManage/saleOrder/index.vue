@@ -65,7 +65,7 @@
     </Card>
     <Modal title="销售单详情" width="960" v-model="show" :mask-closable="false">
       <div class="row-wrapper">
-        <h3>基本信息 <span>{{detailItem.status | toStatus}}</span></h3>
+        <h3>基本信息 <span>状态：{{detailItem.status | toStatus}}</span></h3>
         <Row class="row-list">
           <Col span="8">客户单位：{{detailItem.buyCompanyName}}</Col>
           <Col span="8">仓库：{{detailItem.storeHouseName}}</Col>
@@ -210,9 +210,9 @@
             width: 100
           },
           {
-            title: "单件重量",
+            title: "单件重量(KG)",
             key: "singleWeight",
-            width: 100
+            width: 120
           },
           {
             title: "产品单位",
@@ -234,29 +234,33 @@
             width: 100,
           },
           {
-            title: "理计重量",
+            title: "理计重量(KG)",
             key: "ljWeight",
-            width: 100
+            width: 120
           },
           {
-            title: "过磅重量",
+            title: "过磅重量(KG)",
             key: "poundWeight",
-            width: 100,
+            width: 120,
           },
           {
-            title: "过磅单重",
+            title: "过磅单重(KG)",
             key: "gbWeight",
-            width: 100
+            width: 120
           },
           {
-            title: "卷重",
+            title: "卷重(KG)",
             key: "coiledWeight",
-            width: 100,
+            width: 120,
           },
           {
             title: "单价",
             key: "price",
             width: 100,
+            render: (h,params) =>{
+              let str = `￥${params.row.price}`;
+              return h('span',str)
+            }
           },
           {
             title: "税",
@@ -267,9 +271,13 @@
             title: "金额",
             key: "money",
             width: 100,
+            render: (h,params) =>{
+              let str = `￥${params.row.money}`;
+              return h('span',str)
+            }
           },
           {
-            title: "库存量",
+            title: "库存量(KG)",
             key: "storeWeight",
             width: 100,
           },

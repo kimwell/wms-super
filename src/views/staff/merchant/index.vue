@@ -338,6 +338,7 @@
       close() {
         this.panelShow = false;
         this.resetData();
+        this.$refs[this.ref].resetFields();
       },
       //  保存、编辑商户
       modalHandle() {

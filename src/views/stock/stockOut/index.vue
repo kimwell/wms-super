@@ -6,6 +6,9 @@
         <FormItem label="出库单号：">
           <Input type="text" v-model="pageApi.outBoundId" placeholder="请输入..."></Input>
         </FormItem>
+        <FormItem label="销售单号：">
+          <Input type="text" v-model="pageApi.saleTicketId" placeholder="请输入..."></Input>
+        </FormItem>
         <FormItem label="出库时间：">
           <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
         </FormItem>
@@ -14,13 +17,13 @@
         </FormItem>
         <FormItem label="仓库名称：">
           <Select v-model="pageApi.storeHouseName" style="width: 150px;">
-            <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
-          </Select>
+              <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
+            </Select>
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
-                  <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
+                    <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="供应商名称：">
           <Input type="text" v-model="pageApi.sellCompanyName" placeholder="请输入..."></Input>
@@ -30,41 +33,7 @@
         </FormItem>
       </Form>
       <div class="card-contnet">
-        <div class="table-contnet">
-          <Row class-name="head">
-            <Col class-name="col" span="3">出库单号</Col>
-            <Col class-name="col" span="3">出库时间</Col>
-            <Col class-name="col" span="3">供应商名称</Col>
-            <Col class-name="col" span="3">客户名称</Col>
-            <Col class-name="col" span="2">仓库名称</Col>
-            <Col class-name="col" span="2">出库操作人</Col>
-            <Col class-name="col" span="2">最近更新时间</Col>
-            <Col class-name="col" span="2">状态</Col>
-            <Col class-name="col" span="2">最近更新人</Col>
-            <Col class-name="col" span="2">操作</Col>
-          </Row>
-          <Row v-for="(item,index) in list" :key="item.id">
-            <Col class-name="col" span="3">{{item.id}}</Col>
-            <Col class-name="col" span="3">
-            <span v-if="item.outTime !=''">{{item.outTime | dateformat}}</span>
-            <span v-else>暂无</span>
-            </Col>
-            <Col class-name="col" span="3">{{item.sellCompanyName}}</Col>
-            <Col class-name="col" span="3">{{item.buyCompanyName}}</Col>
-            <Col class-name="col" span="2">{{item.storeHouseName}}</Col>
-            <Col class-name="col" span="2">{{item.outMan}}</Col>
-            <Col class-name="col" span="2">{{item.updateTime | dateformat}}</Col>
-            <Col class-name="col" span="2">{{item.status | toStatus}}</Col>
-            <Col class-name="col" span="2">{{item.updateUser}}</Col>
-            <Col class-name="col" span="2">
-            <Button size="small" type="warning" @click="goDetail(item)">详情</Button>
-            <Button size="small" type="warning">打印</Button>
-            </Col>
-          </Row>
-          <Row v-if="list.length == 0">
-            <Col class-name="col" span="24">暂无数据</Col>
-          </Row>
-        </div>
+        <Table border :columns="tableHeader" :data="list"></Table>
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
     </Card>
@@ -116,7 +85,7 @@
         </Row>
       </div>
       <div slot="footer">
-        <div  v-if="detailItem.saleTicket.status == '3'">
+        <div v-if="detailItem.saleTicket.status == '3'">
           <Button type="text" @click="show = false">取消</Button>
           <Button type="primary" @click="save">确认出库</Button>
         </div>
@@ -138,7 +107,8 @@
           storeHouseName: '',
           buyCompanyName: '',
           status: '',
-          sellCompanyName: ''
+          sellCompanyName: '',
+          saleTicketId: ''
         },
         outApi: {
           outBoundId: '',
@@ -213,6 +183,97 @@
             trigger: 'blur'
           }]
         },
+        tableHeader: [{
+          title: "出库单号",
+          key: "id",
+          minWidth: 200
+        }, {
+          title: "销售单号",
+          key: "saleTicketId",
+          minWidth: 200
+        }, {
+          title: "供应商名称",
+          key: "sellCompanyName",
+          minWidth: 200
+        }, {
+          title: "客户名称",
+          key: "buyCompanyName",
+          minWidth: 200
+        }, {
+          title: "仓库名称",
+          key: "storeHouseName",
+          minWidth: 150
+        }, {
+          title: "出库操作人",
+          key: "outMan",
+          minWidth: 150,
+          render: (h, params) => {
+            let t = params.row.outMan != '' ? params.row.outMan : '暂无'
+            return h('span', t)
+          }
+        }, {
+          title: "出库时间",
+          key: "outTime",
+          minWidth: 150,
+          render: (h, params) => {
+            let t = params.row.outTime != '' ? this.formatDateTime(params.row.outTime) : '暂无'
+            return h('span', t)
+          }
+        }, {
+          title: "状态",
+          key: "status",
+          minWidth: 150,
+          render: (h, params) => {
+            let t = params.row.status != '' ? this.status(params.row.status) : ''
+            return h('span', t)
+          }
+        }, {
+          title: "最近更新人",
+          key: "updateUser",
+          minWidth: 150
+        }, {
+          title: "最近更新时间",
+          key: "updateTime",
+          minWidth: 150,
+          render: (h, params) => {
+            let t = params.row.updateTime != '' ? this.formatDateTime(params.row.updateTime) : ''
+            return h('span', t)
+          }
+        }, {
+          title: '操作',
+          key: 'action',
+          fixed: 'right',
+          width: 140,
+          render: (h, params) => {
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.goDetail(params.row)
+                  }
+                }
+              }, '详情'),
+              h('Button', {
+                props: {
+                  type: 'warning',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    // this.deleteItem(params.row)
+                  }
+                }
+              }, '打印')
+            ]);
+          }
+        }],
         columns: [{
             title: "序号",
             key: "cargoName",
@@ -241,8 +302,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                                params.row.length
-                              }`;
+                                  params.row.length
+                                }`;
               return h("div", str);
             }
           },
@@ -252,9 +313,9 @@
             width: 100
           },
           {
-            title: "单件重量",
+            title: "单件重量(KG)",
             key: "singleWeight",
-            width: 100
+            width: 120
           },
           {
             title: "产品单位",
@@ -304,13 +365,13 @@
             title: "金额",
             key: "money",
             width: 100,
-            render:(h,params) =>{
+            render: (h, params) => {
               let str = `￥${params.row.money}`;
               return h("span", str);
             }
           },
           {
-            title: "库存量",
+            title: "库存量(KG)",
             key: "storeWeight",
             width: 100,
           },
@@ -333,7 +394,8 @@
           startTime: this.dataValue[0] != '' ? this.dataValue[0].getTime() : '',
           endTime: this.dataValue[1] != '' ? this.dataValue[1].getTime() : '',
           status: this.pageApi.status,
-          storeHouseName: this.pageApi.storeHouseName
+          storeHouseName: this.pageApi.storeHouseName,
+          saleTicketId: this.pageApi.saleTicketId
         }
       }
     },
@@ -376,6 +438,21 @@
       }
     },
     methods: {
+      formatDateTime(t) {
+        var date = new Date(t);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+      },
       resetFilter() {
         this.pageApi = {
           pageSize: 10,
@@ -386,7 +463,8 @@
           buyCompanyName: '',
           merchandiser: '',
           status: '',
-          sellCompanyName: ''
+          sellCompanyName: '',
+          saleTicketId: ''
         }
         this.dataValue = ['', '']
         this.getList(this.handleFilter)
@@ -403,9 +481,34 @@
           }
         })
       },
-      getStoreHouse(){
-        this.$http.post(this.api.findAWareHouse).then(res =>{
-          if(res.code === 1000){
+      status(val) {
+        switch (val * 1) {
+          case 1:
+            return '待支付'
+            break;
+          case 2:
+            return '可备货'
+            break;
+          case 3:
+            return '可发货'
+            break;
+          case 4:
+            return '已出库'
+            break;
+          case 5:
+            return '已完成'
+            break;
+          case 6:
+            return '作废中'
+            break;
+          case 9:
+            return '已作废'
+            break;
+        }
+      },
+      getStoreHouse() {
+        this.$http.post(this.api.findAWareHouse).then(res => {
+          if (res.code === 1000) {
             this.storeHouseList = res.data;
           }
         })
@@ -431,6 +534,12 @@
                 this.$Message.success('出库成功');
                 this.show = false;
                 this.getList(this.handleFilter);
+                this.outApi = {
+                  outBoundId: '',
+                  carMan: '',
+                  carId: '',
+                  remark: ''
+                }
               } else {
                 this.$Message.error(res.message)
               }

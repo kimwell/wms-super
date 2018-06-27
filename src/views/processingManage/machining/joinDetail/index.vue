@@ -280,9 +280,9 @@
             width: 100
           },
           {
-            title: "单件重量",
+            title: "单件重量(KG)",
             key: "singleWeight",
-            width: 100
+            width: 120
           },
           {
             title: "产品单位",
@@ -319,12 +319,12 @@
             width: 120,
           },
           {
-            title: "卷重",
+            title: "卷重(KG)",
             key: "coiledWeight",
             width: 120,
           },
           {
-            title: "原卷重",
+            title: "原卷重(KG)",
             key: "oldCoiledWeight",
             width: 120,
           },
@@ -419,7 +419,7 @@
           {
             title: "品类",
             key: "category",
-            width: 100
+            minWidth: 240
           },
           {
             title: "材质",
@@ -470,12 +470,12 @@
             }
           },
           {
-            title: "在库重量",
+            title: "在库重量(KG)",
             key: "warehouseWeights",
             width: 100
           },
           {
-            title: "在途重量",
+            title: "在途重量(KG)",
             key: "preInWareHouseWeight",
             width: 100
           },
@@ -538,7 +538,7 @@
           {
             title: "型号",
             key: "model",
-            width: 100
+            minWidth: 240
           },
           {
             title: "产地",
@@ -565,7 +565,7 @@
             width: 100
           },
           {
-            title: "单件重量",
+            title: "单件重量(KG)",
             key: "singleWeight",
             width: 100
           },
@@ -637,12 +637,12 @@
             }
           },
           {
-            title: "理计重量",
+            title: "理计重量(KG)",
             key: "ljWeight",
             width: 100
           },
           {
-            title: "过磅重量",
+            title: "过磅重量(KG)",
             key: "poundWeight",
             width: 100,
             render: (h, params) => {
@@ -667,12 +667,12 @@
             }
           },
           {
-            title: "过磅单重",
+            title: "过磅单重(KG)",
             key: "gbWeight",
             width: 100
           },
           {
-            title: "卷重",
+            title: "卷重(KG)",
             key: "coiledWeight",
             width: 100,
             render: (h, params) => {
@@ -693,7 +693,7 @@
             }
           },
           {
-            title: "原卷重",
+            title: "原卷重(KG)",
             key: "oldCoiledWeight",
             width: 100,
             render: (h, params) => {
@@ -919,7 +919,7 @@
             width: 100
           },
           {
-            title: "单件重量",
+            title: "单件重量(KG)",
             key: "singleWeight",
             width: 100
           },
@@ -938,12 +938,12 @@
             }
           },
           {
-            title: "在库重量",
+            title: "在库重量(KG)",
             key: "warehouseWeights",
             width: 100
           },
           {
-            title: "在途重量",
+            title: "在途重量(KG)",
             key: "preInWareHouseWeight",
             width: 100
           },

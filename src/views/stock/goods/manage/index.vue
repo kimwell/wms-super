@@ -90,15 +90,15 @@
       <Row class="row-list">
         <Col span="8">密度：{{editItem.density}}</Col>
         <Col span="8">理算方法：{{editItem.formula}}</Col>
-        <Col span="8">单件重量：{{editItem.singleWeight}}</Col>
+        <Col span="8">单件重量：{{editItem.singleWeight}}KG</Col>
       </Row>
       <Row class="row-list">
         <Col span="8">卷号：{{editItem.coiledSheetNum}}</Col>
         <Col span="8">状态：{{editItem.cargoStatus | tranStatus}}</Col>
-        <Col span="8">在库重量：{{editItem.warehouseWeights}}</Col>
+        <Col span="8">在库重量：{{editItem.warehouseWeights}}KG</Col>
       </Row>
       <Row class="row-list">
-        <Col span="8">在途重量：{{editItem.preInWareHouseWeight}}</Col>
+        <Col span="8">在途重量：{{editItem.preInWareHouseWeight}}KG</Col>
         <Col span="8">当前卷重：{{editItem.currentCoiledSheetWeights}}</Col>
         <Col span="8">原卷重：{{editItem.totalCoiledSheetWeights}}</Col>
       </Row>
@@ -205,9 +205,9 @@
           key: 'formula',
           width: 100,
         }, {
-          title: '单件重量',
+          title: '单件重量(KG)',
           key: 'singleWeight',
-          width: 100,
+          width: 120,
         }, {
           title: '卷号',
           key: 'coiledSheetNum',
@@ -223,11 +223,11 @@
             ]);
           }
         }, {
-          title: '在库重量',
+          title: '在库重量(KG)',
           key: 'warehouseWeights',
           width: 100,
         }, {
-          title: '在途重量',
+          title: '在途重量(KG)',
           key: 'preInWareHouseWeight',
           width: 100,
         }, {

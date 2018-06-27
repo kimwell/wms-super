@@ -69,7 +69,7 @@
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="panelShow = false">取消</Button>
+        <Button @click="close">取消</Button>
         <Button type="primary" @click="handleSubmit" :loading="loading">{{ isEdit ? '编辑' : '添加' }}</Button>
       </div>
     </Modal>
@@ -239,6 +239,10 @@
           };
           this.companyData.companyName = '';
         }
+      },
+      close(){
+        this.panelShow = false;
+        this.$refs[this.ref].resetFields();
       },
       //  查找商户
       remoteMethod(query) {

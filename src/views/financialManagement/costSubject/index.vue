@@ -59,7 +59,7 @@
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="show = false">取消</Button>
+        <Button @click="close">取消</Button>
         <Button type="primary" :loading="loading" @click="modalHandle">{{isEdit? '编辑':'添加'}}</Button>
       </div>
     </Modal>
@@ -137,6 +137,10 @@
           status: ''
         }
         this.getList(this.handleFilter);
+      },
+      close(){
+        this.show = false;
+        this.$refs.userInfo.resetFields();
       },
       // 更改状态
       changeSwitch(data){

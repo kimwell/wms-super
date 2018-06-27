@@ -218,7 +218,7 @@
         </Row>
       </Form>
       <div slot="footer">
-        <Button @click="show = false">取消</Button>
+        <Button @click="close">取消</Button>
         <Button type="primary" :loading="loading" @click="handleAction">{{isEdit ? '编辑':'添加'}}</Button>
       </div>
     </Modal>
@@ -641,6 +641,10 @@
           }
         }
         this.show = true;
+      },
+      close(){
+        this.show = false;
+        this.$refs[this.ref].resetFields();
       },
       //  编辑、新增客户
       handleAction() {

@@ -164,7 +164,7 @@
         goodsDetailColumns: [{
             title: "序号",
             key: "cargoName",
-            width: 100,
+            minWidth: 100,
             render: (h, params) => {
               let str = params.index + 1;
               return h("div", str);
@@ -173,22 +173,22 @@
           {
             title: "货物名称",
             key: "cargoName",
-            width: 100
+            minWidth: 150
           },
           {
             title: "型号",
             key: "model",
-            width: 100
+            minWidth: 240
           },
           {
             title: "产地",
             key: "proPlacesName",
-            width: 100
+            minWidth: 100
           },
           {
             title: "规格",
             key: "specifications",
-            width: 180,
+            minWidth: 180,
             render: (h, params) => {
               let str =
                 params.row.specifications != "" ?
@@ -202,17 +202,17 @@
           {
             title: "公差",
             key: "tolerance",
-            width: 100
+            minWidth: 100
           },
           {
-            title: "单件重量",
+            title: "单件重量(KG)",
             key: "singleWeight",
-            width: 100
+            minWidth: 120
           },
           {
             title: "产品单位",
             key: "numberUnit",
-            width: 100,
+            minWidth: 100,
             render: (h, params) => {
               let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
               return h("div", str);
@@ -221,52 +221,60 @@
           {
             title: "卷号",
             key: "coiledSheetNum",
-            width: 180,
+            minWidth: 180,
           },
           {
             title: "数量",
             key: "number",
-            width: 120,
+            minWidth: 120,
           },
           {
-            title: "理计重量",
+            title: "理计重量(KG)",
             key: "meterWeight",
-            width: 120,
+            minWidth: 120,
           },
           {
-            title: "过磅重量",
+            title: "过磅重量(KG)",
             key: "poundWeight",
-            width: 120,
+            minWidth: 120,
           },
           {
-            title: "过磅单重",
+            title: "过磅单重(KG)",
             key: "poundSingleWeight",
-            width: 120,
+            minWidth: 120,
           },
           {
-            title: "卷重",
+            title: "卷重(KG)",
             key: "coiledWeight",
-            width: 120,
+            minWidth: 120,
           },
           {
-            title: "原卷重",
+            title: "原卷重(KG)",
             key: "oldCoiledWeight",
-            width: 120,
+            minWidth: 120,
           },
           {
             title: "成本价",
             key: "costPrice",
-            width: 120,
+            minWidth: 120,
+            render:(h,params) =>{
+              let str = `￥${params.row.costPrice}`;
+              return h("span", str);
+            }
           },
           {
             title: "成本金额",
             key: "costNumber",
-            width: 120,
+            minWidth: 120,
+            render:(h,params) =>{
+              let str = `￥${params.row.costNumber}`;
+              return h("span", str);
+            }
           },
           {
             title: "备注",
             key: "remark",
-            width: 120,
+            minWidth: 120,
           },
           {
             title: "入库后是否自动合并",

@@ -30,11 +30,6 @@
       <Table width="100%" :columns="tableHeader" :data="item.cancelTicket.cancelTicketInfos"></Table>
       <h4 style="padding: 15px 0;">其他信息</h4>
       <Table width="100%" :columns="costHeader" :data="item.oldSaleTicket.saleTicketCosts"></Table>
-      <Row class="row-list" style="padding-top: 20px;">
-        <Col span="8">退款金额：{{item.cancelTicket.refundMoney}}</Col>
-        <Col span="8">备注：{{item.cancelTicket.remark}}</Col>
-        <Col span="8">附件：<img v-if="item.cancelTicket.attachMent != ''" :src="item.cancelTicket.attachMent" style="max-width: 300px;vertical-align: top;"><span v-else>暂无</span></Col>
-      </Row>
     </Card>
     <Card :bordered="false" class="card" title="退货信息">
       <Form :mode="dataApi" :label-width="100" inline>
@@ -125,7 +120,7 @@
           key: 'tolerance',
           minWidth: 150
         }, {
-          title: '单件重量',
+          title: '单件重量(KG)',
           key: 'singleWeight',
           minWidth: 150
         }, {
@@ -141,15 +136,15 @@
           key: 'number',
           minWidth: 100
         }, {
-          title: '理计重量',
+          title: '理计重量(KG)',
           key: 'meterWeight',
           minWidth: 100
         }, {
-          title: '过磅重量',
+          title: '过磅重量(KG)',
           key: 'poundWeight',
           minWidth: 100
         }, {
-          title: '过磅单重',
+          title: '过磅单重(KG)',
           key: 'poundSingleWeight',
           minWidth: 100
         }, {

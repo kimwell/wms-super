@@ -95,6 +95,9 @@
 </template>
 
 <script>
+import {
+  dateformat
+} from '@/utils/filters.js'
   export default {
     data() {
       return {
@@ -216,8 +219,7 @@
           key: "outTime",
           minWidth: 150,
           render: (h, params) => {
-            let t = params.row.outTime != '' ? this.formatDateTime(params.row.outTime) : '暂无'
-            return h('span', t)
+            return h('span', params.row.outTime != '' ? dateformat(params.row.outTime):'暂无')
           }
         }, {
           title: "状态",
@@ -236,8 +238,7 @@
           key: "updateTime",
           minWidth: 150,
           render: (h, params) => {
-            let t = params.row.updateTime != '' ? this.formatDateTime(params.row.updateTime) : ''
-            return h('span', t)
+            return h('span', params.row.updateTime != '' ? dateformat(params.row.updateTime):'暂无')
           }
         }, {
           title: '操作',
@@ -438,21 +439,6 @@
       }
     },
     methods: {
-      formatDateTime(t) {
-        var date = new Date(t);
-        var y = date.getFullYear();
-        var m = date.getMonth() + 1;
-        m = m < 10 ? ('0' + m) : m;
-        var d = date.getDate();
-        d = d < 10 ? ('0' + d) : d;
-        var h = date.getHours();
-        h = h < 10 ? ('0' + h) : h;
-        var minute = date.getMinutes();
-        var second = date.getSeconds();
-        minute = minute < 10 ? ('0' + minute) : minute;
-        second = second < 10 ? ('0' + second) : second;
-        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
-      },
       resetFilter() {
         this.pageApi = {
           pageSize: 10,

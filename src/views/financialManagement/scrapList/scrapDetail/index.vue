@@ -78,6 +78,9 @@
 </template>
 
 <script>
+import {
+  dateformat
+} from '@/utils/filters.js'
   import uploadPic from '@/components/basics/uploadPic.vue'
   export default {
     components: {
@@ -102,8 +105,7 @@
           key: 'updateTime',
           minWidth: 150,
           render: (h, params) => {
-            let t = this.formatDateTime(params.row.updateTime)
-            return h('span', t)
+            return h('span', params.row.updateTime != '' ? dateformat(params.row.updateTime):'暂无')
           }
         }, {
           title: '操作人',
@@ -278,21 +280,6 @@
       }
     },
     methods: {
-      formatDateTime(t) {
-        var date = new Date(t);
-        var y = date.getFullYear();
-        var m = date.getMonth() + 1;
-        m = m < 10 ? ('0' + m) : m;
-        var d = date.getDate();
-        d = d < 10 ? ('0' + d) : d;
-        var h = date.getHours();
-        h = h < 10 ? ('0' + h) : h;
-        var minute = date.getMinutes();
-        var second = date.getSeconds();
-        minute = minute < 10 ? ('0' + minute) : minute;
-        second = second < 10 ? ('0' + second) : second;
-        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
-      },
       getData() {
         this.$http.post(this.api.findCancelTicket, {
           zfId: this.id

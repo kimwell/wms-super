@@ -20,17 +20,22 @@
         </FormItem>
         <FormItem v-if="dataApi.isBuser == 'false'" label="客户名称：" prop="customerName">
           <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-                  <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
-                </Select>
+            <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
+          </Select>
         </FormItem>
         <FormItem v-if="dataApi.isBuser == 'true'" label="供应商名称：" prop="customerName">
           <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-                <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-              </Select>
+            <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
+          </Select>
         </FormItem>
-        <FormItem label="客户账户：" prop="customerBankCardNo">
+        <FormItem v-if="dataApi.isBuser == 'false'" label="客户账户：" prop="customerBankCardNo">
           <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
             <Option v-for="item in bankList" :value="item.cardNo" :key="item.cardNo">{{ item.cardNo }}</Option>
+          </AutoComplete>
+        </FormItem>
+        <FormItem v-if="dataApi.isBuser == 'true'" label="供应商账户：" prop="customerBankCardNo">
+          <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
+            <Option v-for="item in bankList" :value="item.card" :key="item.card">{{ item.card }}</Option>
           </AutoComplete>
         </FormItem>
         <FormItem label="账户银行：" prop="customerBankName">
@@ -214,6 +219,7 @@
         this.dataApi.customerBankName = '';
         this.dataApi.paymentOrderAmountItem = [];
         this.selectAllList = [];
+        this.$refs.receiptOrder.resetFields();
       }
     },
     methods: {
@@ -260,13 +266,15 @@
           datas = data.split('-')
         }
         if (data != '') {
-          let params = {
-            name: this.dataApi.isBuser == 'true' ? datas[0] : data,
+          let params = this.dataApi.isBuser == 'true' ? {companyName: datas[0]}: {
+            name: data,
             cardNo: ''
           }
-          this.$http.post(this.api.findbankCards, params).then(res => {
+          //  供应商、客户银行卡查询
+          let cardUrl = this.dataApi.isBuser == 'true' ? this.api.getCompanyCard : this.api.findbankCards
+          this.$http.post(cardUrl, params).then(res => {
             if (res.code === 1000) {
-              this.bankList = res.data
+              this.bankList = this.dataApi.isBuser == 'true' ? JSON.parse(res.data.cardInfo) : res.data
             }
           })
           this.$http.post(this.api.buserAccountDetail, {
@@ -280,8 +288,15 @@
       },
       customerChange(data) {
         this.bankList.forEach(el => {
+          if(this.dataApi.isBuser == 'true'){
+            if (el.card == data) {
+              this.dataApi.customerBankName = el.bank
+            }
+          }else{
+
           if (el.cardNo == data) {
             this.dataApi.customerBankName = el.bankName
+          }
           }
         })
       },
@@ -345,15 +360,14 @@
             }
             params.inTime = this.inTime;
             params.paymentOrderAmountItem = JSON.stringify(this.selectAllList)
-            console.log(params)
-            // this.$http.post(this.api.paymentOrderOut, params).then(res => {
-            //   if (res.code === 1000) {
-            //     this.$Message.success('保存成功')
-            //     this.$router.push('paymentOrder');
-            //   } else {
-            //     this.$Message.error(res.message);
-            //   }
-            // })
+            this.$http.post(this.api.paymentOrderOut, params).then(res => {
+              if (res.code === 1000) {
+                this.$Message.success('保存成功')
+                this.$router.push('paymentOrder');
+              } else {
+                this.$Message.error(res.message);
+              }
+            })
             }
           } else {
             this.$Message.error('表单验证失败!');

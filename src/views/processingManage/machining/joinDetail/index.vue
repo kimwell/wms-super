@@ -467,7 +467,7 @@ import {dateformat} from '@/utils/filters.js'
             width: 100,
             render: (h, params) => {
               // let str = this.toStatus(params.row.cargoStatus);
-              return h("div", toStatus(params.row.cargoStatus));
+              return h("div", this.toStatus(params.row.cargoStatus));
             }
           },
           {
@@ -527,7 +527,7 @@ import {dateformat} from '@/utils/filters.js'
             key: "cargoName",
             width: 100,
             render: (h, params) => {
-              let str = params.row._index;
+              let str = params.index + 1;
               return h("div", str);
             }
           },
@@ -568,7 +568,7 @@ import {dateformat} from '@/utils/filters.js'
           {
             title: "单件重量(KG)",
             key: "singleWeight",
-            width: 100
+            width: 120
           },
           {
             title: "产品单位",
@@ -640,12 +640,12 @@ import {dateformat} from '@/utils/filters.js'
           {
             title: "理计重量(KG)",
             key: "ljWeight",
-            width: 100
+            width: 120
           },
           {
             title: "过磅重量(KG)",
             key: "poundWeight",
-            width: 100,
+            width: 120,
             render: (h, params) => {
               let _this = this;
               return h("Input", {
@@ -670,12 +670,12 @@ import {dateformat} from '@/utils/filters.js'
           {
             title: "过磅单重(KG)",
             key: "gbWeight",
-            width: 100
+            width: 120
           },
           {
             title: "卷重(KG)",
             key: "coiledWeight",
-            width: 100,
+            width: 120,
             render: (h, params) => {
               let _this = this;
               return h("Input", {
@@ -696,7 +696,7 @@ import {dateformat} from '@/utils/filters.js'
           {
             title: "原卷重(KG)",
             key: "oldCoiledWeight",
-            width: 100,
+            width: 120,
             render: (h, params) => {
               let _this = this;
               return h("Input", {
@@ -861,7 +861,6 @@ import {dateformat} from '@/utils/filters.js'
             key: "createTime",
             width: 135,
             render: (h, params) => {
-              // let str = this.toTime(params.row.createTime);
               return h("div", dateformat(params.row.createTime));
             }
           },
@@ -922,7 +921,7 @@ import {dateformat} from '@/utils/filters.js'
           {
             title: "单件重量(KG)",
             key: "singleWeight",
-            width: 100
+            width: 120
           },
           {
             title: "卷号",
@@ -934,18 +933,18 @@ import {dateformat} from '@/utils/filters.js'
             key: "cargoStatus",
             width: 100,
             render: (h, params) => {
-              return h("div", toStatus(params.row.cargoStatus));
+              return h("div", this.toStatus(params.row.cargoStatus));
             }
           },
           {
             title: "在库重量(KG)",
             key: "warehouseWeights",
-            width: 100
+            width: 120
           },
           {
             title: "在途重量(KG)",
             key: "preInWareHouseWeight",
-            width: 100
+            width: 120
           },
           {
             title: "备注",
@@ -1120,6 +1119,28 @@ import {dateformat} from '@/utils/filters.js'
       }
     },
     methods: {
+      toStatus(val) {
+        switch (val * 1) {
+          case 1:
+            return "待加工";
+            break;
+          case 2:
+            return "加工中";
+            break;
+          case 3:
+            return "待入库";
+            break;
+          case 4:
+            return "已入库";
+            break;
+          case 5:
+            return "已取消";
+            break;
+          case 6:
+            return "入库重申";
+            break;
+        }
+      },
       getData() {
         this.$http
           .post(this.api.findProcess, {
@@ -1323,12 +1344,8 @@ import {dateformat} from '@/utils/filters.js'
           if (res.code === 1000) {
             res.data.data.forEach(el => {
               el.selected = false;
-              // if(el.productNumber == data.row.productNumber){
-              //   el.selected = true
-              // }
             });
             this.mergeList = res.data.data;
-            // this.$set(this,'mergeList',[...res.data.data])
             this.mergeTotalCount = res.data.totalCount;
           }
         });
@@ -1342,8 +1359,8 @@ import {dateformat} from '@/utils/filters.js'
         params.processId = this.id;
         params.goods = JSON.stringify(params.goods)
           this.$Modal.confirm({
-            title: '加工单入库',
-            content: '确认开始加工？',
+            title: '开具加工入库单',
+            content: '是否确认开具加工入库单？',
             onOk: () => {
               this.$http.post(this.api.saveProcessIn,params).then(res =>{
                 if(res.code === 1000){
@@ -1359,7 +1376,6 @@ import {dateformat} from '@/utils/filters.js'
       }
     },
     created() {
-      // this.getData();
       this.asyncGoods();
     }
   };

@@ -17,10 +17,9 @@
             <Col class-name="col" span="4">仓库名称</Col>
             <Col class-name="col" span="2">库存上限</Col>
             <Col class-name="col" span="2">实际库存</Col>
-            <!-- <Col class-name="col" span="3">库位</Col> -->
             <Col class-name="col" span="4">库管员</Col>
             <Col class-name="col" span="5">地址</Col>
-            <Col class-name="col" span="2">序号</Col>
+            <Col class-name="col" span="2">排序</Col>
             <Col class-name="col" span="2">状态</Col>
             <Col class-name="col" span="3">操作</Col>
           </Row>
@@ -28,7 +27,6 @@
             <Col class-name="col" span="4">{{item.name}}</Col>
             <Col class-name="col" span="2">{{item.inventory}}</Col>
             <Col class-name="col" span="2">{{item.realWeight}}吨</Col>
-            <!-- <Col class-name="col" span="3"></Col> -->
             <Col class-name="col" span="4">
               <Tag color="blue" v-for="(sub,sindex) in item.kgName" :key="sindex">
                 {{sub}}
@@ -80,7 +78,7 @@
         <FormItem label="库存上限:">
           <Input v-model="dataApi.inventory" placeholder="请输入"></Input>
         </FormItem>
-        <FormItem label="序号:">
+        <FormItem label="排序:">
           <Input v-model="dataApi.orderNum" placeholder="请输入"></Input>
         </FormItem>
         <FormItem label="备注:">

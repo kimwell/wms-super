@@ -1295,3 +1295,13 @@ export const receiptCancel = '/sys/cancelTicketBg/receipt/cancel'
 *销售单打印
 */
 export const saleTicketPrint = '/sys/saleTicketBg/saleTicketPrint'
+
+/*
+*加工单打印
+*/
+export const processPrint = '/sys/processTicket/processPrint'
+
+/*
+*菜单提醒
+*/
+export const messagePrompt = '/sys/buserInfoBg/messagePrompt'

@@ -104,6 +104,9 @@
           case 5:
             return '已取消'
             break;
+          case 6:
+            return '入库重申'
+            break;
         }
       }
     },

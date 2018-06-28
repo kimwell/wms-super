@@ -131,7 +131,7 @@
       <div class="card-contnet" style="padding-bottom: 10px;">
         <div class="table-contnet">
           <Row class-name="head">
-            <Col class-name="col" span="12">销售单号</Col>
+            <Col class-name="col" span="12">销售单</Col>
             <Col class-name="col" span="12">操作</Col>
           </Row>
           <Row v-for="(item,index) in printData" :key="item.id">
@@ -418,7 +418,6 @@
             this.spinShow = false;
             this.printData = res.data;
           } else {
-            // this.printShow = false;
             this.$Message.error(res.message);
           }
         })

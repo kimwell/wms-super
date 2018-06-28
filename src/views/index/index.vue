@@ -6,9 +6,13 @@
           <div class="layout-logo-left">超管后台管理系统</div>
           <Submenu :name="index" v-for="(item,index) in menu" :key="index">
             <template slot="title">
-                        <span class="iconfont menuicon" :class="item.icon"></span>{{ item.menuName }}
-</template>
-            <MenuItem :name="index+'-'+i" v-for="(sub,i) in item.children" :key="i">{{ sub.menuName }}</MenuItem>
+              <span class="pointer" v-show="item.showPointer"></span>
+              <span class="iconfont menuicon" :class="item.icon"></span>{{ item.menuName }}
+            </template>
+            <MenuItem :name="index+'-'+i" v-for="(sub,i) in item.children" :key="i">
+              {{ sub.menuName }}
+              <span class="pointer" v-show="sub.showPointer"></span>
+            </MenuItem>
           </Submenu>
         </Menu>
       </div>
@@ -39,16 +43,17 @@
   import {
     mapGetters
   } from "vuex";
-  import push from "@/utils/push.js";
+  import pushs from "@/utils/push.js";
   export default {
-    mixins: [push],
+    mixins: [pushs],
     data() {
       return {
         // menu: [],
         openArr: [],
         // 导航初始选中菜单
         activeIndex: "",
-        contentHeight: "700"
+        contentHeight: "700",
+        pointData: {}
       };
     },
     computed: {
@@ -77,8 +82,39 @@
       menu() {
         return this.$store.state.menuData;
       },
-      user(){
-        return this.$store.state.user
+      user() {
+        return this.$store.state.user;
+      },
+      menuData() {
+        let arr = [];
+        this.menu.forEach((el, index) => {
+          if (el.children) {
+            el.showPointer = false;
+            el.children.forEach((sub, i) => {
+              sub.showPointer = false;
+              if (sub.url == "stockOut") {
+                sub.showPointer = this.pointData.ckdgl;
+              }
+              if(sub.url == 'machining'){
+                sub.showPointer = this.pointData.jgd;
+              }
+              if(sub.url == 'stockInto'){
+                sub.showPointer = this.pointData.rkdgl;
+              }
+              if(sub.url == 'stockCancel'){
+                sub.showPointer = this.pointData.zfgl;
+              }
+              if(sub.url == 'saleOrder'){
+                sub.showPointer = this.pointData.xsdgl;
+              }
+              if(sub.showPointer){
+                el.showPointer = true;
+              }
+            });
+          }
+        });
+        arr.push(...this.menu);
+        return arr
       }
     },
     methods: {
@@ -95,17 +131,17 @@
       },
       // 设置菜单全部展开,匹配当前页面选中菜单
       setActiveMenu() {
-        this.menu.forEach((el, index) => {
+        this.menuData.forEach((el, index) => {
           this.openArr.push(index);
           el.children.forEach((sub, i) => {
             if (sub.children.length != 0) {
               sub.children.forEach((ch, j) => {
                 if (this.$route.fullPath === ch.url)
-                  this.activeIndex = `${index}-${i}`
-              })
+                  this.activeIndex = `${index}-${i}`;
+              });
             } else {
               if (this.$route.name === sub.url)
-                this.activeIndex = `${index}-${i}`
+                this.activeIndex = `${index}-${i}`;
             }
           });
         });
@@ -122,21 +158,28 @@
         this.$http.post(this.api.getUser).then(res => {
           if (res.code === 1000) {
             this.$store.commit(types.MENU_DATA, JSON.parse(res.data.menuInfo));
-            // this.$store.commit(types.USER,res.data)
-            // document.addEventListener("visibilitychange", () => {
-            //   let isHidden = document.hidden;
-            //   if (isHidden) {
-            //     this.isFocus = false;
-            //   } else {
-            //     this.isFocus = true;
-            //     document.title = this.titleInit;
-            //     window.clearInterval(this.stl);
-            //     if (!this.isNotice) {
-            //       this.notify(this.msg);
-            //     }
-            //   }
-            // });
-            // this.initScoket();
+            this.$store.commit(types.USER, res.data);
+            document.addEventListener("visibilitychange", () => {
+              let isHidden = document.hidden;
+              if (isHidden) {
+                this.isFocus = false;
+              } else {
+                this.isFocus = true;
+                document.title = this.titleInit;
+                window.clearInterval(this.stl);
+                if (!this.isNotice) {
+                  this.notify(this.msg);
+                }
+              }
+            });
+            this.initScoket();
+          }
+        });
+      },
+      messagePrompt() {
+        this.$http.post(this.api.messagePrompt).then(res => {
+          if (res.code === 1000) {
+            this.pointData = res.data || {};
           }
         });
       },
@@ -144,12 +187,10 @@
       loginout(data) {
         this.$store.commit(types.LOGOUT, data);
         window.location.href = "/bg/login";
-      },
-      itemClick(data){
-        console.log(data)
       }
     },
     created() {
+      this.messagePrompt();
       this.getUserInfo();
     },
     mounted() {
@@ -169,7 +210,7 @@
           });
         }
       },
-      menu() {
+      menuData() {
         this.setActiveMenu();
         this.$nextTick(function() {
           this.$refs.menu.updateActiveName();
@@ -290,5 +331,14 @@
   .menuicon {
     margin-right: 4px;
     vertical-align: middle;
+  }
+  .pointer{
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color:red;
+    top: 20px;
+    right: 60px;
   }
 </style>

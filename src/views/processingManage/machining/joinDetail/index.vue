@@ -198,6 +198,7 @@
 </template>
 
 <script>
+import {dateformat} from '@/utils/filters.js'
   export default {
     data() {
       return {
@@ -407,8 +408,8 @@
             key: "createTime",
             width: 135,
             render: (h, params) => {
-              let str = this.toTime(params.row.createTime);
-              return h("div", str);
+              // let str = this.toTime(params.row.createTime);
+              return h("div", dateformat(params.row.createTime));
             }
           },
           {
@@ -465,8 +466,8 @@
             key: "cargoStatus",
             width: 100,
             render: (h, params) => {
-              let str = this.toStatus(params.row.cargoStatus);
-              return h("div", [h("span", str)]);
+              // let str = this.toStatus(params.row.cargoStatus);
+              return h("div", toStatus(params.row.cargoStatus));
             }
           },
           {
@@ -860,8 +861,8 @@
             key: "createTime",
             width: 135,
             render: (h, params) => {
-              let str = this.toTime(params.row.createTime);
-              return h("div", str);
+              // let str = this.toTime(params.row.createTime);
+              return h("div", dateformat(params.row.createTime));
             }
           },
           {
@@ -933,8 +934,7 @@
             key: "cargoStatus",
             width: 100,
             render: (h, params) => {
-              let str = this.toStatus(params.row.cargoStatus);
-              return h("div", [h("span", str)]);
+              return h("div", toStatus(params.row.cargoStatus));
             }
           },
           {
@@ -1079,6 +1079,9 @@
           case 5:
             return "已取消";
             break;
+          case 6:
+            return "入库重申";
+            break;
         }
       },
       toMegerStatus(val){
@@ -1163,38 +1166,6 @@
       },
       onSelected(data) {
         this.goods = data;
-      },
-      // 状态
-      toStatus(val) {
-        switch (val * 1) {
-          case 0:
-            return "暂无";
-            break;
-          case 1:
-            return "在途";
-            break;
-          case 2:
-            return "在库";
-            break;
-          default:
-            break;
-        }
-      },
-      //  格式化时间
-      toTime(val) {
-        let date = new Date(val);
-        let y = date.getFullYear();
-        let m = date.getMonth() + 1;
-        m = m < 10 ? "0" + m : m;
-        let d = date.getDate();
-        d = d < 10 ? "0" + d : d;
-        let h = date.getHours();
-        h = h < 10 ? "0" + h : h;
-        let minute = date.getMinutes();
-        let second = date.getSeconds();
-        minute = minute < 10 ? "0" + minute : minute;
-        second = second < 10 ? "0" + second : second;
-        return y + "-" + m + "-" + d + " " + h + ":" + minute;
       },
       getList(params) {
         this.$http.post(this.api.findCargoInfoList, params).then(res => {

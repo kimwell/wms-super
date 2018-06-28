@@ -1,4 +1,5 @@
 import * as types from '@/store/types'
+import {codeUrl} from './codeUrl'
 import {
   MathRand
 } from '@/utils/tools.js'
@@ -22,7 +23,6 @@ export default {
       }
       // 建立WebSocket链接
       let ws = new WebSocket(this.api.ws + "/saas?userId=" + this.$store.state.loginId + rand);
-
       ws.onopen = function (evt) {
         //  console.log("消息推送链接成功");
       };
@@ -47,7 +47,7 @@ export default {
       let _this = this;
       let title = data.title;
       let body = data.body;
-      let icon = `https://tbxoss.oss-cn-hangzhou.aliyuncs.com/ggh/push_icons/bg${data.code}.png`;
+      let icon = `https://tbxoss.oss-cn-hangzhou.aliyuncs.com/saas/websocket_icon/${data.code}.png`
       if (window.Notification && Notification.permission == 'granted') {
         let notif = new Notification(title, {
           body: body, //通知的具体内容
@@ -55,6 +55,7 @@ export default {
           requireInteraction: true
         });
         notif.onclick = () => {
+          this.$router.push({ name: codeUrl(data.code) })
           // if (data.code == 1 || data.code == 5) {
           //   this.$router.push('/ironBuys');
           // } else if(data.code == 2){

@@ -45,10 +45,10 @@
       </Row>
       <Row class="row-list">
         <Col span="8">附件：
-          <span v-if="activeItem.fileAddress !=''">
-            <Button type="primary" size="small" @click="previewImg(activeItem.fileAddress)">查看附件</Button>
-          </span>
-          <span v-else>暂无</span>
+        <span v-if="activeItem.fileAddress !=''">
+              <Button type="primary" size="small" @click="previewImg(activeItem.fileAddress)">查看附件</Button>
+            </span>
+        <span v-else>暂无</span>
         </Col>
         <Col span="8">操作人：{{activeItem.updateUser}}</Col>
         <Col span="8">操作时间：{{activeItem.updateTime | dateformat}}</Col>
@@ -58,11 +58,20 @@
         <Col span="8">备注：{{activeItem.remark}}</Col>
       </Row>
       <h2 style="margin-bottom: 16px;">结算客户</h2>
-      <Row class="row-list" v-for="(item,index) in activeItem.paymentOrderAmountItems" :key="index">
-        <Col span="8">客户名称：{{item.customerName}}</Col>
-        <Col span="8">结算金额：{{item.amount}}</Col>
-        <Col span="8">待结算金额：{{item.waitSettleAmount}}</Col>
-      </Row>
+      <div class="card-contnet">
+        <div class="table-contnet">
+          <Row class-name="head">
+            <Col class-name="col" span="8">客户名称</Col>
+            <Col class-name="col" span="8">结算金额</Col>
+            <Col class-name="col" span="8">待结算金额</Col>
+          </Row>
+          <Row v-for="(item,index) in activeItem.paymentOrderAmountItems" :key="item.id">
+            <Col class-name="col" span="8">{{item.customerName}}</Col>
+            <Col class-name="col" span="8">{{item.amount}}</Col>
+            <Col class-name="col" span="8">{{item.waitSettleAmount}}</Col>
+          </Row>
+        </div>
+      </div>
       <div slot="footer">
         <Button @click="detailShow = false">关闭</Button>
       </div>
@@ -79,9 +88,9 @@
 </template>
 
 <script>
-import {
-  dateformat
-} from '@/utils/filters.js'
+  import {
+    dateformat
+  } from '@/utils/filters.js'
   import uploadBtn from '@/components/basics/uploadBtn'
   export default {
     components: {
@@ -112,7 +121,7 @@ import {
           }]
         },
         detailShow: false,
-        activeItem:{},
+        activeItem: {},
         prevShow: false,
         prevImgSrc: '',
         tableHeader: [{
@@ -135,12 +144,12 @@ import {
           title: '费用科目',
           key: 'feeType',
           minWidth: 150
-        },{
+        }, {
           title: "出账时间",
           key: "inTime",
           minWidth: 150,
           render: (h, params) => {
-            return h('span', params.row.inTime != '' ? dateformat(params.row.inTime):'暂无')
+            return h('span', params.row.inTime != '' ? dateformat(params.row.inTime) : '暂无')
           }
         }, {
           title: "银行账号流水号",
@@ -180,7 +189,7 @@ import {
           key: "updateTime",
           minWidth: 150,
           render: (h, params) => {
-            return h('span', params.row.updateTime != '' ? dateformat(params.row.updateTime):'暂无')
+            return h('span', params.row.updateTime != '' ? dateformat(params.row.updateTime) : '暂无')
           }
         }, {
           title: "备注",
@@ -359,10 +368,35 @@ import {
       max-width: 100%;
     }
   }
-  .row-list{
+  
+  .row-list {
     margin-bottom: 16px;
-    &:last-child{
+    &:last-child {
       margin: 0;
+    }
+  }
+  
+  .card-contnet {
+    position: relative;
+    padding-bottom: 40px;
+  }
+  
+  .table-contnet {
+    line-height: 40px;
+    text-align: center;
+    border-top: 1px solid #d0d0d0;
+    border-left: 1px solid #d0d0d0;
+    .head {
+      background-color: #ddd;
+    }
+    .col {
+      height: 40px;
+      padding: 0 5px;
+      border-right: 1px solid #d0d0d0;
+      border-bottom: 1px solid #d0d0d0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 </style>

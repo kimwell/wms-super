@@ -23,15 +23,15 @@
             <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
           </Select>
         </FormItem>
-        <FormItem v-if="dataApi.isBuser == 'true'" label="供应商名称：" prop="customerName">
-          <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-            <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-          </Select>
-        </FormItem>
         <FormItem v-if="dataApi.isBuser == 'false'" label="客户账户：" prop="customerBankCardNo">
           <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
             <Option v-for="item in bankList" :value="item.cardNo" :key="item.cardNo">{{ item.cardNo }}</Option>
           </AutoComplete>
+        </FormItem>
+        <FormItem v-if="dataApi.isBuser == 'true'" label="供应商名称：" prop="customerName">
+          <Select v-model="dataApi.customerName" ref="companyRef" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
+            <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
+          </Select>
         </FormItem>
         <FormItem v-if="dataApi.isBuser == 'true'" label="供应商账户：" prop="customerBankCardNo">
           <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -197,7 +197,7 @@
       totalMoney() {
         let nums = 0;
         this.selectAllList.forEach(el => {
-          nums += parseInt(el.amount)
+          nums += el.amount
         })
         return nums
       },
@@ -206,7 +206,7 @@
       }
     },
     watch: {
-      'dataApi.isBuser' () {
+      'dataApi.isBuser' (newVal,oldVal) {
         this.companyList = [];
         this.bankList = [];
         this.bankCardList = [];
@@ -219,7 +219,7 @@
         this.dataApi.customerBankName = '';
         this.dataApi.paymentOrderAmountItem = [];
         this.selectAllList = [];
-        this.$refs.receiptOrder.resetFields();
+        // this.$refs.receiptOrder.resetFields();
       }
     },
     methods: {
@@ -261,6 +261,11 @@
       },
       //  选择客户名称
       selectOnChange(data) {
+        this.dataApi.customerBankCardNo = '';
+        this.dataApi.customerBankName = '';
+        this.bankList = [];
+        this.selectList = [];
+        this.selectAllList = [];
         let datas;
         if (this.dataApi.isBuser == 'true') {
           datas = data.split('-')
@@ -274,7 +279,7 @@
           let cardUrl = this.dataApi.isBuser == 'true' ? this.api.getCompanyCard : this.api.findbankCards
           this.$http.post(cardUrl, params).then(res => {
             if (res.code === 1000) {
-              this.bankList = this.dataApi.isBuser == 'true' ? JSON.parse(res.data.cardInfo) : res.data
+              this.bankList = this.dataApi.isBuser == 'true' ? res.data !='' ? JSON.parse(res.data.cardInfo) : [] : res.data
             }
           })
           this.$http.post(this.api.buserAccountDetail, {
@@ -293,15 +298,11 @@
               this.dataApi.customerBankName = el.bank
             }
           }else{
-
           if (el.cardNo == data) {
             this.dataApi.customerBankName = el.bankName
           }
           }
         })
-      },
-      bankCardNoChange(data) {
-  
       },
       //  查找商户
       remoteMethod(query) {

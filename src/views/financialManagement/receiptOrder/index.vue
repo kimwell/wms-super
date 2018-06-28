@@ -336,6 +336,7 @@ import {
           }
         })
       },
+      //  费用科目
       getFeeList() {
         this.$http.get(this.api.findFeeType).then(res => {
           if (res.code === 1000) {

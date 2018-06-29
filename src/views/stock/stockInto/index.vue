@@ -47,9 +47,9 @@
             <Col class-name="col" span="3">{{item.updateUser}}</Col>
             <Col class-name="col" span="3">{{item.updateTime | dateformat}}</Col>
             <Col class-name="col" span="3">
-            <Button size="small" type="warning" @click="itemHandle(item,1)">打印</Button>
             <Button v-if="item.status == 1" size="small" type="warning" @click="itemHandle(item,2)">确认入库</Button>
             <Button size="small" type="warning" @click="itemHandle(item,3)">详情</Button>
+            <Button size="small" type="warning" @click="itemHandle(item,1)">打印</Button>
             </Col>
           </Row>
           <Row v-if="list.length == 0">

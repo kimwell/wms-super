@@ -208,6 +208,7 @@
           this.$nextTick(function() {
             this.$refs.menu.updateActiveName();
           });
+          this.setActiveMenu();
         }
       },
       menuData() {

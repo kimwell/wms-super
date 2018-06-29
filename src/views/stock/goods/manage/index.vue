@@ -102,7 +102,7 @@
         <FormItem label="在途数量:"><span>暂无</span></FormItem>
         <FormItem label="理计单重:"><span>{{ detail.singleWeight }}</span></FormItem>
         <FormItem label="过磅单重:"><span>{{ detail.numbers == 0 ? 0 : (detail.ponderanceCoiledSheetWeights/detail.numbers).toFixed(3) }}</span></FormItem>
-        <FormItem label="剩余重量:"><span>{{ (detail.warehouseWeights + detail.preInWareHouseWeight).toFixed(3) }}</span></FormItem>
+        <FormItem label="剩余重量:"><span>{{ detail.warehouseWeights }}</span></FormItem>
         <FormItem label="在库重量:"><span>{{ detail.warehouseWeights }}</span></FormItem>
         <FormItem label="理计重量:"><span>{{ (detail.singleWeight * detail.numbers).toFixed(3) }}</span></FormItem>
         <FormItem label="过磅重量:"><span>{{ detail.ponderanceCoiledSheetWeights }}</span></FormItem>

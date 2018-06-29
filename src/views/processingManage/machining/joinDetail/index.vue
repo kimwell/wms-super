@@ -778,18 +778,6 @@ import {dateformat} from '@/utils/filters.js'
             width: 200
           },
           {
-            title: "仓库",
-            key: "wareHouseCargoSet",
-            width: 150,
-            render: (h, params) => {
-              if(params.row.wareHouseCargoSet.length > 0){
-                return h("div", params.row.wareHouseCargoSet[0].wareHouseName);
-              }else{
-                return h("div", '');
-              }
-            }
-          },
-          {
             title: "货品名称",
             key: "cargoName",
             width: 150

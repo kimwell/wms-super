@@ -91,6 +91,31 @@
         </div>
       </div>
     </Modal>
+    <Modal title="打印出库单" width="400" v-model="printShow" :mask-closable="false">
+      <Spin size="large" fix v-if="spinShow">
+        <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
+        <div>正在生成打印出库单...</div>
+      </Spin>
+      <div class="card-contnet" style="padding-bottom: 10px;">
+        <div class="table-contnet">
+          <Row class-name="head">
+            <Col class-name="col" span="12">出库单</Col>
+            <Col class-name="col" span="12">操作</Col>
+          </Row>
+          <Row v-for="(item,index) in printData" :key="item.id">
+            <Col class-name="col" span="12">{{`出库单_${item.orderNum}`}}</Col>
+            <Col class-name="col" span="12">
+              <a class="ivu-btn ivu-btn-warning ivu-btn-small" :href="item.viewUrl" target="_blank">打印</a>
+            </Col>
+          </Row>
+          <Row v-if="printData.length == 0">
+            <Col class-name="col" span="24">暂无数据</Col>
+          </Row>
+        </div>
+      </div>
+      <div slot="footer">
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -119,6 +144,9 @@ import {
           carId: '',
           remark: ''
         },
+        printShow: false,
+        spinShow: true,
+        printData: [],
         storeHouseList: [],
         dataValue: ['', ''],
         statusData: [{
@@ -268,7 +296,7 @@ import {
                 },
                 on: {
                   click: () => {
-                    
+                    this.print(params.row)
                   }
                 }
               }, '打印')
@@ -507,6 +535,20 @@ import {
         }).then(res => {
           if (res.code === 1000) {
             this.detailItem = res.data;
+          }
+        })
+      },
+      //  打印
+      print(item) {
+        this.printShow = true;
+        this.$http.post(this.api.saleTicketPrint, {
+          saleTicketId: item.saleTicketId
+        }).then(res => {
+          if (res.code === 1000) {
+            this.spinShow = false;
+            this.printData = res.data;
+          } else {
+            this.$Message.error(res.message);
           }
         })
       },

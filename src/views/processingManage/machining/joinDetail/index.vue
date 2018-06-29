@@ -66,7 +66,7 @@
               {{item.coildSheetWeight}}
             </FormItem>
             <FormItem label="余卷备注：">
-              {{item.remark}}
+              {{item.coilSheetRemark}}
             </FormItem>
           </Form>
         </div>

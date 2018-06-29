@@ -32,7 +32,7 @@
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
     </div>
-    <Modal v-model="show" width="1000" :mask-closable="false" title="供应商交易详情">
+    <Modal v-model="show" width="1000" :mask-closable="false" title="账户余额详情">
       <Form :mode="detailApi" :label-width="80" inline>
         <FormItem label="金额：">
           <Select v-model="detailApi.toZero" style="width: 100px;">
@@ -55,19 +55,19 @@
         <div class="card-contnet">
           <div class="table-contnet">
             <Row class-name="head">
-              <Col class-name="col" span="4">金额</Col>
+              <Col class-name="col" span="3">金额</Col>
               <Col class-name="col" span="4">费用科目</Col>
               <Col class-name="col" span="4">收支款账号</Col>
-              <Col class-name="col" span="3">银行流水号</Col>
+              <Col class-name="col" span="4">银行流水号</Col>
               <Col class-name="col" span="3">附件</Col>
               <Col class-name="col" span="3">交易时间</Col>
               <Col class-name="col" span="3">备注</Col>
             </Row>
             <Row v-for="(item,index) in detailList " :key="index">
-              <Col class-name="col" span="4">{{item.amount}}</Col>
+              <Col class-name="col" span="3">{{item.amount}}</Col>
               <Col class-name="col" span="4">{{item.feeType}}</Col>
               <Col class-name="col" span="4">{{item.bankCardNo}}</Col>
-              <Col class-name="col" span="3">{{item.bankTradeNo}}</Col>
+              <Col class-name="col" span="4">{{item.bankTradeNo}}</Col>
               <Col class-name="col" span="3">
               <div v-if="item.fileAddress !=''">
                 <Button size="small" type="warning" @click="fileDetail(true,item)">查看附件</Button>

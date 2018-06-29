@@ -6,7 +6,7 @@
         <FormItem label="销售单号：">
           <Input type="text" v-model="pageApi.saleTicketId" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="下单时间：">
+        <FormItem label="下单日期：">
           <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
         </FormItem>
         <FormItem label="客户名称：">
@@ -43,7 +43,7 @@
           </Row>
           <Row v-for="(item,index) in list" :key="item.id">
             <Col class-name="col" span="3">{{item.id}}</Col>
-            <Col class-name="col" span="3">{{item.ticketTime | dateformat}}</Col>
+            <Col class-name="col" span="3">{{item.ticketTime | dateformat('yyyy-MM-dd')}}</Col>
             <Col class-name="col" span="3">{{item.sellCompanyName}}</Col>
             <Col class-name="col" span="3">{{item.buyCompanyName}}</Col>
             <Col class-name="col" span="2">{{item.merchandiser}}</Col>

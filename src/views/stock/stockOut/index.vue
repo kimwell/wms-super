@@ -351,7 +351,7 @@ import {
             key: "numberUnit",
             width: 100,
             render: (h, params) => {
-              let str = `${params.row.numberUnit}/${params.row.weightUnit}`;
+              let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
               return h("div", str);
             }
           },
@@ -398,11 +398,6 @@ import {
               let str = `￥${params.row.money}`;
               return h("span", str);
             }
-          },
-          {
-            title: "库存量(KG)",
-            key: "storeWeight",
-            width: 100,
           },
           {
             title: "备注",

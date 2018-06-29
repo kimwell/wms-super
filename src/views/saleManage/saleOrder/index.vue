@@ -84,12 +84,12 @@
       <div class="row-wrapper">
         <h3>订单详细信息</h3>
         <Row class="row-list">
-          <Col span="8">销售总额：{{detailItem.saleMoney}}</Col>
-          <Col span="8">不含税总金额：{{detailItem.moneyWithoutTax}}</Col>
-          <Col span="8">税：{{detailItem.tax}}</Col>
+          <Col span="8">销售总额：￥{{detailItem.saleMoney}}</Col>
+          <Col span="8">不含税总金额：￥{{detailItem.moneyWithoutTax}}</Col>
+          <Col span="8">税：￥{{detailItem.tax}}</Col>
         </Row>
         <Row class="row-list">
-          <Col span="8">总重量：{{detailItem.weight}}</Col>
+          <Col span="8">总重量：{{detailItem.weight}}KG</Col>
           <Col span="8">总件数：{{detailItem.number}}</Col>
         </Row>
         <Table border :columns="columns" :data="detailItem.saleTicketInfos"></Table>
@@ -104,14 +104,14 @@
               <Col class-name="col" span="6">数量</Col>
               <Col class-name="col" span="3">单价</Col>
               <Col class-name="col" span="3">金额</Col>
-              <Col class-name="col" span="3">税</Col>
+              <Col class-name="col" span="3">税/%</Col>
             </Row>
             <Row v-for="(item,index) in detailItem.saleTicketCosts" :key="index">
               <Col class-name="col" span="3">{{index+1}}</Col>
               <Col class-name="col" span="6">{{item.costName}}</Col>
               <Col class-name="col" span="6">{{item.number}}</Col>
-              <Col class-name="col" span="3">{{item.price}}</Col>
-              <Col class-name="col" span="3">{{item.money}}</Col>
+              <Col class-name="col" span="3">￥{{item.price}}</Col>
+              <Col class-name="col" span="3">￥{{item.money}}</Col>
               <Col class-name="col" span="3">{{item.tax}}</Col>
             </Row>
             <Row v-if="detailItem.saleTicketCosts.length === 0">
@@ -135,7 +135,7 @@
             <Col class-name="col" span="12">操作</Col>
           </Row>
           <Row v-for="(item,index) in printData" :key="item.id">
-            <Col class-name="col" span="12">{{`销售单${index +1}`}}</Col>
+            <Col class-name="col" span="12">{{`销售单_${item.orderNum}`}}</Col>
             <Col class-name="col" span="12">
               <a class="ivu-btn ivu-btn-warning ivu-btn-small" :href="item.viewUrl" target="_blank">打印</a>
             </Col>
@@ -204,7 +204,7 @@
             key: "cargoName",
             width: 100,
             render: (h, params) => {
-              let str = params.row._index;
+              let str = params.index + 1;
               return h("div", str);
             }
           },

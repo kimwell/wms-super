@@ -92,6 +92,8 @@
     },
     methods: {
       selectOnChange(data) {
+        this.selectedList = [];
+        this.selectList = [];
         this.handleApi.customerName = data;
         this.$http.post(this.api.customerAccountFind, {
           customerName: data

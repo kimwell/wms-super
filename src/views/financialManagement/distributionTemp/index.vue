@@ -65,7 +65,7 @@
         <FormItem :label="types === 1 ? '分配人：':'结算人：'">
           <Input type="text" v-model="dataApi.createUser" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="操作时间：">
+        <FormItem :label="types === 1 ? '分配时间：':'结算时间：'">
           <DatePicker type="daterange" placement="bottom-end" v-model="dataValue1" placeholder="选择日期" style="width: 200px"></DatePicker>
         </FormItem>
         <FormItem label="客户公司：">

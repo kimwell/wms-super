@@ -961,6 +961,12 @@ export const findStorageIn= '/sys/storageIn/findStorageIn'
 export const findCargoInfoList= '/sys/cargoInfo/page'
 
 
+/**
+ * 分页查询货品
+ */
+export const findCargoInfo= '/sys/cargo/page'
+
+
 // -----------------------------------仓库管理---------------------------------
 
 /**

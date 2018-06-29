@@ -69,10 +69,11 @@
       <Row class="row-list">
         <Col span="6">供应商：{{detailItem.sellCompany}}</Col>
         <Col span="6">开单日期：{{detailItem.createTime | dateformat}}</Col>
+        <Col span="6">提货车主：{{detailItem.carMan}}</Col>
         <Col span="6">车牌号：{{detailItem.carId}}</Col>
-        <Col span="6">状态：{{detailItem.status | toStatus}}</Col>
       </Row>
       <Row class="row-list">
+        <Col span="6">状态：{{detailItem.status | toStatus}}</Col>
         <Col span="6">费用：{{detailItem.cost}}</Col>
         <Col span="6">仓库：{{detailItem.storeHouseName}}</Col>
         <Col span="6">备注：{{detailItem.remark}}</Col>

@@ -69,7 +69,7 @@
           </div>
         </div>
       </div>
-      <div class="totalNum"><span>数量合计：{{item.number}}</span><span>加工重量合计： {{item.processWeight}}</span></div>
+      <div class="totalNum"><span>数量合计：{{item.number}}</span><span>加工重量合计： {{item.processWeight}}KG</span></div>
     </Card>
   </div>
 </template>
@@ -127,8 +127,8 @@
       //  确认加工
       onPrecess() {
         this.$Modal.confirm({
-          title: "确认加工提示！",
-          content: "确认加入加工单？",
+          title: "开具加工入库单",
+          content: "是否确认开具加工入库单？",
           onOk: () => {
             let params = {
               processId: this.id

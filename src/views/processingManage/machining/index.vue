@@ -75,7 +75,7 @@
             <Col class-name="col" span="12">操作</Col>
           </Row>
           <Row v-for="(item,index) in printData" :key="item.id">
-            <Col class-name="col" span="12">{{`加工单${index +1}`}}</Col>
+            <Col class-name="col" span="12">{{`加工单_${item.orderNum}`}}</Col>
             <Col class-name="col" span="12">
             <a class="ivu-btn ivu-btn-warning ivu-btn-small" :href="item.viewUrl" target="_blank">打印</a>
             </Col>

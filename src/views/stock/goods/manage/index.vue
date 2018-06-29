@@ -14,33 +14,36 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.cargoStatus" style="width: 130px;">
-              <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-            </Select>
+                    <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="品类：">
           <Select v-model="pageApi.category" style="width: 130px;">
-              <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                    <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="表面：">
           <Select v-model="pageApi.surface" style="width: 130px;">
-              <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                    <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="材质：">
           <Select v-model="pageApi.material" style="width: 130px;">
-              <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                    <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="产地：">
           <Select v-model="pageApi.proPlacesName" style="width: 130px;">
-              <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                    <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="仓库：">
           <Select v-model="pageApi.wareHouseName" style="width: 130px;">
-              <Option v-for="(item,index) in wareHouseList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                    <Option v-for="(item,index) in wareHouseList" :value="item" :key="item.index">{{ item }}</Option>
+                  </Select>
+        </FormItem>
+        <FormItem label="内部编号：">
+          <Input type="text" v-model="pageApi.internalNumber" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="厚度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.heightBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
@@ -54,7 +57,7 @@
           <Input type="text" v-model="pageApi.lengthBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
           <Input type="text" v-model="pageApi.lengthEnd" style="width:60px;" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="规格："  v-if="!isBJ">
+        <FormItem label="规格：" v-if="!isBJ">
           <Input type="text" v-model="pageApi.specifications" style="width:80px;" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="公差：">
@@ -71,54 +74,50 @@
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
     </Card>
-    <Modal v-model="show" :closable="false" width="900" :mask-closable="false" title="货品详情">
-      <Row class="row-list">
-        <Col span="8">供应商名称：{{editItem.ownerName}}</Col>
-        <Col span="8">货品名称：{{editItem.cargoName}}</Col>
-        <Col span="8">型号：{{editItem.model}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">品类：{{editItem.category}}</Col>
-        <Col span="8">表面：{{editItem.surface}}</Col>
-        <Col span="8">材质：{{editItem.material}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">规格：{{editItem.specifications !='' ? editItem.specifications : `${editItem.height}*${editItem.width}*${editItem.length}`}}</Col>
-        <Col span="8">公差：{{editItem.tolerance}}</Col>
-        <Col span="8">产地：{{editItem.proPlacesName}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">密度：{{editItem.density}}</Col>
-        <Col span="8">理算方法：{{editItem.formula}}</Col>
-        <Col span="8">单件重量：{{editItem.singleWeight}}KG</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">卷号：{{editItem.coiledSheetNum}}</Col>
-        <Col span="8">状态：{{editItem.cargoStatus | tranStatus}}</Col>
-        <Col span="8">在库重量：{{editItem.warehouseWeights}}KG</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">在途重量：{{editItem.preInWareHouseWeight}}KG</Col>
-        <Col span="8">当前卷重：{{editItem.currentCoiledSheetWeights}}</Col>
-        <Col span="8">原卷重：{{editItem.totalCoiledSheetWeights}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">仓库重量控制值：{{editItem.weightSwitchVal}}</Col>
-        <Col span="8">成本价格：{{editItem.costPrice}}</Col>
-        <Col span="8">货品库存数量：{{editItem.warehouseNumber}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">内部编号：{{editItem.internalNumber}}</Col>
-        <Col span="8">产品编号：{{editItem.productNumber}}</Col>
-        <Col span="8">备注：{{editItem.remark | isEmpty('暂无')}}</Col>
-      </Row>
-      <Row class="row-list">
-        <Col span="8">产品图片：
-        <div class="pic-lists" v-for="item in productImg" :key="item">
-          <img :src="item">
-        </div>
-        </Col>
-      </Row>
+    <Modal v-model="show" :closable="false" width="1000" :mask-closable="false" title="货品详情">
+      <Form :label-width="120" label-position="right" inline class="cargo-info">
+        <FormItem label="货品名称:"><span>{{ detail.cargoName }}</span></FormItem>
+        <FormItem label="型号:"><span>{{ detail.model }}</span></FormItem>
+        <FormItem label="卷号:"><span>{{ detail.coiledSheetNum }}</span></FormItem>
+        <FormItem label="品类:"><span>{{ detail.category }}</span></FormItem>
+        <FormItem label="材质:"><span>{{ detail.material }}</span></FormItem>
+        <FormItem label="表面:"><span>{{ detail.surface }}</span></FormItem>
+        <FormItem label="公差:"><span>{{ detail.tolerance }}</span></FormItem>
+        <FormItem label="产地:"><span>{{ detail.proPlacesName }}</span></FormItem>
+        <FormItem label="规格:"><span>{{ detail.specifications != "" ? detail.specifications : `${detail.height}*${detail.width}*${detail.length}` }}</span></FormItem>
+        <FormItem label="销售底价:"><span>{{ detail.salePrice }}</span></FormItem>
+        <FormItem label="成本价:"><span>{{ detail.costPrice }}</span></FormItem>
+        <FormItem label="计价方式:"><span>{{ detail.formula }}</span></FormItem>
+        <FormItem label="内部编号:"><span>{{ detail.internalNumber }}</span></FormItem>
+        <FormItem label="属性:"><span>{{ detail.qualitativeType }}</span></FormItem>
+        <FormItem label="类型:"><span>{{ detail.productTypeDes }}</span></FormItem>
+        <FormItem label=""><span></span></FormItem>
+        <FormItem label="物流状态:"><span><a class="cargo-status" :class="'status'+detail.cargoStatus">{{ detail.cargoStatus | cargoStatusStr }}</a></span></FormItem>
+        <FormItem label="理算方法:"><span>{{ detail.formula }}</span></FormItem>
+        <FormItem label="销项税:"><span>{{ detail.outputTaxVal }}</span></FormItem>
+        <FormItem label="进项税:"><span>{{ detail.inputTaxVal }}</span></FormItem>
+        <FormItem label="数量单位:"><span>{{ detail.numberUnit }}</span></FormItem>
+        <FormItem label="重量单位:"><span>{{ detail.weightUnit }}</span></FormItem>
+        <FormItem label="在库数量:"><span>{{ detail.numbers }}</span></FormItem>
+        <FormItem label="在途数量:"><span>暂无</span></FormItem>
+        <FormItem label="理计单重:"><span>{{ detail.singleWeight }}</span></FormItem>
+        <FormItem label="过磅单重:"><span>{{ detail.numbers == 0 ? 0 : (detail.ponderanceCoiledSheetWeights/detail.numbers).toFixed(3) }}</span></FormItem>
+        <FormItem label="剩余重量:"><span>{{ (detail.warehouseWeights + detail.preInWareHouseWeight).toFixed(3) }}</span></FormItem>
+        <FormItem label="在库重量:"><span>{{ detail.warehouseWeights }}</span></FormItem>
+        <FormItem label="理计重量:"><span>{{ (detail.singleWeight * detail.numbers).toFixed(3) }}</span></FormItem>
+        <FormItem label="过磅重量:"><span>{{ detail.ponderanceCoiledSheetWeights }}</span></FormItem>
+        <FormItem label="原(毛)卷重:"><span>{{ detail.totalCoiledSheetWeights }}</span></FormItem>
+        <FormItem label="预入库重量:"><span>{{ detail.preInWareHouseWeight }}</span></FormItem>
+        <FormItem label="备注:">
+          <p style="width:800px">{{ detail.remark | isEmpty('暂无')}}</p>
+        </FormItem>
+        <FormItem label="产品图片:">
+          <p style="width:400px" v-if="detail.productImg !=''" class="productImg">
+            <img :src="detail.productImg" >
+          </p>
+          <p v-else>暂无</p>
+        </FormItem>
+      </Form>
       <div slot="footer">
         <Button @click="show = false">关闭</Button>
       </div>
@@ -154,7 +153,8 @@
           wareHouseName: '',
           productNumber: '',
           ownerName: '',
-          ownerId: ''
+          ownerId: '',
+          internalNumber: ''
         },
         columns: [{
           title: '供应商名称',
@@ -183,7 +183,7 @@
         }, {
           title: '规格',
           key: 'specifications',
-          width: 220,
+          width: 150,
           render: (h, params) => {
             let str = params.row.specifications != '' ? params.row.specifications : `${params.row.height}*${params.row.width}*${params.row.length}`
             return h('div', str);
@@ -225,11 +225,15 @@
         }, {
           title: '在库重量(KG)',
           key: 'warehouseWeights',
-          width: 100,
+          width: 120,
         }, {
           title: '在途重量(KG)',
           key: 'preInWareHouseWeight',
-          width: 100,
+          width: 120,
+        }, {
+          title: '内部编号',
+          key: 'internalNumber',
+          width: 150,
         }, {
           title: '备注',
           key: 'remark',
@@ -261,7 +265,7 @@
         list: [],
         totalCount: 0,
         show: false,
-        editItem: {},
+        detail: {},
         ironTypeList: [],
         surfaceList: [],
         materialList: [],
@@ -295,18 +299,19 @@
           wareHouseName: this.pageApi.wareHouseName,
           productNumber: this.pageApi.productNumber,
           ownerName: this.pageApi.ownerName,
-          ownerId: this.pageApi.ownerId
+          ownerId: this.pageApi.ownerId,
+          internalNumber: this.pageApi.internalNumber
         }
       },
       productImg() {
         return this.editItem.productImg != undefined ? this.editItem.productImg.split(',') : []
       },
-      isBJ(){
+      isBJ() {
         return this.pageApi.category == '不锈钢卷' || this.pageApi.category == '不锈钢板'
       }
     },
-    filters:{
-      tranStatus(val){
+    filters: {
+      tranStatus(val) {
         switch (val * 1) {
           case 0:
             return '暂无'
@@ -320,6 +325,9 @@
           default:
             break;
         }
+      },
+      cargoStatusStr(value) {
+        return ['无', '在途', '在库'][value]
       }
     },
     watch: {
@@ -359,7 +367,8 @@
           wareHouseName: '',
           productNumber: '',
           ownerName: '',
-          ownerId: ''
+          ownerId: '',
+          internalNumber: ''
         }
         this.getList(this.handleFilter)
       },
@@ -393,7 +402,7 @@
       },
       //  详情
       openModel(item) {
-        this.editItem = item || {}
+        this.detail = item || {}
         this.show = true
       },
       closeModel() {
@@ -432,9 +441,9 @@
         })
       },
       // 仓库
-      getWareHouse(){
-        this.$http.post(this.api.findAWareHouse).then(res =>{
-          if(res.code === 1000){
+      getWareHouse() {
+        this.$http.post(this.api.findAWareHouse).then(res => {
+          if (res.code === 1000) {
             this.wareHouseList = res.data;
           }
         })
@@ -479,6 +488,40 @@
       img {
         max-width: 100%;
       }
+    }
+  }
+  
+  .ivu-form-item {
+    margin: 0 0 10px 0;
+  }
+  
+  span {
+    display: block;
+    width: 109px;
+  }
+  
+  .cargo-status {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 4px;
+    &.status0 {
+      background-color: #526069;
+    }
+    &.status1 {
+      background-color: #11C26D;
+    }
+    &.status2 {
+      background-color: #0BB2D4;
+    }
+  }
+  .productImg{
+    img{
+      max-width: 100%;
     }
   }
 </style>

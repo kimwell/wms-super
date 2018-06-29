@@ -60,13 +60,23 @@
             </FormItem>
           </Form>
         </div>
+        <div class="extra-form" v-if="item.status != '2'" >
+          <Form :label-width="100" inline>
+            <FormItem label="余卷过磅重量：">
+              {{item.coildSheetWeight}}
+            </FormItem>
+            <FormItem label="余卷备注：">
+              {{item.remark}}
+            </FormItem>
+          </Form>
+        </div>
         <div>
           <Table width="100%" v-if="item.status === '2'" border :columns="goodsColumns" :data="dataApi.goods"></Table>
           <Table width="100%"  v-if="item.status === '3' || item.status === '4'" border :columns="goodsDetailColumns" :data="item.processIns"></Table>
         </div>
       </div>
     </Card>
-    <Modal title="选择库存货物" width="1000" v-model="show" :mask-closable="false">
+    <Modal title="选择库存货物" width="1000" v-model="show" :closable="false" :mask-closable="false">
       <Form :mode="pageApi" :label-width="85" inline>
         <!-- <FormItem label="供应商名称：">
                   <Input type="text" v-model="pageApi.ownerName" placeholder="请输入..."></Input>
@@ -126,13 +136,13 @@
       </Form>
       <div class="card-contnet">
         <div class="table-contnet">
-          <Table width="100%" :columns="columns" :data="list" @on-selection-change="onSelected"></Table>
+          <Table width="100%" ref="tableList" :columns="columns" :data="list" @on-selection-change="onSelected"></Table>
         </div>
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
       <div slot="footer">
-        <Button @click="cancelModal">取消</Button>
-        <Button type="primary" @click="saveData">添加</Button>
+        <Button @click="cancelModal(false)">取消</Button>
+        <Button type="primary" @click="saveData(false)">添加</Button>
       </div>
     </Modal>
     <Modal title="选择合并货物" width="1000" v-model="mergeShow" :mask-closable="false">
@@ -295,11 +305,6 @@ import {dateformat} from '@/utils/filters.js'
             }
           },
           {
-            title: "卷号",
-            key: "coiledSheetNum",
-            width: 180,
-          },
-          {
             title: "数量",
             key: "number",
             width: 120,
@@ -317,16 +322,6 @@ import {dateformat} from '@/utils/filters.js'
           {
             title: "过磅单重(KG)",
             key: "poundSingleWeight",
-            width: 120,
-          },
-          {
-            title: "卷重(KG)",
-            key: "coiledWeight",
-            width: 120,
-          },
-          {
-            title: "原卷重(KG)",
-            key: "oldCoiledWeight",
             width: 120,
           },
           {
@@ -473,12 +468,12 @@ import {dateformat} from '@/utils/filters.js'
           {
             title: "在库重量(KG)",
             key: "warehouseWeights",
-            width: 100
+            width: 120
           },
           {
             title: "在途重量(KG)",
             key: "preInWareHouseWeight",
-            width: 100
+            width: 120
           },
           {
             title: "备注",
@@ -580,36 +575,9 @@ import {dateformat} from '@/utils/filters.js'
             }
           },
           {
-            title: "卷号",
-            key: "coiledSheetNum",
-            width: 180,
-            render: (h, params) => {
-              let _this = this;
-              return h("Input", {
-                props: {
-                  type: "text",
-                  placeholder: "请输入",
-                  value: _this.dataApi.goods[params.index].coiledSheetNum
-                },
-                on: {
-                  "on-blur": event => {
-                    let e = event.target.value;
-                    _this.dataApi.goods[params.index].coiledSheetNum = e;
-                    if (!_this.dataApi.goods[params.index].merge && _this.dataApi.goods[params.index].autoStauts === undefined) {
-                      if (e != "") {
-                        delete _this.dataApi.goods[params.index].autoStauts;
-                        delete _this.dataApi.goods[params.index].merge;
-                        _this.$set(_this.dataApi.goods[params.index],"autoStauts",1);
-                        _this.$set(_this.dataApi.goods[params.index],"merge",false);
-                      } else {
-                        delete _this.dataApi.goods[params.index].autoStauts;
-                        _this.$set(_this.dataApi.goods[params.index],"autoStauts",undefined);
-                      }
-                    }
-                  }
-                }
-              });
-            }
+            title: "理计重量(KG)",
+            key: "ljWeight",
+            width: 120
           },
           {
             title: "数量",
@@ -628,7 +596,7 @@ import {dateformat} from '@/utils/filters.js'
                     let e = event.target.value;
                     _this.dataApi.goods[params.index].number = e;
                     if (e != "") {
-                      let result = Number(e * _this.dataApi.goods[params.index].singleWeight)
+                      let result = Number(e * _this.dataApi.goods[params.index].singleWeight).toFixed(2)
                       delete _this.dataApi.goods[params.index].ljWeight;
                       _this.$set(_this.dataApi.goods[params.index],"ljWeight",result);
                     }
@@ -636,11 +604,6 @@ import {dateformat} from '@/utils/filters.js'
                 }
               });
             }
-          },
-          {
-            title: "理计重量(KG)",
-            key: "ljWeight",
-            width: 120
           },
           {
             title: "过磅重量(KG)",
@@ -671,48 +634,6 @@ import {dateformat} from '@/utils/filters.js'
             title: "过磅单重(KG)",
             key: "gbWeight",
             width: 120
-          },
-          {
-            title: "卷重(KG)",
-            key: "coiledWeight",
-            width: 120,
-            render: (h, params) => {
-              let _this = this;
-              return h("Input", {
-                props: {
-                  type: "text",
-                  placeholder: "请输入",
-                  value: _this.dataApi.goods[params.index].coiledWeight
-                },
-                on: {
-                  "on-blur": event => {
-                    _this.dataApi.goods[params.index].coiledWeight =
-                      event.target.value;
-                  }
-                }
-              });
-            }
-          },
-          {
-            title: "原卷重(KG)",
-            key: "oldCoiledWeight",
-            width: 120,
-            render: (h, params) => {
-              let _this = this;
-              return h("Input", {
-                props: {
-                  type: "text",
-                  placeholder: "请输入",
-                  value: _this.dataApi.goods[params.index].oldCoiledWeight
-                },
-                on: {
-                  "on-blur": event => {
-                    _this.dataApi.goods[params.index].oldCoiledWeight =
-                      event.target.value;
-                  }
-                }
-              });
-            }
           },
           {
             title: "成本价",
@@ -812,6 +733,9 @@ import {dateformat} from '@/utils/filters.js'
                         type: "warning",
                         size: "small"
                       },
+                      style: {
+                        marginRight: '5px'
+                      },
                       on: {
                         click: () => {
                           _this.handleMerge(params);
@@ -819,6 +743,19 @@ import {dateformat} from '@/utils/filters.js'
                       }
                     },
                     "选择"
+                  ), h(
+                    "Button", {
+                      props: {
+                        type: "warning",
+                        size: "small"
+                      },
+                      on: {
+                        click: () => {
+                          _this.delMerge(params);
+                        }
+                      }
+                    },
+                    "删除"
                   )
                 ]);
               } else if (status === 1) {
@@ -832,7 +769,8 @@ import {dateformat} from '@/utils/filters.js'
         columns: [{
             type: "selection",
             width: 60,
-            align: "center"
+            align: "center",
+            fixed: 'left'
           },
           {
             title: "产品编号",
@@ -914,6 +852,11 @@ import {dateformat} from '@/utils/filters.js'
             width: 100
           },
           {
+            title: "在库数量",
+            key: "warehouseNumber",
+            width: 100
+          },
+          {
             title: "理算方法",
             key: "formula",
             width: 100
@@ -922,19 +865,6 @@ import {dateformat} from '@/utils/filters.js'
             title: "单件重量(KG)",
             key: "singleWeight",
             width: 120
-          },
-          {
-            title: "卷号",
-            key: "coiledSheetNum",
-            width: 100
-          },
-          {
-            title: "状态",
-            key: "cargoStatus",
-            width: 100,
-            render: (h, params) => {
-              return h("div", this.toStatus(params.row.cargoStatus));
-            }
           },
           {
             title: "在库重量(KG)",
@@ -1160,7 +1090,7 @@ import {dateformat} from '@/utils/filters.js'
       selectGoods() {
         this.show = true;
       },
-      saveData() {
+      saveData(status) {
         if (this.goods.length > 0) {
           this.goods.forEach(el => {
             el.cargoId = el.id,
@@ -1169,27 +1099,27 @@ import {dateformat} from '@/utils/filters.js'
             el.poundWeight = "",
             el.coiledWeight = "",
             el.oldCoiledWeight = "",
-            el.costPrice = "",
-            el.floorPrice = "",
-            el.remark = "",
+            el.floorPrice = el.salePrice,
             el.merge = false,
             el.mergeCargoId = ""
             el.autoStauts = undefined
           });
           this.show = false;
           this.dataApi.goods = this.goods;
+          this.$refs.tableList.selectAll(status)
         } else {
           this.$Message.error("请选择货品");
         }
       },
-      cancelModal() {
+      cancelModal(status) {
         this.show = false;
+        this.$refs.tableList.selectAll(status)
       },
       onSelected(data) {
         this.goods = data;
       },
       getList(params) {
-        this.$http.post(this.api.findCargoInfoList, params).then(res => {
+        this.$http.post(this.api.findCargoInfo, params).then(res => {
           if (res.code === 1000) {
             this.list = res.data.data;
             this.totalCount = res.data.totalCount;
@@ -1337,6 +1267,9 @@ import {dateformat} from '@/utils/filters.js'
             this.$set(this.dataApi.goods[params.index], "autoStauts", 1);
           }
         });
+      },
+      delMerge(data){
+        this.dataApi.goods.splice(data.index,1)
       },
       //  选择合并货物
       getmergeData(params) {

@@ -91,7 +91,7 @@
         <FormItem label="内部编号:"><span>{{ detail.internalNumber }}</span></FormItem>
         <FormItem label="属性:"><span>{{ detail.qualitativeTypeDes }}</span></FormItem>
         <FormItem label="类型:"><span>{{ detail.productTypeDes }}</span></FormItem>
-        <FormItem label=""><span></span></FormItem>
+        <FormItem label="密度"><span>{{detail.density}}</span></FormItem>
         <FormItem label="物流状态:"><span><a class="cargo-status" :class="'status'+detail.cargoStatus">{{ detail.cargoStatus | cargoStatusStr }}</a></span></FormItem>
         <FormItem label="理算方法:"><span>{{ detail.formula }}</span></FormItem>
         <FormItem label="销项税:"><span>{{ detail.outputTaxVal }}</span></FormItem>

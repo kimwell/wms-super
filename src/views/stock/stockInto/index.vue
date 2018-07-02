@@ -73,7 +73,7 @@
         <Col span="6">车牌号：{{detailItem.carId}}</Col>
       </Row>
       <Row class="row-list">
-        <Col span="6">状态：{{detailItem.status | toStatus}}</Col>
+        <Col span="6">货物状态：{{detailItem.goodStatus | toMegerStatus}}</Col>
         <Col span="6">费用：{{detailItem.cost}}</Col>
         <Col span="6">仓库：{{detailItem.storeHouseName}}</Col>
         <Col span="6">备注：{{detailItem.remark}}</Col>
@@ -275,6 +275,11 @@
               let str = `￥${params.row.costNumber}`;
               return h("span", str);
             }
+          },
+          {
+            title: "内部编号",
+            key: "internalNumber",
+            width: 100
           },
           {
             title: "备注",

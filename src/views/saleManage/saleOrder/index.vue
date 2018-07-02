@@ -31,7 +31,8 @@
         <div class="table-contnet">
           <Row class-name="head">
             <Col class-name="col" span="3">销售单号</Col>
-            <Col class-name="col" span="3">下单日期</Col>
+            <Col class-name="col" span="2">下单日期</Col>
+            <Col class-name="col" span="2">创建时间</Col>
             <Col class-name="col" span="3">供应商名称</Col>
             <Col class-name="col" span="3">客户名称</Col>
             <Col class-name="col" span="2">跟单员</Col>
@@ -39,11 +40,12 @@
             <Col class-name="col" span="2">销售总额</Col>
             <Col class-name="col" span="2">状态</Col>
             <Col class-name="col" span="1">打印次数</Col>
-            <Col class-name="col" span="3">操作</Col>
+            <Col class-name="col" span="2">操作</Col>
           </Row>
           <Row v-for="(item,index) in list" :key="item.id">
             <Col class-name="col" span="3">{{item.id}}</Col>
-            <Col class-name="col" span="3">{{item.ticketTime | dateformat('yyyy-MM-dd')}}</Col>
+            <Col class-name="col" span="2">{{item.ticketTime | dateformat('yyyy-MM-dd')}}</Col>
+            <Col class-name="col" span="2">{{item.createTime | dateformat}}</Col>
             <Col class-name="col" span="3">{{item.sellCompanyName}}</Col>
             <Col class-name="col" span="3">{{item.buyCompanyName}}</Col>
             <Col class-name="col" span="2">{{item.merchandiser}}</Col>
@@ -51,7 +53,7 @@
             <Col class-name="col" span="2">{{item.saleMoney}}</Col>
             <Col class-name="col" span="2">{{item.status | toStatus}}</Col>
             <Col class-name="col" span="1">{{item.printNum}}</Col>
-            <Col class-name="col" span="3">
+            <Col class-name="col" span="2">
             <Button size="small" type="warning" @click="goDetail(item)">详情</Button>
             <Button size="small" v-if="item.status == '1' || item.status == '2' || item.status == '3' || item.status == '4' || item.status == '5'" @click="print(item)" type="warning">打印</Button>
             </Col>
@@ -219,6 +221,11 @@
             width: 100
           },
           {
+            title: "品类",
+            key: "ironTypeName",
+            width: 100
+          },
+          {
             title: "规格",
             key: "specifications",
             width: 180,
@@ -263,8 +270,12 @@
           },
           {
             title: "理计重量(KG)",
-            key: "ljWeight",
-            width: 120
+            key: "meterWeight",
+            width: 120,
+            render: (h, params) => {
+              let str = params.row.singleWeight !='' ? (params.row.singleWeight*params.row.number).toFixed(3):'';
+              return h("div", str);
+            }
           },
           {
             title: "过磅重量(KG)",
@@ -273,7 +284,7 @@
           },
           {
             title: "过磅单重(KG)",
-            key: "gbWeight",
+            key: "poundSingleWeight",
             width: 120
           },
           {
@@ -291,7 +302,7 @@
             }
           },
           {
-            title: "税",
+            title: "税/%",
             key: "tax",
             width: 100,
           },
@@ -303,11 +314,6 @@
               let str = `￥${params.row.money}`;
               return h('span', str)
             }
-          },
-          {
-            title: "库存量(KG)",
-            key: "storeWeight",
-            width: 100,
           },
           {
             title: "备注",

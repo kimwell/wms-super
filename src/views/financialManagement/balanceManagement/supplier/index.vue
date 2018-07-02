@@ -55,26 +55,28 @@
         <div class="card-contnet">
           <div class="table-contnet">
             <Row class-name="head">
-              <Col class-name="col" span="3">金额</Col>
-              <Col class-name="col" span="4">费用科目</Col>
+              <Col class-name="col" span="2">金额</Col>
+              <Col class-name="col" span="2">可结算余额</Col>
+              <Col class-name="col" span="3">费用科目</Col>
               <Col class-name="col" span="4">收支款账号</Col>
               <Col class-name="col" span="4">银行流水号</Col>
-              <Col class-name="col" span="3">附件</Col>
-              <Col class-name="col" span="3">交易时间</Col>
+              <Col class-name="col" span="2">附件</Col>
+              <Col class-name="col" span="4">操作时间</Col>
               <Col class-name="col" span="3">备注</Col>
             </Row>
             <Row v-for="(item,index) in detailList " :key="index">
-              <Col class-name="col" span="3">{{item.amount}}</Col>
-              <Col class-name="col" span="4">{{item.feeType}}</Col>
+              <Col class-name="col" span="2">{{item.amount}}</Col>
+              <Col class-name="col" span="2">{{item.remainAmount}}</Col>
+              <Col class-name="col" span="3">{{item.feeType}}</Col>
               <Col class-name="col" span="4">{{item.bankCardNo}}</Col>
               <Col class-name="col" span="4">{{item.bankTradeNo}}</Col>
-              <Col class-name="col" span="3">
+              <Col class-name="col" span="2">
               <div v-if="item.fileAddress !=''">
                 <Button size="small" type="warning" @click="fileDetail(true,item)">查看附件</Button>
               </div>
               <div v-else>暂无</div>
               </Col>
-              <Col class-name="col" span="3">{{item.tradeTime | dateformat}}</Col>
+              <Col class-name="col" span="4">{{item.tradeTime | dateformat}}</Col>
               <Col class-name="col" span="3">        <Tooltip placement="top" v-if="item.remark != ''">
                 <Button type="text" style="width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.remark}}</Button>
                 <div slot="content">

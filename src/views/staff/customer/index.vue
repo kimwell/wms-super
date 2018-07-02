@@ -311,7 +311,7 @@
         }, {
           title: '客户编号',
           key: 'id',
-          width: 280,
+          width: 180,
         }, {
           title: '供应商名称',
           key: 'buserName',

@@ -46,22 +46,22 @@
             <Option v-for="item in bankCardList" :value="item.card" :key="item.card">{{ item.card }}</Option>
           </AutoComplete>
         </FormItem>
-        <FormItem label="入账金额：" prop="amount" v-if="dataApi.isBuser =='false'">
+        <FormItem label="付款金额：" prop="amount" v-if="dataApi.isBuser =='false'">
           <Input type="text" v-model="dataApi.amount" style="width: 300px;" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="入账金额：" v-if="dataApi.isBuser =='true'">
+        <FormItem label="付款金额：" v-if="dataApi.isBuser =='true'">
           <Button @click="selectDistribution">选择结算客户</Button><span class="totalaccount" v-if="detail !=''">待结算金额：{{detail.account}}元</span>
-          <div class="chooseSettleCustomer">
-            <div class="chooseList" v-for="(item,index) in selectAllList" :key="index">
-              <span>{{item.customerName}}</span>
-              <span>待结算总额：{{item.waitSettleAmount}}元</span>
+          <div class="chooseSettleCustomer" v-if="selectedShow">
+            <div class="chooseList" v-for="(p,index) in selectList" :key="index">
+              <span>{{p.customerName}}</span>
+              <span>待结算总额：{{p.waitSettleAmount}}元</span>
               <span>本次结算金额：
-                      <InputNumber style="width: 160px;" :max="item.waitSettleAmount" :min="0" v-model="item.amount" placeholder="请输入...">
-                      </InputNumber>元</span>
+              <InputNumber style="width: 160px;" :max="p.waitSettleAmount" :min="0" v-model="p.amount" placeholder="请输入...">
+              </InputNumber>元</span>
             </div>
           </div>
         </FormItem>
-        <FormItem label="入账时间：" prop="inTime">
+        <FormItem label="付款时间：" prop="inTime">
           <DatePicker type="datetime" v-model="dataApi.inTime" placeholder="请选择日期" style="width: 300px"></DatePicker>
         </FormItem>
         <FormItem label="银行流水号：">
@@ -184,22 +184,23 @@
           buserName: ''
         },
         selectList: [],
-        selectAllList: [],
         detail: {
           account: 0
-        }
+        },
+        selectedShow: false
       }
     },
     computed: {
       inTime() {
         return this.dataApi.inTime != '' ? this.dataApi.inTime.getTime() : ''
       },
-      totalMoney() {
-        let nums = 0;
-        this.selectAllList.forEach(el => {
-          nums += el.amount
-        })
-        return nums
+      totalMoney(){
+        return this.selectList.reduce((sum, el) => sum + el.amount, 0)
+        // let sum = 0;
+        // this.selectList.forEach(el => {
+        //   sum += el.amount;
+        // })
+        // return sum;
       },
       allSellMoney() {
         return this.totalMoney > this.detail.account
@@ -218,7 +219,8 @@
         this.dataApi.amount = '';
         this.dataApi.customerBankName = '';
         this.dataApi.paymentOrderAmountItem = [];
-        this.selectAllList = [];
+        this.selectList = [];
+        this.selectedShow = false;
         // this.$refs.receiptOrder.resetFields();
       }
     },
@@ -265,7 +267,7 @@
         this.dataApi.customerBankName = '';
         this.bankList = [];
         this.selectList = [];
-        this.selectAllList = [];
+        this.selectedShow = false;
         let datas;
         if (this.dataApi.isBuser == 'true') {
           datas = data.split('-')
@@ -333,15 +335,15 @@
       },
       //  选择结算客户
       disSelect(data) {
+        data.forEach(el =>{
+          el.amount = 0;
+        })
         this.selectList = data;
       },
       //  确定选择结算客户
       selectAction() {
         if (this.selectList.length > 0) {
-          this.selectList.forEach(el => {
-            el.amount = 0;
-          })
-          this.selectAllList = [...this.selectList];
+          this.selectedShow = true;
           this.settlementShow = false;
         } else {
           this.$Message.error('请选择结算客户')
@@ -360,7 +362,7 @@
               params.buserId = strs[1]
             }
             params.inTime = this.inTime;
-            params.paymentOrderAmountItem = JSON.stringify(this.selectAllList)
+            params.paymentOrderAmountItem = JSON.stringify(this.selectList)
             this.$http.post(this.api.paymentOrderOut, params).then(res => {
               if (res.code === 1000) {
                 this.$Message.success('保存成功')

@@ -7,7 +7,7 @@
         <FormItem label="客户名称：">
           <Input type="text" v-model="pageApi.customerName" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="进账时间：">
+        <FormItem label="付款时间：">
           <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
         </FormItem>
         <FormItem>
@@ -129,7 +129,7 @@
           key: "customerName",
           minWidth: 200
         }, {
-          title: "出账金额",
+          title: "付款金额",
           key: "amount",
           minWidth: 150
         }, {
@@ -145,7 +145,7 @@
           key: 'feeType',
           minWidth: 150
         }, {
-          title: "出账时间",
+          title: "付款时间",
           key: "inTime",
           minWidth: 150,
           render: (h, params) => {

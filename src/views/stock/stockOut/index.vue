@@ -22,8 +22,8 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
-                    <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                  </Select>
+            <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="供应商名称：">
           <Input type="text" v-model="pageApi.sellCompanyName" placeholder="请输入..."></Input>
@@ -55,6 +55,7 @@
           <Col span="8">提货车号：{{detailItem.saleTicket.carId}}</Col>
         </Row>
         <Row class="row-list">
+          <Col span="8">审核人：{{detailItem.saleTicket.checkMan}}</Col>
           <Col span="8">备注：{{detailItem.saleTicket.remark}}</Col>
         </Row>
       </div>
@@ -368,7 +369,11 @@ import {
           {
             title: "理计重量(KG)",
             key: "meterWeight",
-            width: 120
+            width: 120,
+            render: (h,params) =>{
+              let str = params.row.singleWeight != '' ?  (params.row.singleWeight*params.row.number).toFixed(3) : '无'
+              return h("div", str);
+            }
           },
           {
             title: "过磅重量(KG)",

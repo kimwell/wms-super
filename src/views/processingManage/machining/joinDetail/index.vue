@@ -112,23 +112,26 @@
                                             <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
                                           </Select>
         </FormItem>
-        <FormItem label="厚度：">
+        <FormItem label="厚度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.heightBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
           <Input type="text" v-model="pageApi.heightEnd" style="width:60px;" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="宽度：">
+        <FormItem label="宽度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.widthBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
           <Input type="text" v-model="pageApi.widthEnd" style="width:60px;" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="长度：">
+        <FormItem label="长度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.lengthBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
           <Input type="text" v-model="pageApi.lengthEnd" style="width:60px;" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="规格：">
+        <FormItem label="规格：" v-if="!isBJ">
           <Input type="text" v-model="pageApi.specifications" style="width:80px;" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="公差：">
           <Input type="text" v-model="pageApi.tolerance" style="width:80px;" placeholder="请输入..."></Input>
+        </FormItem>
+        <FormItem label="内部编号：">
+          <Input type="text" v-model="pageApi.internalNumber" style="width:130px;" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -150,14 +153,12 @@
         <FormItem label="产品编号：">
           <Input type="text" v-model="mergeApi.productNumber" placeholder="请输入..."></Input>
         </FormItem>
+        <FormItem label="内部编号：">
+          <Input type="text" v-model="mergeApi.productNumber" placeholder="请输入..."></Input>
+        </FormItem>
         <FormItem label="库存：">
           <Select v-model="mergeApi.hasStore" style="width: 130px;">
               <Option v-for="item in [{name:'有',value: '1'},{name:'无',value: '0'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-            </Select>
-        </FormItem>
-        <FormItem label="货物状态：">
-          <Select v-model="mergeApi.cargoStatus" style="width: 130px;">
-              <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
             </Select>
         </FormItem>
         <FormItem>
@@ -244,7 +245,8 @@ import {dateformat} from '@/utils/filters.js'
           productNumber: "",
           ownerName: "",
           ownerId: "",
-          hasCoiledSheetNum: '0'
+          hasCoiledSheetNum: '0',
+          internalNumber: ''
         },
         activeGoods: {},
         goodsDetailColumns:[{
@@ -678,6 +680,27 @@ import {dateformat} from '@/utils/filters.js'
             }
           },
           {
+            title: "内部编号",
+            key: "internalNumber",
+            width: 100,
+            render: (h, params) => {
+              let _this = this;
+              return h("Input", {
+                props: {
+                  type: "text",
+                  placeholder: "请输入",
+                  value: _this.dataApi.goods[params.index].internalNumber
+                },
+                on: {
+                  "on-blur": event => {
+                    _this.dataApi.goods[params.index].internalNumber =
+                      event.target.value;
+                  }
+                }
+              });
+            }
+          },
+          {
             title: "备注",
             key: "remark",
             width: 200,
@@ -773,11 +796,6 @@ import {dateformat} from '@/utils/filters.js'
             fixed: 'left'
           },
           {
-            title: "产品编号",
-            key: "productNumber",
-            width: 200
-          },
-          {
             title: "货品名称",
             key: "cargoName",
             width: 150
@@ -840,8 +858,8 @@ import {dateformat} from '@/utils/filters.js'
             width: 100
           },
           {
-            title: "在库数量",
-            key: "warehouseNumber",
+            title: "内部编号",
+            key: "internalNumber",
             width: 100
           },
           {
@@ -944,7 +962,8 @@ import {dateformat} from '@/utils/filters.js'
           productNumber: this.pageApi.productNumber,
           ownerName: this.pageApi.ownerName,
           ownerId: this.item.customerId,
-          hasCoiledSheetNum: '0'
+          hasCoiledSheetNum: '0',
+          internalNumber: this.pageApi.internalNumber
         };
       },
       mergeFilter() {
@@ -976,6 +995,9 @@ import {dateformat} from '@/utils/filters.js'
       },
       productImg() {
         // return this.editItem.productImg != undefined ? this.editItem.productImg.split(',') : []
+      },
+      isBJ(){
+        return this.pageApi.category == '不锈钢板' || this.pageApi.category == '不锈钢卷'
       }
     },
     filters: {
@@ -1137,7 +1159,8 @@ import {dateformat} from '@/utils/filters.js'
           model: "",
           costPrice: "",
           productNumber: "",
-          ownerName: ""
+          ownerName: "",
+          internalNumber: ''
         };
         this.getList(this.handleFilter);
       },
@@ -1280,8 +1303,8 @@ import {dateformat} from '@/utils/filters.js'
         params.processId = this.id;
         params.goods = JSON.stringify(params.goods)
           this.$Modal.confirm({
-            title: '开具加工入库单',
-            content: '是否确认开具加工入库单？',
+            title: '确认加工',
+            content: '是否确认开始加工？',
             onOk: () => {
               this.$http.post(this.api.saveProcessIn,params).then(res =>{
                 if(res.code === 1000){

@@ -7,7 +7,7 @@
         <FormItem label="客户名称：">
           <Input type="text" v-model="pageApi.customerName" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="进账时间：">
+        <FormItem label="收款时间：">
           <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
         </FormItem>
         <FormItem>
@@ -46,10 +46,10 @@
             <Option v-for="item in bankCardList" :value="item.card" :key="item.card">{{ item.card }}</Option>
           </AutoComplete>
         </FormItem>
-        <FormItem label="入账金额：" prop="amount">
+        <FormItem label="收款金额：" prop="amount">
           <Input type="text" v-model="dataApi.amount" style="width: 300px;" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="入账时间：" prop="inTime">
+        <FormItem label="收款时间：" prop="inTime">
           <DatePicker type="datetime" v-model="dataApi.inTime" placeholder="请选择日期" style="width: 300px"></DatePicker>
         </FormItem>
         <FormItem label="银行流水号：">
@@ -188,7 +188,7 @@ import {
           key: "customerName",
           minWidth: 200
         }, {
-          title: "进账金额",
+          title: "收款金额",
           key: "amount",
           minWidth: 150
         }, {
@@ -204,7 +204,7 @@ import {
           key: "feeType",
           minWidth: 200
         }, {
-          title: "进账时间",
+          title: "收款时间",
           key: "inTime",
           minWidth: 180,
           render: (h, params) => {

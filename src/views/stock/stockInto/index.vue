@@ -181,6 +181,11 @@
             minWidth: 240
           },
           {
+            title: "品类",
+            key: "category",
+            minWidth: 150
+          },
+          {
             title: "产地",
             key: "proPlacesName",
             minWidth: 100

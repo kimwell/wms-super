@@ -82,18 +82,20 @@
         <div class="card-contnet">
           <div class="table-contnet">
             <Row class-name="head">
-              <Col class-name="col" span="5">{{types === 1 ? '分配金额':'结算金额'}}</Col>
+              <Col class-name="col" span="4">{{types === 1 ? '分配金额':'结算金额'}}</Col>
+              <Col class-name="col" span="4">{{types === 1 ? '可分配余额':'可结算余额'}}</Col>
               <Col class-name="col" span="5">销售单号</Col>
               <Col class-name="col" span="4">{{types === 1 ? '分配人':'结算人'}}</Col>
               <Col class-name="col" span="4">{{types === 1 ? '分配时间':'结算时间'}}</Col>
-              <Col class-name="col" span="6">备注</Col>
+              <Col class-name="col" span="3">备注</Col>
             </Row>
             <Row v-for="(item,index) in detailList" :key="index">
-              <Col class-name="col" span="5">{{item.amount}}</Col>
+              <Col class-name="col" span="4">{{item.amount}}</Col>
+              <Col class-name="col" span="4">{{item.remainAmount}}</Col>
               <Col class-name="col" span="5">{{item.saleTicketId}}</Col>
               <Col class-name="col" span="4">{{item.createUser}}</Col>
               <Col class-name="col" span="4">{{item.createTime | dateformat}}</Col>
-              <Col class-name="col" span="6">{{item.remark}}</Col>
+              <Col class-name="col" span="3">{{item.remark}}</Col>
             </Row>
             <Row v-if="detailList.length == 0">
               <Col class-name="col" span="24">暂无数据</Col>

@@ -69,7 +69,7 @@
       </Form>
       <div class="card-contnet">
         <div class="table-contnet">
-          <Table width="100%" :columns="columns" :data="list"></Table>
+          <Table width="100%" border :columns="columns" :data="list"></Table>
         </div>
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
@@ -85,11 +85,11 @@
         <FormItem label="公差:"><span>{{ detail.tolerance }}</span></FormItem>
         <FormItem label="产地:"><span>{{ detail.proPlacesName }}</span></FormItem>
         <FormItem label="规格:"><span>{{ detail.specifications != "" ? detail.specifications : `${detail.height}*${detail.width}*${detail.length}` }}</span></FormItem>
-        <FormItem label="销售底价:"><span>{{ detail.salePrice }}</span></FormItem>
+        <FormItem label="销售底价:"><span>{{ detail.salePrice}}</span></FormItem>
         <FormItem label="成本价:"><span>{{ detail.costPrice }}</span></FormItem>
-        <FormItem label="计价方式:"><span>{{ detail.formula }}</span></FormItem>
+        <FormItem label="计价方式:"><span v-if="detail.pricingWay !=''">{{ detail.pricingWay == '1' ? '按重量':'按数量' }}</span><span v-else>暂无</span></FormItem>
         <FormItem label="内部编号:"><span>{{ detail.internalNumber }}</span></FormItem>
-        <FormItem label="属性:"><span>{{ detail.qualitativeType }}</span></FormItem>
+        <FormItem label="属性:"><span>{{ detail.qualitativeTypeDes }}</span></FormItem>
         <FormItem label="类型:"><span>{{ detail.productTypeDes }}</span></FormItem>
         <FormItem label=""><span></span></FormItem>
         <FormItem label="物流状态:"><span><a class="cargo-status" :class="'status'+detail.cargoStatus">{{ detail.cargoStatus | cargoStatusStr }}</a></span></FormItem>
@@ -167,7 +167,7 @@
         }, {
           title: '型号',
           key: 'model',
-          width: 100,
+          minWidth: 150,
         }, {
           title: '品类',
           key: 'category',

@@ -308,7 +308,7 @@
             key: "floorPrice",
             width: 100,
             render: (h, params) => {
-              let str = `￥${params.row.floorPrice}`;
+              let str =  params.row.floorPrice != '' ? `￥${params.row.floorPrice}`: `￥0`;
               return h("span", str);
             }
           },
@@ -523,7 +523,7 @@
       getcargoInfoDetail(data) {
         this.goodsDetailShow = true;
         this.$http.post(this.api.cargoInfoDetail, {
-          id: data.row.cargoId
+          id: data.row.mergeCargoId
         }).then(res => {
           if (res.code === 1000) {
             this.detailData = res.data;

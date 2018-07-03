@@ -177,6 +177,15 @@
             required: true,
             message: '联系电话不能为空',
             trigger: 'blur'
+          }, {
+            validator: (rule, value, callback) => {
+              var reg = /^1[34578][0-9]{9}$/;
+              if (!reg.test(value)) {
+                return callback(new Error('请输入正确的手机号码'));
+              } else {
+                callback();
+              }
+            }
           }],
         },
         loading: false,
@@ -208,6 +217,15 @@
             required: true,
             message: '账号不能为空',
             trigger: 'blur'
+          }, {
+            validator: (rule, value, callback) => {
+              var reg = /^1[34578][0-9]{9}$/;
+              if (!reg.test(value)) {
+                return callback(new Error('请输入正确的手机号码'));
+              } else {
+                callback();
+              }
+            }
           }],
           password: [{
             required: false,

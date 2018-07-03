@@ -260,10 +260,6 @@ const router = new Router({
         path: 'BindMenu',
         name: 'BindMenu',
         component: resolve => require(['@/views/authority/bindMenu/index'], resolve)
-      }, {
-        path: 'account',
-        name: 'account',
-        component: resolve => require(['@/views/authority/account/index'], resolve)
       }]
     }]
   }, {

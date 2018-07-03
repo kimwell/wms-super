@@ -95,7 +95,17 @@
               <Col class-name="col" span="5">{{item.saleTicketId}}</Col>
               <Col class-name="col" span="4">{{item.createUser}}</Col>
               <Col class-name="col" span="4">{{item.createTime | dateformat}}</Col>
-              <Col class-name="col" span="3">{{item.remark}}</Col>
+              <Col class-name="col" span="3">
+                      <Tooltip placement="top" v-if="item.remark != ''">
+                <Button type="text" style="width: 100px;overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;">{{item.remark}}</Button>
+                <div slot="content">
+                  <p class="remark-p">{{item.remark}}</p>
+                </div>
+              </Tooltip>
+              <span v-else>暂无</span>
+              </Col>
             </Row>
             <Row v-if="detailList.length == 0">
               <Col class-name="col" span="24">暂无数据</Col>
@@ -291,6 +301,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        &:last-child{
+          overflow:inherit;
+        }
       }
     }
     .page-count {
@@ -298,5 +311,8 @@
       right: 0;
       bottom: 0;
     }
+  }
+    .remark-p{
+    white-space: normal;
   }
 </style>

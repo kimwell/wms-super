@@ -6,9 +6,9 @@
           <div class="layout-logo-left">超管后台管理系统</div>
           <Submenu :name="index" v-for="(item,index) in menu" :key="index">
             <template slot="title">
-              <span class="pointer" v-show="item.showPointer"></span>
-              <span class="iconfont menuicon" :class="item.icon"></span>{{ item.menuName }}
-            </template>
+                <span class="pointer" v-show="item.showPointer"></span>
+                <span class="iconfont menuicon" :class="item.icon"></span>{{ item.menuName }}
+</template>
             <MenuItem :name="index+'-'+i" v-for="(sub,i) in item.children" :key="i">
               {{ sub.menuName }}
               <span class="pointer" v-show="sub.showPointer"></span>
@@ -20,7 +20,15 @@
       <div class="app-header">
         <div class="layout-header" ref="layoutHeader">
           <div class="layout-ceiling-main">
-            <a @click="loginout"><Icon type="log-out" style="margin-right:3px;font-size:14px;"></Icon>退出</a>
+            <Dropdown @on-click="dropDown">
+                <a href="javascript:void(0)">
+                    {{user.name}}
+                    <Icon type="arrow-down-b"></Icon>
+                </a>
+                <DropdownMenu slot="list" >
+                    <DropdownItem name="loginout">退出</DropdownItem>
+                </DropdownMenu>
+            </Dropdown>
           </div>   
         </div>
       </div>
@@ -57,6 +65,7 @@
       };
     },
     computed: {
+      ...mapGetters(['user']),
       //获取当前选中菜单
       activeMenu() {
         if (this.activeIndex != "") {
@@ -95,19 +104,19 @@
               if (sub.url == "stockOut") {
                 sub.showPointer = this.pointData.ckdgl;
               }
-              if(sub.url == 'machining'){
+              if (sub.url == 'machining') {
                 sub.showPointer = this.pointData.jgd;
               }
-              if(sub.url == 'stockInto'){
+              if (sub.url == 'stockInto') {
                 sub.showPointer = this.pointData.rkdgl;
               }
-              if(sub.url == 'stockCancel'){
+              if (sub.url == 'stockCancel') {
                 sub.showPointer = this.pointData.zfgl;
               }
-              if(sub.url == 'saleOrder'){
+              if (sub.url == 'saleOrder') {
                 sub.showPointer = this.pointData.xsdgl;
               }
-              if(sub.showPointer){
+              if (sub.showPointer) {
                 el.showPointer = true;
               }
             });
@@ -187,6 +196,11 @@
       loginout(data) {
         this.$store.commit(types.LOGOUT, data);
         window.location.href = "/bg/login";
+      },
+      dropDown(data){
+        if(data == 'loginout'){
+          this.loginout();
+        }
       }
     },
     created() {
@@ -321,7 +335,7 @@
   .layout-ceiling-main {
     float: right;
     margin-right: 15px;
-    line-height: 60px;
+    margin-top: 22px;
   }
   
   .layout-ceiling-main a {
@@ -333,12 +347,13 @@
     margin-right: 4px;
     vertical-align: middle;
   }
-  .pointer{
+  
+  .pointer {
     position: absolute;
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background-color:red;
+    background-color: red;
     top: 20px;
     right: 60px;
   }

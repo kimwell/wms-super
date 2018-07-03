@@ -303,6 +303,14 @@
               let str = `￥${params.row.costNumber}`;
               return h("span", str);
             }
+          },{
+            title: "销售底价",
+            key: "floorPrice",
+            width: 100,
+            render: (h, params) => {
+              let str = `￥${params.row.floorPrice}`;
+              return h("span", str);
+            }
           },
           {
             title: "内部编号",

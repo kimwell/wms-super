@@ -1,8 +1,8 @@
 <template>
   <div class="page-wrapper">
-    <Form :mode="pageApi" :label-width="100" inline>
+    <Form :mode="pageApi" :label-width="100" inline onkeydown="if(event.keyCode==13){return false;}">
       <FormItem label="供应商名称：">
-        <Input type="text" v-model="pageApi.buserName" @on-blur="serachList" placeholder="请输入..."></Input>
+        <Input type="text" v-model="pageApi.buserName" @on-blur="serachList"  placeholder="请输入..."></Input>
       </FormItem>
       <FormItem>
         <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -32,7 +32,7 @@
         <Page class="page-count" size="small" :total="totalCount" show-total :current="pageApi.currentPage" :page-size="pageApi.pageSize" @on-change="changePage"></Page>
       </div>
     </div>
-    <Modal v-model="show" width="1000" :mask-closable="false" title="账户余额详情">
+    <Modal v-model="show" width="1100" :mask-closable="false" title="账户余额详情">
       <Form :mode="detailApi" :label-width="80" inline>
         <FormItem label="金额：">
           <Select v-model="detailApi.toZero" style="width: 100px;">
@@ -57,17 +57,18 @@
             <Row class-name="head">
               <Col class-name="col" span="2">金额</Col>
               <Col class-name="col" span="2">可结算余额</Col>
-              <Col class-name="col" span="3">费用科目</Col>
+              <Col class-name="col" span="2">费用科目</Col>
               <Col class-name="col" span="4">收支款账号</Col>
               <Col class-name="col" span="4">银行流水号</Col>
               <Col class-name="col" span="2">附件</Col>
-              <Col class-name="col" span="4">操作时间</Col>
-              <Col class-name="col" span="3">备注</Col>
+              <Col class-name="col" span="3">交易时间</Col>
+              <Col class-name="col" span="3">操作时间</Col>
+              <Col class-name="col" span="2">备注</Col>
             </Row>
             <Row v-for="(item,index) in detailList " :key="index">
               <Col class-name="col" span="2">{{item.amount}}</Col>
               <Col class-name="col" span="2">{{item.remainAmount}}</Col>
-              <Col class-name="col" span="3">{{item.feeType}}</Col>
+              <Col class-name="col" span="2">{{item.feeType}}</Col>
               <Col class-name="col" span="4">{{item.bankCardNo}}</Col>
               <Col class-name="col" span="4">{{item.bankTradeNo}}</Col>
               <Col class-name="col" span="2">
@@ -76,8 +77,9 @@
               </div>
               <div v-else>暂无</div>
               </Col>
-              <Col class-name="col" span="4">{{item.tradeTime | dateformat}}</Col>
-              <Col class-name="col" span="3">        <Tooltip placement="top" v-if="item.remark != ''">
+              <Col class-name="col" span="3">{{item.tradeTime | dateformat}}</Col>
+              <Col class-name="col" span="3">{{item.updateTime | dateformat}}</Col>
+              <Col class-name="col" span="2">        <Tooltip placement="top" v-if="item.remark != ''">
                 <Button type="text" style="width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.remark}}</Button>
                 <div slot="content">
                   <p class="remark-p">{{item.remark}}</p>

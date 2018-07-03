@@ -196,11 +196,6 @@
       },
       totalMoney(){
         return this.selectList.reduce((sum, el) => sum + el.amount, 0)
-        // let sum = 0;
-        // this.selectList.forEach(el => {
-        //   sum += el.amount;
-        // })
-        // return sum;
       },
       allSellMoney() {
         return this.totalMoney > this.detail.account
@@ -221,7 +216,6 @@
         this.dataApi.paymentOrderAmountItem = [];
         this.selectList = [];
         this.selectedShow = false;
-        // this.$refs.receiptOrder.resetFields();
       }
     },
     methods: {

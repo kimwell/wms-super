@@ -8,8 +8,8 @@
         </FormItem>
         <FormItem label="仓库名称：">
           <Select v-model="pageApi.storeHouseName" style="width: 150px;">
-            <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
-          </Select>
+              <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
+            </Select>
         </FormItem>
         <FormItem label="供应商名称：">
           <Input type="text" v-model="pageApi.sellId" placeholder="请输入..."></Input>
@@ -19,8 +19,8 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
-            <Option v-for="item in [{name:'待确认',value: '1'},{name:'已入库',value: '2'},{name:'已完成',value: '3'},{name:'已取消',value: '4'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-          </Select>
+              <Option v-for="item in [{name:'待确认',value: '1'},{name:'已入库',value: '2'},{name:'已完成',value: '3'},{name:'已取消',value: '4'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+            </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -47,9 +47,9 @@
             <Col class-name="col" span="3">{{item.updateUser}}</Col>
             <Col class-name="col" span="3">{{item.updateTime | dateformat}}</Col>
             <Col class-name="col" span="3">
-            <Button v-if="item.status == 1" size="small" type="warning" @click="itemHandle(item,2)">确认入库</Button>
+            <Button v-if="item.status == '1'" size="small" type="warning" @click="itemHandle(item,2)">确认入库</Button>
             <Button size="small" type="warning" @click="itemHandle(item,3)">详情</Button>
-            <Button size="small" type="warning" @click="itemHandle(item,1)">打印</Button>
+            <Button size="small" type="warning"  v-if="item.status != '4'" @click="itemHandle(item,1)">打印</Button>
             </Col>
           </Row>
           <Row v-if="list.length == 0">
@@ -126,6 +126,31 @@
         <Button type="primary" @click="storageInto">确定</Button>
       </div>
     </Modal>
+    <Modal title="打印入库单" width="400" v-model="printShow" :mask-closable="false">
+      <Spin size="large" fix v-if="spinShow">
+        <Icon type="load-c" size=18 class="spin-icon-load"></Icon>
+        <div>正在生成打印入库单...</div>
+      </Spin>
+      <div class="card-contnet" style="padding-bottom: 10px;">
+        <div class="table-contnet">
+          <Row class-name="head">
+            <Col class-name="col" span="12">销售单</Col>
+            <Col class-name="col" span="12">操作</Col>
+          </Row>
+          <Row v-for="(item,index) in printData" :key="item.id">
+            <Col class-name="col" span="12">{{`入库单_${item.orderNum}`}}</Col>
+            <Col class-name="col" span="12">
+            <a class="ivu-btn ivu-btn-warning ivu-btn-small" :href="item.viewUrl" target="_blank">打印</a>
+            </Col>
+          </Row>
+          <Row v-if="printData.length == 0">
+            <Col class-name="col" span="24">暂无数据</Col>
+          </Row>
+        </div>
+      </div>
+      <div slot="footer">
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -157,6 +182,9 @@
             trigger: 'blur'
           }]
         },
+        printShow: false,
+        spinShow: true,
+        printData: [],
         storeHouseList: [],
         show: false,
         modalShow: false,
@@ -199,8 +227,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                            params.row.length
-                          }`;
+                              params.row.length
+                            }`;
               return h("div", str);
             }
           },
@@ -262,7 +290,7 @@
             title: "成本价",
             key: "costPrice",
             minWidth: 120,
-            render:(h,params) =>{
+            render: (h, params) => {
               let str = `￥${params.row.costPrice}`;
               return h("span", str);
             }
@@ -271,7 +299,7 @@
             title: "成本金额",
             key: "costNumber",
             minWidth: 120,
-            render:(h,params) =>{
+            render: (h, params) => {
               let str = `￥${params.row.costNumber}`;
               return h("span", str);
             }
@@ -416,6 +444,17 @@
         if (flag === 1) {
           //  打印
   
+          this.printShow = true;
+          this.$http.post(this.api.storageInPrint, {
+            storageInId: item.id
+          }).then(res => {
+            if (res.code === 1000) {
+              this.spinShow = false;
+              this.printData = res.data;
+            } else {
+              this.$Message.error(res.message);
+            }
+          })
         } else if (flag === 2) {
           //  确认入库
           this.modalShow = true;
@@ -461,15 +500,15 @@
           }
         })
       },
-      resetintoData(){
-        this.intoData ={
+      resetintoData() {
+        this.intoData = {
           remark: '',
           storageInId: ''
         }
       },
-      modalClose(){
+      modalClose() {
         this.modalShow = false,
-        this.resetintoData();
+          this.resetintoData();
         this.$refs.intoForm.resetFields();
       },
       //  合并货品详情
@@ -495,28 +534,6 @@
   .card {
     position: relative;
     margin-bottom: 20px;
-    .card-contnet {
-      position: relative;
-      padding-bottom: 40px;
-    }
-    .table-contnet {
-      line-height: 40px;
-      text-align: center;
-      border-top: 1px solid #d0d0d0;
-      border-left: 1px solid #d0d0d0;
-      .head {
-        background-color: #ddd;
-      }
-      .col {
-        height: 40px;
-        padding: 0 5px;
-        border-right: 1px solid #d0d0d0;
-        border-bottom: 1px solid #d0d0d0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
     .page-count {
       position: absolute;
       right: 0;
@@ -524,7 +541,47 @@
     }
   }
   
+  .card-contnet {
+    position: relative;
+    padding-bottom: 40px;
+  }
+  
+  .table-contnet {
+    line-height: 40px;
+    text-align: center;
+    border-top: 1px solid #d0d0d0;
+    border-left: 1px solid #d0d0d0;
+    .head {
+      background-color: #ddd;
+    }
+    .col {
+      height: 40px;
+      padding: 0 5px;
+      border-right: 1px solid #d0d0d0;
+      border-bottom: 1px solid #d0d0d0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  
   .row-list {
     margin-bottom: 16px;
+  }
+  
+  .spin-icon-load {
+    animation: ani-spin 1s linear infinite;
+  }
+  
+  @keyframes ani-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(180deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>

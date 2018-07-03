@@ -1308,6 +1308,11 @@ export const saleTicketPrint = '/sys/saleTicketBg/saleTicketPrint'
 export const processPrint = '/sys/processTicket/processPrint'
 
 /*
+*入库单打印
+*/
+export const storageInPrint = '/sys/storageIn/storageInPrint'
+
+/*
 *菜单提醒
 */
 export const messagePrompt = '/sys/buserInfoBg/messagePrompt'

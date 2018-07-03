@@ -78,9 +78,6 @@
     </Card>
     <Modal title="选择库存货物" width="1000" v-model="show" :closable="false" :mask-closable="false">
       <Form :mode="pageApi" :label-width="85" inline>
-        <!-- <FormItem label="供应商名称：">
-                  <Input type="text" v-model="pageApi.ownerName" placeholder="请输入..."></Input>
-                </FormItem> -->
         <FormItem label="货品名称：">
           <Input type="text" v-model="pageApi.cargoName" placeholder="请输入..."></Input>
         </FormItem>
@@ -405,7 +402,6 @@ import {dateformat} from '@/utils/filters.js'
             key: "createTime",
             width: 135,
             render: (h, params) => {
-              // let str = this.toTime(params.row.createTime);
               return h("div", dateformat(params.row.createTime));
             }
           },
@@ -432,7 +428,7 @@ import {dateformat} from '@/utils/filters.js'
           {
             title: "规格",
             key: "specifications",
-            width: 220,
+            width: 120,
             render: (h, params) => {
               let str =
                 params.row.specifications != "" ?
@@ -870,16 +866,6 @@ import {dateformat} from '@/utils/filters.js'
           {
             title: "单件重量(KG)",
             key: "singleWeight",
-            width: 120
-          },
-          {
-            title: "在库重量(KG)",
-            key: "warehouseWeights",
-            width: 120
-          },
-          {
-            title: "在途重量(KG)",
-            key: "preInWareHouseWeight",
             width: 120
           },
           {

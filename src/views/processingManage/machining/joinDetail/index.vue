@@ -610,7 +610,7 @@ import {dateformat} from '@/utils/filters.js'
                     let e = event.target.value;
                     _this.dataApi.goods[params.index].number = e;
                     if (e != "") {
-                      let result = Number(e * _this.dataApi.goods[params.index].singleWeight).toFixed(2)
+                      let result = Number(e * _this.dataApi.goods[params.index].singleWeight).toFixed(3)
                       delete _this.dataApi.goods[params.index].ljWeight;
                       _this.$set(_this.dataApi.goods[params.index],"ljWeight",result);
                     }
@@ -636,7 +636,7 @@ import {dateformat} from '@/utils/filters.js'
                     let e = event.target.value;
                     _this.dataApi.goods[params.index].poundWeight = e;
                     if (e != "" && _this.dataApi.goods[params.index].number != '') {
-                      let result = Number(e / _this.dataApi.goods[params.index].number).toFixed(2);
+                      let result = Number(e / _this.dataApi.goods[params.index].number).toFixed(3);
                       delete _this.dataApi.goods[params.index].gbWeight;
                       _this.$set(_this.dataApi.goods[params.index],"gbWeight",result);}
                   }

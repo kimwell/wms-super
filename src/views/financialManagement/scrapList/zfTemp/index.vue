@@ -305,7 +305,7 @@ import detailModal from './detailModal'
       handleAction(){
         this.$refs.formRef.validate((valid) => {
           if(valid){
-            let saveApi = this.types === 1 ? this.api.receiptCancel : this.dataApi.paymentCancel;
+            let saveApi = this.types === 1 ? this.api.receiptCancel : this.api.paymentCancel;
             let params = this.$clearData(this.dataApi)
             this.$http.post(saveApi,params).then(res =>{
               if(res.code === 1000){

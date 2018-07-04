@@ -81,7 +81,7 @@
         <Row class="row-list">
           <Col span="8">提货车号：{{detailItem.carId}}</Col>
           <Col span="8">备注：{{detailItem.remark}}</Col>
-          <!-- <Col span="8">出库备注：{{detailItem.outBound.remark}}</Col> -->
+          <Col span="8">出库备注：{{detailItem.outBound.remark}}</Col>
         </Row>
       </div>
       <div class="row-wrapper">
@@ -174,7 +174,8 @@
         show: false,
         detailItem: {
           saleTicketCosts: [],
-          saleTicketInfos: []
+          saleTicketInfos: [],
+          outBound: {}
         },
         columns: [{
             title: "序号",

@@ -68,7 +68,7 @@
       </Row>
       <Row class="row-list">
         <Col span="6">供应商：{{detailItem.sellCompany}}</Col>
-        <Col span="6">开单日期：{{detailItem.createTime | dateformat}}</Col>
+        <Col span="6">开单日期：{{detailItem.createTime | dateformat('yyyy-MM-dd')}}</Col>
         <Col span="6">提货车主：{{detailItem.carMan}}</Col>
         <Col span="6">车牌号：{{detailItem.carId}}</Col>
       </Row>
@@ -155,6 +155,7 @@
 </template>
 
 <script>
+import {dateformat} from '@/utils/filters'
   export default {
     data() {
       return {
@@ -249,6 +250,14 @@
             render: (h, params) => {
               let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
               return h("div", str);
+            }
+          },
+          {
+            title: "创建时间",
+            key: "createTime",
+            minWidth: 150,
+            render: (h, params) => {
+              return h('span', params.row.createTime != '' ? dateformat(params.row.createTime):'暂无')
             }
           },
           {

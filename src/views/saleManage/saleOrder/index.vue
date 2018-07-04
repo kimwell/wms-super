@@ -81,6 +81,7 @@
         <Row class="row-list">
           <Col span="8">提货车号：{{detailItem.carId}}</Col>
           <Col span="8">备注：{{detailItem.remark}}</Col>
+          <!-- <Col span="8">出库备注：{{detailItem.outBound.remark}}</Col> -->
         </Row>
       </div>
       <div class="row-wrapper">
@@ -95,32 +96,6 @@
           <Col span="8">总件数：{{detailItem.number}}</Col>
         </Row>
         <Table border :columns="columns" :data="detailItem.saleTicketInfos"></Table>
-      </div>
-      <div class="row-wrapper">
-        <h3>其他费用</h3>
-        <div class="card-contnet">
-          <div class="table-contnet">
-            <Row class-name="head">
-              <Col class-name="col" span="3">序号</Col>
-              <Col class-name="col" span="6">费用名称</Col>
-              <Col class-name="col" span="6">数量</Col>
-              <Col class-name="col" span="3">单价</Col>
-              <Col class-name="col" span="3">金额</Col>
-              <Col class-name="col" span="3">税/%</Col>
-            </Row>
-            <Row v-for="(item,index) in detailItem.saleTicketCosts" :key="index">
-              <Col class-name="col" span="3">{{index+1}}</Col>
-              <Col class-name="col" span="6">{{item.costName}}</Col>
-              <Col class-name="col" span="6">{{item.number}}</Col>
-              <Col class-name="col" span="3">￥{{item.price}}</Col>
-              <Col class-name="col" span="3">￥{{item.money}}</Col>
-              <Col class-name="col" span="3">{{item.tax}}</Col>
-            </Row>
-            <Row v-if="detailItem.saleTicketCosts.length === 0">
-              <Col class-name="col" span="24">暂无</Col>
-            </Row>
-          </div>
-        </div>
       </div>
       <div slot="footer">
       </div>
@@ -230,12 +205,7 @@
             key: "specifications",
             width: 180,
             render: (h, params) => {
-              let str =
-                params.row.specifications != "" ?
-                params.row.specifications :
-                `${params.row.height}*${params.row.width}*${
-                            params.row.length
-                          }`;
+              let str = params.row.specifications != "" ? params.row.specifications : params.row.height!="" ?  `${params.row.height}*${params.row.width}*${params.row.length}` : '';
               return h("div", str);
             }
           },
@@ -254,7 +224,7 @@
             key: "numberUnit",
             width: 100,
             render: (h, params) => {
-              let str = `${params.row.numberUnit}/${params.row.weightUnit}`;
+              let str = params.row.weightUnit != '' ? `${params.row.weightUnit}/${params.row.numberUnit}` : '';
               return h("div", str);
             }
           },

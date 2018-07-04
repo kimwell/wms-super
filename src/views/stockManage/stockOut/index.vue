@@ -57,6 +57,7 @@
         <Row class="row-list">
           <Col span="8">审核人：{{detailItem.saleTicket.checkMan}}</Col>
           <Col span="8">备注：{{detailItem.saleTicket.remark}}</Col>
+          <Col span="8">出库备注：{{detailItem.outBound.remark}}</Col>
         </Row>
       </div>
       <div class="row-wrapper">

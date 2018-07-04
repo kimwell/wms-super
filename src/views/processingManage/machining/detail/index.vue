@@ -127,15 +127,15 @@
       //  确认加工
       onPrecess() {
         this.$Modal.confirm({
-          title: "开具加工入库单",
-          content: "是否确认开具加工入库单？",
+          title: "加工单确认",
+          content: "是否确认加工？",
           onOk: () => {
             let params = {
               processId: this.id
             }
             this.$http.post(this.api.saveProcess, params).then(res => {
               if (res.code === 1000) {
-                this.$Message.success('加入成功');
+                this.$Message.success('确认成功');
                 this.$router.go(-1)
               } else {
                 this.$Message.error(res.message)

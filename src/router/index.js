@@ -64,17 +64,17 @@ const router = new Router({
         component: resolve => require(['@/views/news/nconfig/index'], resolve)
       }]
     }, {
-      path: 'staff',
-      name: 'staff',
-      component: resolve => require(['@/views/staff/index'], resolve),
+      path: 'staffManage',
+      name: 'staffManage',
+      component: resolve => require(['@/views/staffManage/index'], resolve),
       children: [{
         path: 'customer',
         name: 'customer',
-        component: resolve => require(['@/views/staff/customer/index'], resolve),
+        component: resolve => require(['@/views/staffManage/customer/index'], resolve),
       }, {
         path: 'merchant',
         name: 'merchant',
-        component: resolve => require(['@/views/staff/merchant/index'], resolve),
+        component: resolve => require(['@/views/staffManage/merchant/index'], resolve),
       }]
     }, {
       path: 'processingManage',
@@ -169,62 +169,62 @@ const router = new Router({
         component: resolve => require(['@/views/dataAnalysisManagement/InventoryStatistics/index'], resolve),
       }]
     },{
-      path: 'stock',
-      name: 'stock',
-      component: resolve => require(['@/views/stock/index'], resolve),
+      path: 'stockManage',
+      name: 'stockManage',
+      component: resolve => require(['@/views/stockManage/index'], resolve),
       children: [{
         path: 'stockInto',
         name: 'stockInto',
-        component: resolve => require(['@/views/stock/stockInto/index'], resolve),
+        component: resolve => require(['@/views/stockManage/stockInto/index'], resolve),
       }, {
         path: 'goods',
         name: 'goods',
-        component: resolve => require(['@/views/stock/goods/index'], resolve)
+        component: resolve => require(['@/views/stockManage/goods/index'], resolve)
       },{
         path: 'warehouse',
         name: 'warehouse',
-        component: resolve => require(['@/views/stock/warehouse/index'], resolve),
+        component: resolve => require(['@/views/stockManage/warehouse/index'], resolve),
       },{
         path: 'stockOut',
         name: 'stockOut',
-        component: resolve => require(['@/views/stock/stockOut/index'], resolve),
+        component: resolve => require(['@/views/stockManage/stockOut/index'], resolve),
       },{
         path: 'stockCancel',
         name: 'stockCancel',
-        component: resolve => require(['@/views/stock/stockCancel/index'], resolve),
+        component: resolve => require(['@/views/stockManage/stockCancel/index'], resolve),
       },{
         path: 'stockCancelDetail/:id/',
         name: 'stockCancelDetail',
-        component: resolve => require(['@/views/stock/stockCancel/detail/index'], resolve),
+        component: resolve => require(['@/views/stockManage/stockCancel/detail/index'], resolve),
       }]
     }, {
-      path: 'system',
-      name: 'system',
-      component: resolve => require(['@/views/system/index'], resolve),
+      path: 'systemManage',
+      name: 'systemManage',
+      component: resolve => require(['@/views/systemManage/index'], resolve),
       children: [{
         path: 'adManage',
         name: 'adManage',
-        component: resolve => require(['@/views/system/ad/adManage'], resolve),
+        component: resolve => require(['@/views/systemManage/ad/adManage'], resolve),
       }, {
         path: 'appUnit',
         name: 'appUnit',
-        component: resolve => require(['@/views/system/unit/index'], resolve)
+        component: resolve => require(['@/views/systemManage/unit/index'], resolve)
       }, {
         path: 'appData',
         name: 'appData',
-        component: resolve => require(['@/views/system/data/index'], resolve)
+        component: resolve => require(['@/views/systemManage/data/index'], resolve)
       }, {
         path: 'costManage',
         name: 'costManage',
-        component: resolve => require(['@/views/system/cost/index'], resolve)
+        component: resolve => require(['@/views/systemManage/cost/index'], resolve)
       }, {
         path: 'densityManage',
         name: 'densityManage',
-        component: resolve => require(['@/views/system/density/index'], resolve)
+        component: resolve => require(['@/views/systemManage/density/index'], resolve)
       }, {
         path: 'formulaManage',
         name: 'formulaManage',
-        component: resolve => require(['@/views/system/formula/index'], resolve)
+        component: resolve => require(['@/views/systemManage/formula/index'], resolve)
       }]
     }, {
       path: 'authority',

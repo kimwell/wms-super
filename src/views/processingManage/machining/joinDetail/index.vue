@@ -44,6 +44,33 @@
         </Row>
       </div>
     </Card>
+      <Card :bordered="false" class="card">
+      <p slot="title">加工明细</p>
+      <div class="card-contnet">
+        <div class="table-contnet">
+          <Row class-name="head">
+            <Col class-name="col" span="4">序号</Col>
+            <Col class-name="col" span="5">规格</Col>
+            <Col class-name="col" span="5">公差</Col>
+            <Col class-name="col" span="5">数量</Col>
+            <Col class-name="col" span="5">重量(KG)</Col>
+          </Row>
+          <Row v-for="(sub,index) in item.processTicketInfos" :key="index">
+            <Col class-name="col" span="4">{{index + 1}}</Col>
+            <Col class-name="col" span="5">{{`${sub.height}*${sub.width}*${sub.length}`}}</Col>
+            <Col class-name="col" span="5">{{sub.tolerance}}</Col>
+            <Col class-name="col" span="5">{{sub.number}}</Col>
+            <Col class-name="col" span="5">{{sub.weight}}</Col>
+          </Row>
+          <div v-if="item.processTicketInfos">
+            <Row v-if="item.processTicketInfos.length == 0">
+              <Col class-name="col" span="24">暂无数据</Col>
+            </Row>
+          </div>
+        </div>
+      </div>
+      <div class="totalNum"><span>数量合计：{{item.number}}</span><span>加工重量合计： {{item.processWeight}}KG</span></div>
+    </Card>
     <Card :bordered="false" class="card">
       <p slot="title">加工入库货物明细</p>
       <div slot="extra">
@@ -72,7 +99,7 @@
         </div>
         <div>
           <Table width="100%" v-if="item.status === '2'" border :columns="goodsColumns" :data="dataApi.goods"></Table>
-          <Table width="100%"  v-if="item.status === '3' || item.status === '4'" border :columns="goodsDetailColumns" :data="item.processIns"></Table>
+          <Table width="100%"  v-if="item.status === '3' || item.status === '4' || item.status === '5'" border :columns="goodsDetailColumns" :data="item.processIns"></Table>
         </div>
       </div>
     </Card>
@@ -459,19 +486,8 @@ import {dateformat} from '@/utils/filters.js'
             key: "cargoStatus",
             width: 100,
             render: (h, params) => {
-              // let str = this.toStatus(params.row.cargoStatus);
               return h("div", this.toStatus(params.row.cargoStatus));
             }
-          },
-          {
-            title: "在库重量(KG)",
-            key: "warehouseWeights",
-            width: 120
-          },
-          {
-            title: "在途重量(KG)",
-            key: "preInWareHouseWeight",
-            width: 120
           },
           {
             title: "备注",
@@ -500,7 +516,7 @@ import {dateformat} from '@/utils/filters.js'
                           delete _this.dataApi.goods[_this.activeGoods.index].autoStauts;
                           delete _this.dataApi.goods[_this.activeGoods.index].merge;
                           delete _this.mergeList[params.index].selected;
-                          _this.$set(_this.dataApi.goods[_this.activeGoods.index], 'mergeCargoId', params.row.productNumber);
+                          _this.$set(_this.dataApi.goods[_this.activeGoods.index], 'mergeCargoId', params.row.id);
                           _this.$set(_this.dataApi.goods[_this.activeGoods.index], 'autoStauts', undefined)
                           _this.$set(_this.dataApi.goods[_this.activeGoods.index], 'merge', true)
                           _this.$set(_this.mergeList[params.index], "selected", true);}
@@ -1225,7 +1241,7 @@ import {dateformat} from '@/utils/filters.js'
       //  合并货品详情
       getcargoInfoDetail(data) {
         this.goodsDetailShow = true;
-        this.$http.post(this.api.cargoInfoDetail,{id: data.row.cargoId}).then(res =>{
+        this.$http.post(this.api.cargoInfoDetail,{id: data.row.mergeCargoId}).then(res =>{
           if(res.code === 1000){
             this.detailItem = res.data;
           }
@@ -1342,7 +1358,37 @@ import {dateformat} from '@/utils/filters.js'
     left: 20px;
     bottom: 15px;
   }
-  
+    .card {
+    position: relative;
+    margin-bottom: 20px;
+    .card-contnet {
+      position: relative;
+      padding-bottom: 40px;
+    }
+    .table-contnet {
+      line-height: 40px;
+      text-align: center;
+      border-top: 1px solid #d0d0d0;
+      border-left: 1px solid #d0d0d0;
+      .head {
+        background-color: #ddd;
+      }
+      .col {
+        height: 40px;
+        padding: 0 5px;
+        border-right: 1px solid #d0d0d0;
+        border-bottom: 1px solid #d0d0d0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    .page-count {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+  }
   .remrak-warpper {
     display: inline-block;
     font-weight: normal;

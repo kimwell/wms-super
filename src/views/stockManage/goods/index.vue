@@ -98,10 +98,10 @@
         <FormItem label="在库数量:"><span>{{ detail.numbers }}</span></FormItem>
         <FormItem label="在途数量:"><span>暂无</span></FormItem>
         <FormItem label="理计单重:"><span>{{ detail.singleWeight }}</span></FormItem>
-        <FormItem label="过磅单重:"><span>{{ detail.numbers == 0 ? 0 : (detail.ponderanceCoiledSheetWeights/detail.numbers).toFixed(3) }}</span></FormItem>
+        <FormItem label="过磅单重:"><span>{{ detail.ponderanceCoiledSheetTotalWeights}}</span></FormItem>
         <FormItem label="剩余重量:"><span>{{ detail.warehouseWeights }}</span></FormItem>
         <FormItem label="在库重量:"><span>{{ detail.warehouseWeights }}</span></FormItem>
-        <FormItem label="理计重量:"><span>{{ (detail.singleWeight * detail.numbers).toFixed(3) }}</span></FormItem>
+        <FormItem label="理计重量:"><span>{{ detail.totalSingleWeight }}</span></FormItem>
         <FormItem label="过磅重量:"><span>{{ detail.ponderanceCoiledSheetWeights }}</span></FormItem>
         <FormItem label="原(毛)卷重:"><span>{{ detail.totalCoiledSheetWeights }}</span></FormItem>
         <FormItem label="预入库重量:"><span>{{ detail.preInWareHouseWeight }}</span></FormItem>

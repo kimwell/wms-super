@@ -389,7 +389,7 @@
         this.$http.post(this.api.findCargoInfoList, params).then(res => {
           if (res.code === 1000) {
             this.list = res.data.data,
-              this.totalCount = res.data.totalCount
+            this.totalCount = res.data.totalCount
           }
         })
       },

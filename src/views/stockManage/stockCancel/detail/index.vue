@@ -18,11 +18,11 @@
     </Card>
     <Card :bordered="false" class="card" title="原单明细">
       <Row class="row-list">
-        <Col span="4">销售总额：{{item.oldSaleTicket.saleMoney}}</Col>
-        <Col span="4">不含税总金额：{{item.oldSaleTicket.moneyWithoutTax}}</Col>
-        <Col span="4">税：{{item.oldSaleTicket.tax}}</Col>
-        <Col span="4">总重量：{{item.oldSaleTicket.weight}}</Col>
-        <Col span="4">总件数：{{item.oldSaleTicket.number}}</Col>
+        <Col span="4">销售总额：￥{{item.oldSaleTicket.saleMoney}}</Col>
+        <Col span="4">不含税总金额：￥{{item.oldSaleTicket.moneyWithoutTax}}</Col>
+        <Col span="4">税：￥{{item.oldSaleTicket.tax}}</Col>
+        <Col span="4">总重量：{{item.oldSaleTicket.weight}}KG</Col>
+        <Col span="4">总件数：{{item.oldSaleTicket.number}}KG</Col>
       </Row>
       <Table width="100%" :columns="tableHeader" :data="item.oldSaleTicket.saleTicketInfos"></Table>
     </Card>
@@ -36,17 +36,20 @@
         <FormItem label="确认备注：">
           <Input type="text" :disabled="item.cancelTicket.status == '1' ? false : true" v-model="dataApi.inRemark" placeholder="请输入..."></Input>
         </FormItem>
-        <FormItem label="附件1：">
+        <FormItem label="附件1：" v-if="item.cancelTicket.status == '1'">
           <uploadPic v-model="attachMent[0]"></uploadPic>
         </FormItem>
-        <FormItem label="附件2：">
+        <FormItem label="附件2："  v-if="item.cancelTicket.status == '1'">
           <uploadPic v-model="attachMent[1]"></uploadPic>
         </FormItem>
-        <FormItem label="附件3：">
-          <uploadPic v-model="attachMent[2]"></uploadPic>
+        <FormItem label="附件3："  v-if="item.cancelTicket.status == '1'">
+          <uploadPic v-model="attachMent[2]" ></uploadPic>
         </FormItem>
-        <FormItem>
-        </FormItem>
+        <div v-if="item.cancelTicket.status != '1'" style="display:inline-block;">
+          <FormItem :label="`附件${index+1}：`" v-for="(item,index) in attachMent" :key="index">
+            <img :src="item" style="width: 200px;">
+          </FormItem>
+        </div>
       </Form>
     </Card>
   </div>
@@ -71,7 +74,7 @@
           inRemark: '',
           inAttachMent: ''
         },
-        attachMent: ['', '', ''],
+        attachMent: [],
         costHeader: [{
           title: '序号',
           key: 'index',
@@ -114,7 +117,16 @@
         }, {
           title: '规格',
           key: 'specifications',
-          minWidth: 150
+          minWidth: 150,
+          render: (h, params) => {
+            let str =
+              params.row.specifications != "" ?
+              params.row.specifications :
+              `${params.row.height}*${params.row.width}*${
+                            params.row.length
+                          }`;
+            return h("div", str);
+          }
         }, {
           title: '公差',
           key: 'tolerance',
@@ -138,15 +150,19 @@
         }, {
           title: '理计重量(KG)',
           key: 'meterWeight',
-          minWidth: 100
+          minWidth: 120,
+          render: (h,params) =>{
+            let str = (params.row.singleWeight*params.row.number).toFixed(3);
+            return h("span", str);
+          }
         }, {
           title: '过磅重量(KG)',
           key: 'poundWeight',
-          minWidth: 100
+          minWidth: 120
         }, {
           title: '过磅单重(KG)',
           key: 'poundSingleWeight',
-          minWidth: 100
+          minWidth: 120
         }, {
           title: '备注',
           key: 'remark',
@@ -194,7 +210,7 @@
         this.dataApi.inRemark = newValue
       },
       inAttach(newValue, oldValue) {
-        this.attachMent = newValue != '' ? JSON.parse(newValue) : ['', '', '']
+        this.attachMent = newValue != '' ? JSON.parse(newValue) : []
       }
     },
     methods: {

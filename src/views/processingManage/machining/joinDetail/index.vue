@@ -91,23 +91,23 @@
         </FormItem>
         <FormItem label="品类：">
           <Select v-model="pageApi.category" style="width: 130px;">
-                                            <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
-                                          </Select>
+            <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="表面：">
           <Select v-model="pageApi.surface" style="width: 130px;">
-                                            <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
-                                          </Select>
+            <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="材质：">
           <Select v-model="pageApi.material" style="width: 130px;">
-                                            <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
-                                          </Select>
+            <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="产地：">
           <Select v-model="pageApi.proPlacesName" style="width: 130px;">
-                                            <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
-                                          </Select>
+            <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="厚度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.heightBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>

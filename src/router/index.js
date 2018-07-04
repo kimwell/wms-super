@@ -179,17 +179,7 @@ const router = new Router({
       }, {
         path: 'goods',
         name: 'goods',
-        component: resolve => require(['@/views/stock/goods/index'], resolve),
-        redirect: 'goods/goodsManage',
-        children: [{
-          path: 'goodsManage',
-          name: 'goodsManage',
-          component: resolve => require(['@/views/stock/goods/manage/index'], resolve),
-        }, {
-          path: 'skuManage',
-          name: 'skuManage',
-          component: resolve => require(['@/views/stock/goods/sku/index'], resolve),
-        }]
+        component: resolve => require(['@/views/stock/goods/index'], resolve)
       },{
         path: 'warehouse',
         name: 'warehouse',

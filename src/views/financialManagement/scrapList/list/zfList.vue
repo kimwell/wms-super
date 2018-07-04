@@ -21,8 +21,8 @@
       </FormItem>
       <FormItem label="状态：">
         <Select v-model="pageApi.status" style="width: 100px;">
-                        <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                      </Select>
+          <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
       </FormItem>
       <FormItem>
         <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -33,8 +33,8 @@
     <Modal v-model="show" width="1000" :mask-closable="false" title="原销售单详情">
       <div class="row-wrapper">
         <Row class="row-list">
-          <Col span="6">平台已代收金额：{{saleDetail.platFormMoney}}</Col>
-          <Col span="6">平台已结算金额：{{saleDetail.settleMoney}}</Col>
+          <Col span="6">平台已代收金额：￥{{saleDetail.platFormMoney}}</Col>
+          <Col span="6">平台已结算金额：￥{{saleDetail.settleMoney}}</Col>
         </Row>
         <Row class="row-list">
           <Col span="6">客户单位：{{saleDetail.buyCompanyName}}</Col>
@@ -51,22 +51,22 @@
       </div>
       <div class="row-wrapper">
         <Row class="row-list">
-          <Col span="4">销售总额：<span class="numbers">{{saleDetail.saleMoney}}</span></Col>
-          <Col span="4">不含税总金额：<span class="numbers">{{saleDetail.moneyWithoutTax}}</span></Col>
+          <Col span="4">销售总额：<span class="numbers">￥{{saleDetail.saleMoney}}</span></Col>
+          <Col span="4">不含税总金额：<span class="numbers">￥{{saleDetail.moneyWithoutTax}}</span></Col>
           <Col span="4">税：<span class="numbers">{{saleDetail.tax }}</span></Col>
-          <Col span="4">总重量：<span class="numbers">{{saleDetail.weight}}</span></Col>
-          <Col span="4">总数量：<span class="numbers">{{saleDetail.number}}</span></Col>
+          <Col span="4">总重量：<span class="numbers">{{saleDetail.weight}}KG</span></Col>
+          <Col span="4">总数量：<span class="numbers">{{saleDetail.number}}KG</span></Col>
         </Row>
       </div>
       <Table border :columns="columns" :data="saleDetail.saleTicketInfos"></Table>
       <div slot="footer">
       </div>
     </Modal>
-    <Modal v-model="panelShow" width="600" :mask-closable="false" :title="isFK ? '新增付款单':'新增收款单'">
+    <Modal v-model="panelShow" width="600" :mask-closable="false" :closable="false" :title="isFK ? '新增付款单':'新增收款单'">
       <zfPayModal :isFK="isFK"  v-if="!isFK" ref="sfModal" @on-close="onClose" :itemData="currentItem"></zfPayModal>
       <zfReceiptModal :isFK="isFK" v-if="isFK" ref="sfModal" @on-close="onClose" :itemData="currentItem"></zfReceiptModal>
       <div slot="footer">
-        <Button @click="panelShow = false">取消</Button>
+        <Button @click="closePanel">取消</Button>
         <Button type="primary" @click="handleAction">确定</Button>
       </div>
     </Modal>
@@ -154,9 +154,9 @@ import {
               let str =
                 params.row.specifications != "" ?
                 params.row.specifications :
-                `${params.row.height}*${params.row.width}*${
+                params.row.height != "" ? `${params.row.height}*${params.row.width}*${
                                         params.row.length
-                                      }`;
+                                      }` : '';
               return h("div", str);
             }
           },
@@ -175,7 +175,7 @@ import {
             key: "numberUnit",
             width: 100,
             render: (h, params) => {
-              let str = `${params.row.numberUnit}/${params.row.weightUnit}`;
+              let str = params.row.numberUnit !="" ?  `${params.row.weightUnit}/${params.row.numberUnit}` : '';
               return h("div", str);
             }
           },
@@ -190,19 +190,23 @@ import {
             width: 100,
           },
           {
-            title: "理计重量",
+            title: "理计重量(KG)",
             key: "ljWeight",
-            width: 100
+            width: 120,
+            render: (h,params) =>{
+              let str = params.row.singleWeight != '' ?  (params.row.singleWeight*params.row.number).toFixed(3) : ''
+              return h("div", str);
+            }
           },
           {
-            title: "过磅重量",
+            title: "过磅重量(KG)",
             key: "poundWeight",
-            width: 100,
+            width: 120,
           },
           {
-            title: "过磅单重",
+            title: "过磅单重(KG)",
             key: "gbWeight",
-            width: 100
+            width: 120
           },
           {
             title: "卷重",
@@ -210,12 +214,12 @@ import {
             width: 100,
           },
           {
-            title: "单价",
+            title: "单价(元/KG)",
             key: "price",
-            width: 100,
+            width: 120,
           },
           {
-            title: "税",
+            title: "税(%)",
             key: "tax",
             width: 100,
           },
@@ -223,6 +227,10 @@ import {
             title: "金额",
             key: "money",
             width: 100,
+            render: (h, params) => {
+              let str = `￥${params.row.money}`;
+              return h("span", str);
+            }
           },
           {
             title: "库存量",
@@ -507,6 +515,10 @@ import {
       },
       onClose(data) {
         this.panelShow = data;
+      },
+      closePanel(){
+        this.panelShow = false;
+        this.$refs.sfModal.clearData();
       }
     },
     created() {
@@ -553,6 +565,9 @@ import {
     .numbers {
       color: #008947;
       font-weight: bold;
+    }
+    .row-list{
+      margin-bottom: 12px;
     }
   }
 </style>

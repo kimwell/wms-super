@@ -23,8 +23,8 @@
       </FormItem>
       <FormItem v-if="dataApi.cType == '1'" label="供应商名称：" prop="buserName">
         <Select v-model="dataApi.buserName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-                    <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-                  </Select>
+          <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
+        </Select>
       </FormItem>
       <FormItem v-if="dataApi.cType == '1'" label="供应商银行账户：" prop="buserBankCardNo">
         <AutoComplete v-model="dataApi.buserBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -36,8 +36,8 @@
       </FormItem>
       <FormItem v-if="dataApi.cType == '2'" label="客户名称：" prop="customerName">
         <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-                    <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
-                  </Select>
+          <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
+        </Select>
       </FormItem>
       <FormItem v-if="dataApi.cType == '2'" label="客户银行账户：" prop="customerBankCardNo">
         <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -202,14 +202,13 @@
         this.bankList = [];
         this.reset();
       },
-      // 'itemData.sellPay' (newVal, oldVal) {
-      //   console.log(newVal)
-      //   if (newVal === 0) {
-      //     this.dataApi.cType = '2';
-      //   } else {
-      //     this.dataApi.cType = '1';
-      //   }
-      // }
+      'itemData.sellPay' (newVal, oldVal) {
+        if (newVal === 0) {
+          this.dataApi.cType = '2';
+        } else {
+          this.dataApi.cType = '1';
+        }
+      }
     },
     methods: {
       reset() {
@@ -234,6 +233,7 @@
         }
       },
       clearData() {
+        this.$refs.formInline.resetFields();
         this.dataApi = {
           cType: '',
           buserId: '',

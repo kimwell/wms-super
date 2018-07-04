@@ -372,7 +372,7 @@ import {
             key: "meterWeight",
             width: 120,
             render: (h,params) =>{
-              let str = params.row.singleWeight != '' ?  (params.row.singleWeight*params.row.number).toFixed(3) : '无'
+              let str = params.row.singleWeight != '' ?  (params.row.singleWeight*params.row.number).toFixed(3) : ''
               return h("div", str);
             }
           },

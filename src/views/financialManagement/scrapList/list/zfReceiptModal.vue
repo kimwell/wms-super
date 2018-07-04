@@ -233,6 +233,7 @@
         }
       },
       clearData() {
+        this.$refs.formInline.resetFields();
         this.dataApi = {
           cType: '',
           buserId: '',

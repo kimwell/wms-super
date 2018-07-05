@@ -2,7 +2,7 @@
   <div class="details">
     <Card :bordered="false" class="card">
       <p slot="title">原单基本信息<span class="title-bar-status">状态：{{item.cancelTicket.status | toStatus}}</span></p>
-      <Button slot="extra" v-show="item.cancelTicket.status == '1'" type="warning" @click="add">确认退货入库</Button>
+      <!-- <Button slot="extra" v-show="item.cancelTicket.status == '1'" type="warning" @click="add">确认退货入库</Button> -->
         <Row class="row-list">
         <Col span="6">平台代收金额：{{item.oldSaleTicket.platFormMoney}}</Col>
         <Col span="6">平台已结算金额：{{item.oldSaleTicket.settleMoney}}</Col>
@@ -28,7 +28,7 @@
         <Col span="4">不含税总金额：￥{{item.oldSaleTicket.moneyWithoutTax}}</Col>
         <Col span="4">税：￥{{item.oldSaleTicket.tax}}</Col>
         <Col span="4">总重量：{{item.oldSaleTicket.weight}}KG</Col>
-        <Col span="4">总件数：{{item.oldSaleTicket.number}}KG</Col>
+        <Col span="4">总件数：{{item.oldSaleTicket.number}}</Col>
       </Row>
       <Table width="100%" :columns="tableHeader" :data="item.oldSaleTicket.saleTicketInfos"></Table>
       <h4 style="padding: 15px 0;">其他费用</h4>
@@ -38,7 +38,7 @@
       <Table width="100%" :columns="tableHeader" :data="item.cancelTicket.cancelTicketInfos"></Table>
       <h4 style="padding: 15px 0;">其他信息</h4>
       <Row class="row-list">
-        <Col span="6">退货金额：￥{{item.cancelTicket.refundMoney}}</Col>
+        <Col span="6">实单金额：￥{{item.cancelTicket.refundMoney}}</Col>
         <Col span="6">附件：<img v-if="item.cancelTicket.attachMent !=''" style="width: 200px;vertical-align: top;" :src="item.cancelTicket.attachMent"><span v-else>暂无</span></Col>
         <Col span="6">备注：{{item.cancelTicket.remark | isEmpty('暂无')}}</Col>
       </Row>
@@ -171,7 +171,11 @@ import {
         }, {
           title: '产品单位',
           key: 'numberUnit',
-          minWidth: 150
+          minWidth: 150,
+          render: (h,params) =>{
+            let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
+            return h("span", str);
+          }
         }, {
           title: '卷号',
           key: 'coiledSheetNum',

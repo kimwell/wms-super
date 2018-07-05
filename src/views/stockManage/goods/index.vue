@@ -105,6 +105,9 @@
         <FormItem label="过磅重量:"><span>{{ detail.ponderanceCoiledSheetWeights }}</span></FormItem>
         <FormItem label="原(毛)卷重:"><span>{{ detail.totalCoiledSheetWeights }}</span></FormItem>
         <FormItem label="预入库重量:"><span>{{ detail.preInWareHouseWeight }}</span></FormItem>
+        <FormItem label="各仓库重量/KG:">
+            <p style="width:800px" v-for="(w,i) in whereHoses" :key="i">{{ w | isEmpty('未入库') }}</p>
+        </FormItem>
         <FormItem label="备注:">
           <p style="width:800px">{{ detail.remark | isEmpty('暂无')}}</p>
         </FormItem>
@@ -305,6 +308,10 @@
       },
       isBJ() {
         return this.pageApi.category == '不锈钢卷' || this.pageApi.category == '不锈钢板'
+      },
+      // 详情仓库
+      whereHoses() {
+          return this.detail.wareHouseCargoStr ? this.detail.wareHouseCargoStr.split(';') : []
       }
     },
     filters: {
@@ -399,8 +406,14 @@
       },
       //  详情
       openModel(item) {
-        this.detail = item || {}
-        this.show = true
+        this.show = true;
+        this.$http.post(this.api.cargoInfoDetails , {
+          id: item.id
+        }).then(res =>{
+          if(res.code === 1000){
+            this.detail = res.data || {};
+          }
+        })
       },
       closeModel() {
         this.show = false;

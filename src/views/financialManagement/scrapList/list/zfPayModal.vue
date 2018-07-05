@@ -2,8 +2,8 @@
   <div>
     <Row class="row-list">
       <Col span="8">作废单号：<span class="numbers">{{itemData.id}}</span></Col>
-      <Col span="8">待客户支付金额：<span class="numbers">{{itemData.customerPay}}</span></Col>
       <Col span="8">待供应商支付金额：<span class="numbers">{{itemData.sellPay }}</span></Col>
+      <Col span="8">待客户支付金额：<span class="numbers">{{itemData.customerPay}}</span></Col>
     </Row>
     <Form ref="formInline" :model="dataApi" :label-width="140" :rules="ruleInline">
       <FormItem label="用户类型：">
@@ -22,9 +22,7 @@
         </AutoComplete>
       </FormItem>
       <FormItem v-if="dataApi.cType == '1'" label="供应商名称：" prop="buserName">
-        <Select v-model="dataApi.buserName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-          <Option v-for="(option, index) in companyList.list" :value="`${option.companyName}-${option.id}`" :key="index">{{option.companyName}}</Option>
-        </Select>
+        <Input type="text" disabled v-model="dataApi.buserName" style="width: 300px;" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem v-if="dataApi.cType == '1'" label="供应商银行账户：" prop="buserBankCardNo">
         <AutoComplete v-model="dataApi.buserBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -35,9 +33,7 @@
         <Input type="text" v-model="dataApi.buserBankName" style="width: 300px;" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem v-if="dataApi.cType == '2'" label="客户名称：" prop="customerName">
-        <Select v-model="dataApi.customerName" filterable remote @on-change="selectOnChange" :remote-method="remoteMethod" style="width: 300px;" :loading="queryLoading">
-          <Option v-for="(option, index) in companyList" :value="`${option}`" :key="index">{{option}}</Option>
-        </Select>
+        <Input type="text" disabled v-model="dataApi.customerName" style="width: 300px;" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem v-if="dataApi.cType == '2'" label="客户银行账户：" prop="customerBankCardNo">
         <AutoComplete v-model="dataApi.customerBankCardNo" @on-change="customerChange" style="width: 300px;" placeholder="请输入...">
@@ -48,10 +44,15 @@
         <Input type="text" v-model="dataApi.customerBankName" style="width: 300px;" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem label="平台对公银行账户：" prop="bankCardNo">
-        <Input type="text" v-model="dataApi.bankCardNo" style="width: 300px;" placeholder="请输入..."></Input>
+        <AutoComplete v-model="dataApi.bankCardNo" style="width: 300px;" placeholder="请输入...">
+          <Option v-for="item in platList" :value="item.card" :key="item.card">{{ item.card }}</Option>
+        </AutoComplete>
       </FormItem>
-      <FormItem label="入账金额：" prop="amount">
+      <FormItem v-if="!isFK" label="入账金额：" prop="amount">
         <InputNumber style="width: 300px;" :max="dataApi.cType == '1' ? itemData.sellPay : itemData.customerPay" :min="0" v-model="dataApi.amount" placeholder="请输入..."></InputNumber>
+      </FormItem>
+      <FormItem v-if="isFK" label="入账金额：" prop="amount">
+        <InputNumber style="width: 300px;" :max="dataApi.cType == '1' ? itemData.sellGet : itemData.customerGet" :min="0" v-model="dataApi.amount" placeholder="请输入..."></InputNumber>
       </FormItem>
       <FormItem label="入账时间：" prop="inTime">
         <DatePicker type="datetime" v-model="dataApi.inTime" placeholder="请选择日期" style="width: 300px"></DatePicker>
@@ -82,6 +83,9 @@
       isFK: {
         type: Boolean
       },
+      show: {
+        type: Boolean
+      },
       itemData: {
         type: Object
       }
@@ -89,7 +93,7 @@
     data() {
       return {
         dataApi: {
-          cType: this.itemData.customerPay === 0 ? '1': '2',
+          cType: this.itemData.sellPay === 0 ? '2' : '1',
           buserId: '',
           buserName: '',
           buserBankCardNo: '',
@@ -146,7 +150,7 @@
           bankCardNo: [{
             required: true,
             message: '不能为空',
-            trigger: 'blur'
+            trigger: 'change'
           }],
           amount: [{
             required: true,
@@ -173,7 +177,8 @@
         feeList: [],
         companyList: [],
         queryLoading: false,
-        bankList: []
+        bankList: [],
+        platList: []
       }
     },
     computed: {
@@ -201,13 +206,40 @@
         this.companyList = [];
         this.bankList = [];
         this.reset();
-      },
-      'itemData.sellPay' (newVal, oldVal) {
-        if (newVal === 0) {
-          this.dataApi.cType = '2';
+        if (newVal === '1') {
+          this.dataApi.buserName = this.itemData.sellCompany;
         } else {
-          this.dataApi.cType = '1';
+          this.dataApi.customerName = this.itemData.buyCompany;
         }
+      },
+      show(n, o) {
+        if (this.show) {
+          this.$refs.formInline.resetFields();
+          if (this.isFK) {
+            if (this.itemData.sellGet === 0) {
+              this.dataApi.cType = '2';
+              this.dataApi.customerName = this.itemData.buyCompany;
+            } else {
+              this.dataApi.cType = '1';
+              this.dataApi.buserName = this.itemData.sellCompany;
+            }
+          } else {
+  
+            if (this.itemData.sellPay === 0) {
+              this.dataApi.cType = '2';
+              this.dataApi.customerName = this.itemData.buyCompany;
+            } else {
+              this.dataApi.cType = '1';
+              this.dataApi.buserName = this.itemData.sellCompany;
+            }
+          }
+        }
+      },
+      'dataApi.buserName' (newVal, oldVal) {
+        this.selectOnChange(newVal)
+      },
+      'dataApi.customerName' (newVal, oldVal) {
+        this.selectOnChange(newVal)
       }
     },
     methods: {
@@ -235,7 +267,7 @@
       clearData() {
         this.$refs.formInline.resetFields();
         this.dataApi = {
-          cType: '',
+          cType: this.dataApi.cType,
           buserId: '',
           buserName: '',
           buserBankCardNo: '',
@@ -261,17 +293,20 @@
           }
         })
       },
+      getPlat() {
+        this.$http.post(this.api.findPlatBankCard).then(res => {
+          if (res.code === 1000) {
+            this.platList = res.data != '' ? JSON.parse(res.data.cardInfo) : []
+          }
+        })
+      },
       // 选择供应商
       selectOnChange(data) {
-        let datas;
-        if (this.dataApi.cType == '1') {
-          datas = data.split('-')
-        }
         if (data != '') {
           let params = {}
           if (this.dataApi.cType == '1') {
             params = {};
-            params.companyName = datas[0]
+            params.companyName = data;
           } else {
             params = {}
             params.name = data;
@@ -281,39 +316,12 @@
           this.$http.post(urls, params).then(res => {
             if (res.code === 1000) {
               if (this.dataApi.cType == '1') {
-                this.bankList = JSON.parse(res.data.cardInfo)
+                this.bankList = res.data != '' ? JSON.parse(res.data.cardInfo) : []
               } else {
                 this.bankList = res.data
               }
             }
           })
-        }
-      },
-      //  查找商户
-      remoteMethod(query) {
-        if (query != '') {
-          this.queryLoading = true;
-          let urls = this.dataApi.cType == '1' ? this.api.findBusinessList : this.api.findCustomerList
-          let params = this.dataApi.cType == '1' ? {
-            pageSize: 99,
-            currentPage: 1,
-            qq: '',
-            fax: '',
-            contactNum: '',
-            contact: '',
-            companyName: query
-          } : {
-            name: query
-          }
-          this.$http.post(urls, params).then(res => {
-            if (res.code === 1000) {
-              this.queryLoading = false;
-              this.companyList = res.data
-            }
-          })
-        } else {
-          this.companyList = [];
-          this.dataApi.customerName = '';
         }
       },
       //  选择银行卡自动填充银行名称
@@ -347,11 +355,6 @@
         let params = this.$clearData(this.dataApi);
         params.inTime = this.inTime;
         params.cancelTicketId = this.itemData.id;
-        if (params.cType == '1' && params.buserName != '') {
-          let sp = params.buserName.split('-')
-          params.buserName = sp[0];
-          params.buserId = sp[1];
-        }
         let saveApi = this.isFK ? this.api.cancelTicketBgPayment : this.api.cancelTicketBgReceipt;
         this.$http.post(saveApi, params).then(res => {
           if (res.code === 1000) {
@@ -366,6 +369,7 @@
     },
     created() {
       this.getFeeList();
+      this.getPlat();
     }
   }
 </script>

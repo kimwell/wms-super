@@ -25,7 +25,7 @@
       </div>
     </Modal>
     <Modal v-model="cancelShow" width="600" :mask-closable="false" :title="types === 1 ? '作废收款单':'作废付款单'">
-      <Form  :model="dataApi" ref="formRef" :label-width="100" :rules="ruleInline">
+      <Form  :model="dataApi" ref="formRef" :label-width="100" :rules="ruleInline" onkeydown="if(event.keyCode==13)return false;">
       <FormItem label="作废备注：" prop="deleteRemark">
         <Input type="text" v-model="dataApi.deleteRemark" style="width: 300px;" placeholder="请输入..."></Input>
       </FormItem>

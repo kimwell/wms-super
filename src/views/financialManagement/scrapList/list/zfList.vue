@@ -63,8 +63,7 @@
       </div>
     </Modal>
     <Modal v-model="panelShow" width="600" :mask-closable="false" :closable="false" :title="isFK ? '新增付款单':'新增收款单'">
-      <zfPayModal :isFK="isFK"  v-if="!isFK" ref="sfModal" @on-close="onClose" :itemData="currentItem"></zfPayModal>
-      <zfReceiptModal :isFK="isFK" v-if="isFK" ref="sfModal" @on-close="onClose" :itemData="currentItem"></zfReceiptModal>
+      <zfPayModal :isFK="isFK" :show="panelShow"  ref="sfModal" @on-close="onClose" :itemData="currentItem"></zfPayModal>
       <div slot="footer">
         <Button @click="closePanel">取消</Button>
         <Button type="primary" @click="handleAction">确定</Button>
@@ -78,11 +77,9 @@ import {
   dateformat
 } from '@/utils/filters.js'
   import zfPayModal from './zfPayModal'
-  import zfReceiptModal from './zfReceiptModal'
   export default {
     components: {
-      zfPayModal,
-      zfReceiptModal
+      zfPayModal
     },
     data() {
       return {
@@ -287,7 +284,7 @@ import {
           key: 'saleMoney',
           minWidth: 150
         }, {
-          title: '退款金额',
+          title: '退款单金额',
           key: 'refundMoney',
           minWidth: 150
         }, {
@@ -409,7 +406,7 @@ import {
             }
             //  收款单
             if (!aRepit) {
-              if (status != '1' || status != '2' || status != '3') {
+              if (status == '1' || status == '2' || status == '3') {
                 let payArr = [
                   h('Button', {
                     props: {

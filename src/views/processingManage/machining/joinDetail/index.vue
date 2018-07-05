@@ -44,7 +44,7 @@
         </Row>
       </div>
     </Card>
-      <Card :bordered="false" class="card">
+    <Card :bordered="false" class="card">
       <p slot="title">加工明细</p>
       <div class="card-contnet">
         <div class="table-contnet">
@@ -77,7 +77,7 @@
         <Button type="warning" v-if="item.status === '2'" @click="selectGoods">选择库存货物</Button>
       </div>
       <div class="detail-wrapper">
-        <div class="extra-form" v-if="item.status === '2'" >
+        <div class="extra-form" v-if="item.status === '2'">
           <Form :mode="dataApi" :label-width="100" inline>
             <FormItem label="余卷过磅重量：">
               <Input type="text" v-model="dataApi.coildSheetWeight" placeholder="请输入..."></Input>
@@ -87,7 +87,7 @@
             </FormItem>
           </Form>
         </div>
-        <div class="extra-form" v-if="item.status != '2'" >
+        <div class="extra-form" v-if="item.status != '2'">
           <Form :label-width="100" inline>
             <FormItem label="余卷过磅重量：">
               {{item.coildSheetWeight}}
@@ -99,7 +99,7 @@
         </div>
         <div>
           <Table width="100%" v-if="item.status === '2'" border :columns="goodsColumns" :data="dataApi.goods"></Table>
-          <Table width="100%"  v-if="item.status === '3' || item.status === '4' || item.status === '5'" border :columns="goodsDetailColumns" :data="item.processIns"></Table>
+          <Table width="100%" v-if="item.status === '3' || item.status === '4' || item.status === '5'" border :columns="goodsDetailColumns" :data="item.processIns"></Table>
         </div>
       </div>
     </Card>
@@ -113,28 +113,28 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.cargoStatus" style="width: 130px;">
-            <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-          </Select>
+              <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+            </Select>
         </FormItem>
         <FormItem label="品类：">
           <Select v-model="pageApi.category" style="width: 130px;">
-            <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
-          </Select>
+              <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
+            </Select>
         </FormItem>
         <FormItem label="表面：">
           <Select v-model="pageApi.surface" style="width: 130px;">
-            <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
-          </Select>
+              <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
+            </Select>
         </FormItem>
         <FormItem label="材质：">
           <Select v-model="pageApi.material" style="width: 130px;">
-            <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
-          </Select>
+              <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
+            </Select>
         </FormItem>
         <FormItem label="产地：">
           <Select v-model="pageApi.proPlacesName" style="width: 130px;">
-            <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
-          </Select>
+              <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
+            </Select>
         </FormItem>
         <FormItem label="厚度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.heightBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
@@ -178,52 +178,74 @@
           <Input type="text" v-model="mergeApi.productNumber" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="内部编号：">
-          <Input type="text" v-model="mergeApi.productNumber" placeholder="请输入..."></Input>
+          <Input type="text" v-model="mergeApi.internalNumber" placeholder="请输入..."></Input>
         </FormItem>
         <FormItem label="库存：">
           <Select v-model="mergeApi.hasStore" style="width: 130px;">
-              <Option v-for="item in [{name:'有',value: '1'},{name:'无',value: '0'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-            </Select>
+                <Option v-for="item in [{name:'有',value: '1'},{name:'无',value: '0'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+              </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetMergeApi">清除</Button>
         </FormItem>
-      </Form>   
+      </Form>
       <Table width="100%" border :columns="mergeColumns" :data="mergeList"></Table>
       <div slot="footer">
       </div>
     </Modal>
     <Modal title="当前合并货品" width="800" v-model="goodsDetailShow" :mask-closable="false">
-        <div v-if="detailItem">
-          <Row class="row-list">
-            <Col span="6">产品编号：{{detailItem.productNumber}}</Col>
-            <Col span="6">货物名称：{{detailItem.cargoName}}</Col>
-            <Col span="6">表面：{{detailItem.surface}}</Col>
-            <Col span="6">物流状态：{{detailItem.status | toMegerStatus}}</Col>
-          </Row>
-          <Row class="row-list">
-            <Col span="6" v-if="detailItem.wareHouseCargoSet.length != 0">仓库：{{detailItem.wareHouseCargoSet[0].wareHouseName}}</Col>
-            <Col span="6">型号：{{detailItem.model}}</Col>
-            <Col span="6">公差：{{detailItem.tolerance}}</Col>
-            <Col span="6">库存数量：{{detailItem.warehouseNumber}}</Col>
-          </Row>
-          <Row class="row-list">
-            <Col span="6">日期：{{detailItem.createTime | dateformat}}</Col>
-            <Col span="6">品类：{{detailItem.category}}</Col>
-            <Col span="6">规格：{{detailItem.specifications != "" ? detailItem.specifications :`${detailItem.height}*${detailItem.width}*${detailItem.length}`}}</Col>
-            <Col span="6">库存重量：{{detailItem.warehouseWeights}}</Col>
-          </Row>
-          <Row class="row-list">
-            <Col span="6">产地：{{detailItem.proPlacesName}}</Col>
-            <Col span="6">材质：{{detailItem.material}}</Col>
-            <Col span="6">卷号：{{detailItem.coiledSheetNum}}</Col>
-            <Col span="6">预入库重量：{{detailItem.weights}}</Col>
-          </Row>
-          <Row class="row-list">
-            <Col span="6">成本价：{{detailItem.costPrice}}</Col>
-            <Col span="6">备注：{{detailItem.remark}}</Col>
-          </Row>
-        </div>
+      <Form :label-width="120" label-position="right" inline class="cargo-info">
+        <FormItem label="货品名称:"><span>{{ detailItem.cargoName }}</span></FormItem>
+        <FormItem label="型号:"><span>{{ detailItem.model }}</span></FormItem>
+        <FormItem label="卷号:"><span>{{ detailItem.coiledSheetNum }}</span></FormItem>
+        <FormItem label="品类:"><span>{{ detailItem.category }}</span></FormItem>
+        <FormItem label="材质:"><span>{{ detailItem.material }}</span></FormItem>
+        <FormItem label="表面:"><span>{{ detailItem.surface }}</span></FormItem>
+        <FormItem label="公差:"><span>{{ detailItem.tolerance }}</span></FormItem>
+        <FormItem label="产地:"><span>{{ detailItem.proPlacesName }}</span></FormItem>
+        <FormItem label="规格:"><span>{{ detailItem.specifications != "" ? detailItem.specifications : `${detailItem.height}*${detailItem.width}*${detailItem.length}` }}</span></FormItem>
+        <FormItem label="销售底价:"><span>{{ detailItem.salePrice}}</span></FormItem>
+        <FormItem label="成本价:"><span>{{ detailItem.costPrice }}</span></FormItem>
+        <FormItem label="计价方式:"><span v-if="detailItem.pricingWay !=''">{{ detailItem.pricingWay == '1' ? '按重量':'按数量' }}</span><span v-else>暂无</span></FormItem>
+        <FormItem label="内部编号:"><span>{{ detailItem.internalNumber }}</span></FormItem>
+        <FormItem label="属性:"><span>{{ detailItem.qualitativeTypeDes }}</span></FormItem>
+        <FormItem label="类型:"><span>{{ detailItem.productTypeDes }}</span></FormItem>
+        <FormItem label="密度"><span>{{detailItem.density}}</span></FormItem>
+        <FormItem label="物流状态:">
+          <span v-if="detailItem.cargoStatus">
+            <a class="cargo-status" :class="'status'+el" v-for="(el,i) in detailItem.cargoStatus.split(',')" :key="i">
+              {{ el | cargoStatusStr }}
+            </a>
+          </span>
+        </FormItem>
+        <FormItem label="理算方法:"><span>{{ detailItem.formula }}</span></FormItem>
+        <FormItem label="销项税:"><span>{{ detailItem.outputTaxVal }}</span></FormItem>
+        <FormItem label="进项税:"><span>{{ detailItem.inputTaxVal }}</span></FormItem>
+        <FormItem label="数量单位:"><span>{{ detailItem.numberUnit }}</span></FormItem>
+        <FormItem label="重量单位:"><span>{{ detailItem.weightUnit }}</span></FormItem>
+        <FormItem label="在库数量:"><span>{{ detailItem.numbers }}</span></FormItem>
+        <FormItem label="在途数量:"><span>暂无</span></FormItem>
+        <FormItem label="理计单重:"><span>{{ detailItem.singleWeight }}</span></FormItem>
+        <FormItem label="过磅单重:"><span>{{ detailItem.ponderanceCoiledSheetTotalWeights}}</span></FormItem>
+        <FormItem label="剩余重量:"><span>{{ detailItem.warehouseWeights }}</span></FormItem>
+        <FormItem label="在库重量:"><span>{{ detailItem.warehouseWeights }}</span></FormItem>
+        <FormItem label="理计重量:"><span>{{ detailItem.totalSingleWeight }}</span></FormItem>
+        <FormItem label="过磅重量:"><span>{{ detailItem.ponderanceCoiledSheetWeights }}</span></FormItem>
+        <FormItem label="原(毛)卷重:"><span>{{ detailItem.totalCoiledSheetWeights }}</span></FormItem>
+        <FormItem label="预入库重量:"><span>{{ detailItem.preInWareHouseWeight }}</span></FormItem>
+        <FormItem label="各仓库重量/KG:">
+          <p style="width:800px" v-for="(w,i) in whereHoses" :key="i">{{ w | isEmpty('未入库') }}</p>
+        </FormItem>
+        <FormItem label="备注:">
+          <p style="width:800px">{{ detailItem.remark | isEmpty('暂无')}}</p>
+        </FormItem>
+        <FormItem label="产品图片:">
+          <p style="width:400px" v-if="detailItem.productImg !=''" class="productImg">
+            <img :src="detailItem.productImg">
+          </p>
+          <p v-else>暂无</p>
+        </FormItem>
+      </Form>
       <div slot="footer">
         <Button @click="giveMerge" v-if="item.status === '2'">放弃合并</Button>
         <Button type="primary" @click="changeMerge" v-if="item.status === '2'">变更合并</Button>
@@ -233,7 +255,9 @@
 </template>
 
 <script>
-import {dateformat} from '@/utils/filters.js'
+  import {
+    dateformat
+  } from '@/utils/filters.js'
   export default {
     data() {
       return {
@@ -273,7 +297,7 @@ import {dateformat} from '@/utils/filters.js'
           internalNumber: ''
         },
         activeGoods: {},
-        goodsDetailColumns:[{
+        goodsDetailColumns: [{
             title: "序号",
             key: "cargoName",
             width: 100,
@@ -306,8 +330,8 @@ import {dateformat} from '@/utils/filters.js'
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                      params.row.length
-                    }`;
+                        params.row.length
+                      }`;
               return h("div", str);
             }
           },
@@ -354,24 +378,24 @@ import {dateformat} from '@/utils/filters.js'
             title: "成本价",
             key: "costPrice",
             width: 120,
-            render: (h,params) =>{
-              return h('span',`￥${params.row.costPrice}`)
+            render: (h, params) => {
+              return h('span', `￥${params.row.costPrice}`)
             }
           },
           {
             title: "成本金额",
             key: "costNumber",
             width: 120,
-            render: (h,params) =>{
-              return h('span',`￥${params.row.costNumber}`)
+            render: (h, params) => {
+              return h('span', `￥${params.row.costNumber}`)
             }
           },
           {
             title: "销售底价",
             key: "floorPrice",
             width: 120,
-            render: (h,params) =>{
-              return h('span',`￥${params.row.floorPrice}`)
+            render: (h, params) => {
+              return h('span', `￥${params.row.floorPrice}`)
             }
           },
           {
@@ -387,29 +411,30 @@ import {dateformat} from '@/utils/filters.js'
             render: (h, params) => {
               let _this = this;
               let status = params.row.merge;
-              if(status){
-              return h("div", [
-                h(
-                  "Button", {
-                    props: {
-                      type: "warning",
-                      size: "small"
-                    },
-                    on: {
-                      click: () => {
-                        _this.activeGoods = params;
-                        _this.getcargoInfoDetail(params)
+              if (status) {
+                return h("div", [
+                  h(
+                    "Button", {
+                      props: {
+                        type: "warning",
+                        size: "small"
+                      },
+                      on: {
+                        click: () => {
+                          _this.activeGoods = params;
+                          _this.getcargoInfoDetail(params)
+                        }
                       }
-                    }
-                  },
-                  "显示产品编号"
-                )
+                    },
+                    "显示产品编号"
+                  )
                 ]);
-              }else{
-              return h("div", '不合并');
+              } else {
+                return h("div", '不合并');
               }
             }
-          }],
+          }
+        ],
         mergeColumns: [{
             title: "产品编号",
             key: "productNumber",
@@ -461,8 +486,8 @@ import {dateformat} from '@/utils/filters.js'
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                      params.row.length
-                    }`;
+                        params.row.length
+                      }`;
               return h("div", str);
             }
           },
@@ -519,7 +544,8 @@ import {dateformat} from '@/utils/filters.js'
                           _this.$set(_this.dataApi.goods[_this.activeGoods.index], 'mergeCargoId', params.row.id);
                           _this.$set(_this.dataApi.goods[_this.activeGoods.index], 'autoStauts', undefined)
                           _this.$set(_this.dataApi.goods[_this.activeGoods.index], 'merge', true)
-                          _this.$set(_this.mergeList[params.index], "selected", true);}
+                          _this.$set(_this.mergeList[params.index], "selected", true);
+                        }
                       }
                     },
                     "选择"
@@ -564,8 +590,8 @@ import {dateformat} from '@/utils/filters.js'
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                      params.row.length
-                    }`;
+                        params.row.length
+                      }`;
               return h("div", str);
             }
           },
@@ -612,7 +638,7 @@ import {dateformat} from '@/utils/filters.js'
                     if (e != "") {
                       let result = Number(e * _this.dataApi.goods[params.index].singleWeight).toFixed(3)
                       delete _this.dataApi.goods[params.index].ljWeight;
-                      _this.$set(_this.dataApi.goods[params.index],"ljWeight",result);
+                      _this.$set(_this.dataApi.goods[params.index], "ljWeight", result);
                     }
                   }
                 }
@@ -638,7 +664,8 @@ import {dateformat} from '@/utils/filters.js'
                     if (e != "" && _this.dataApi.goods[params.index].number != '') {
                       let result = Number(e / _this.dataApi.goods[params.index].number).toFixed(3);
                       delete _this.dataApi.goods[params.index].gbWeight;
-                      _this.$set(_this.dataApi.goods[params.index],"gbWeight",result);}
+                      _this.$set(_this.dataApi.goods[params.index], "gbWeight", result);
+                    }
                   }
                 }
               });
@@ -760,44 +787,44 @@ import {dateformat} from '@/utils/filters.js'
                   )
                 ]);
               } else {
-             if (status === undefined) {
-                return h("div", [
-                  h(
-                    "Button", {
-                      props: {
-                        type: "warning",
-                        size: "small"
-                      },
-                      style: {
-                        marginRight: '5px'
-                      },
-                      on: {
-                        click: () => {
-                          _this.handleMerge(params);
+                if (status === undefined) {
+                  return h("div", [
+                    h(
+                      "Button", {
+                        props: {
+                          type: "warning",
+                          size: "small"
+                        },
+                        style: {
+                          marginRight: '5px'
+                        },
+                        on: {
+                          click: () => {
+                            _this.handleMerge(params);
+                          }
                         }
-                      }
-                    },
-                    "选择"
-                  ), h(
-                    "Button", {
-                      props: {
-                        type: "warning",
-                        size: "small"
                       },
-                      on: {
-                        click: () => {
-                          _this.delMerge(params);
+                      "选择"
+                    ), h(
+                      "Button", {
+                        props: {
+                          type: "warning",
+                          size: "small"
+                        },
+                        on: {
+                          click: () => {
+                            _this.delMerge(params);
+                          }
                         }
-                      }
-                    },
-                    "删除"
-                  )
-                ]);
-              } else if (status === 1) {
-                return h("div", [h("span", "不合并")]);
-              } 
+                      },
+                      "删除"
+                    )
+                  ]);
+                } else if (status === 1) {
+                  return h("div", [h("span", "不合并")]);
+                }
               }
-   
+  
             }
           }
         ],
@@ -849,8 +876,8 @@ import {dateformat} from '@/utils/filters.js'
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                      params.row.length
-                    }`;
+                        params.row.length
+                      }`;
               return h("div", str);
             }
           },
@@ -926,10 +953,10 @@ import {dateformat} from '@/utils/filters.js'
           internalNumber: ''
         },
         goodsDetailShow: false,
-        detailItem:{
+        detailItem: {
           wareHouseCargoSet: []
         },
-        pageFilterData:{
+        pageFilterData: {
           row: {}
         }
       };
@@ -990,7 +1017,7 @@ import {dateformat} from '@/utils/filters.js'
           cargoStatus: this.mergeApi.cargoStatus,
           model: this.mergeApi.model,
           costPrice: this.mergeApi.costPrice,
-          wareHouseName: this.mergeApi.wareHouseName,
+          wareHouseName: this.item.storeHouseName,
           productNumber: this.mergeApi.productNumber,
           internalNumber: this.mergeApi.internalNumber
         };
@@ -998,8 +1025,12 @@ import {dateformat} from '@/utils/filters.js'
       productImg() {
         // return this.editItem.productImg != undefined ? this.editItem.productImg.split(',') : []
       },
-      isBJ(){
+      isBJ() {
         return this.pageApi.category == '不锈钢板' || this.pageApi.category == '不锈钢卷'
+      },
+      // 详情仓库
+      whereHoses() {
+        return this.detailItem.wareHouseCargoStr ? this.detailItem.wareHouseCargoStr.split(';') : []
       }
     },
     filters: {
@@ -1025,7 +1056,7 @@ import {dateformat} from '@/utils/filters.js'
             break;
         }
       },
-      toMegerStatus(val){
+      toMegerStatus(val) {
         switch (val * 1) {
           case 0:
             return "暂无";
@@ -1039,6 +1070,9 @@ import {dateformat} from '@/utils/filters.js'
           default:
             break;
         }
+      },
+      cargoStatusStr(value) {
+        return ['无', '在途', '在库'][value]
       }
     },
   
@@ -1106,14 +1140,14 @@ import {dateformat} from '@/utils/filters.js'
         if (this.goods.length > 0) {
           this.goods.forEach(el => {
             el.cargoId = el.id,
-            el.coiledSheetNum = "",
-            el.number = "",
-            el.poundWeight = "",
-            el.coiledWeight = "",
-            el.oldCoiledWeight = "",
-            el.floorPrice = el.salePrice,
-            el.merge = false,
-            el.mergeCargoId = ""
+              el.coiledSheetNum = "",
+              el.number = "",
+              el.poundWeight = "",
+              el.coiledWeight = "",
+              el.oldCoiledWeight = "",
+              el.floorPrice = el.salePrice,
+              el.merge = false,
+              el.mergeCargoId = ""
             el.autoStauts = undefined
           });
           this.show = false;
@@ -1167,8 +1201,8 @@ import {dateformat} from '@/utils/filters.js'
         this.getList(this.handleFilter);
       },
       // 清除合并货物筛选
-      resetMergeApi(){
-         this.mergeApi = {
+      resetMergeApi() {
+        this.mergeApi = {
           currentPage: 1,
           pageSize: 6,
           cargoName: this.pageFilterData.row.cargoName,
@@ -1188,7 +1222,7 @@ import {dateformat} from '@/utils/filters.js'
           cargoStatus: '',
           model: '',
           costPrice: '',
-          wareHouseName: '',
+          wareHouseName: this.item.storeHouseName,
           productNumber: '',
           internalNumber: '',
           hasCoiledSheetNum: '0'
@@ -1241,14 +1275,16 @@ import {dateformat} from '@/utils/filters.js'
       //  合并货品详情
       getcargoInfoDetail(data) {
         this.goodsDetailShow = true;
-        this.$http.post(this.api.cargoInfoDetail,{id: data.row.mergeCargoId}).then(res =>{
-          if(res.code === 1000){
+        this.$http.post(this.api.cargoInfoDetail, {
+          id: data.row.mergeCargoId
+        }).then(res => {
+          if (res.code === 1000) {
             this.detailItem = res.data;
           }
         })
       },
       //  放弃合并
-      giveMerge(){
+      giveMerge() {
         this.goodsDetailShow = false;
         delete this.dataApi.goods[this.activeGoods.index].merge;
         delete this.dataApi.goods[this.activeGoods.index].autoStauts;
@@ -1256,7 +1292,7 @@ import {dateformat} from '@/utils/filters.js'
         this.$set(this.dataApi.goods[this.activeGoods.index], "autoStauts", undefined);
       },
       //  变更合并
-      changeMerge(){
+      changeMerge() {
         this.goodsDetailShow = false;
         this.mergeShow = true
       },
@@ -1281,8 +1317,8 @@ import {dateformat} from '@/utils/filters.js'
           }
         });
       },
-      delMerge(data){
-        this.dataApi.goods.splice(data.index,1)
+      delMerge(data) {
+        this.dataApi.goods.splice(data.index, 1)
       },
       //  选择合并货物
       getmergeData(params) {
@@ -1298,27 +1334,29 @@ import {dateformat} from '@/utils/filters.js'
       },
       //  保存加工单
       saveMerge() {
-        if(this.dataApi.goods.length === 0){
+        if (this.dataApi.goods.length === 0) {
           this.$Message.error('加工货物不能为空！')
-        }else{
-        let params = this.$clearData(this.dataApi)
-        params.processId = this.id;
-        params.goods = JSON.stringify(params.goods)
+        } else {
+          let params = this.$clearData(this.dataApi)
+          params.processId = this.id;
+          params.goods = JSON.stringify(params.goods)
           this.$Modal.confirm({
             title: '确认加工',
             content: '是否确认开始加工？',
             onOk: () => {
-              this.$http.post(this.api.saveProcessIn,params).then(res =>{
-                if(res.code === 1000){
+              this.$http.post(this.api.saveProcessIn, params).then(res => {
+                if (res.code === 1000) {
                   this.$Message.success('加入成功')
-                  this.$router.push({name: 'machining'})
-                }else{
+                  this.$router.push({
+                    name: 'machining'
+                  })
+                } else {
                   this.$Message.error(res.message)
                 }
               })
             }
           })
-      }
+        }
       }
     },
     created() {
@@ -1350,15 +1388,18 @@ import {dateformat} from '@/utils/filters.js'
       }
     }
   }
+  
   .row-list {
     margin-bottom: 15px;
   }
+  
   .page-count {
     position: absolute;
     left: 20px;
     bottom: 15px;
   }
-    .card {
+  
+  .card {
     position: relative;
     margin-bottom: 20px;
     .card-contnet {
@@ -1389,9 +1430,49 @@ import {dateformat} from '@/utils/filters.js'
       bottom: 0;
     }
   }
+  
   .remrak-warpper {
     display: inline-block;
     font-weight: normal;
     padding-left: 50px;
+  }
+  
+  .cargo-info {
+    span {
+      display: block;
+      width: 109px;
+    }
+    .ivu-form-item {
+      margin: 0 0 10px 0;
+    }
+  }
+  .cargo-status {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 4px;
+    margin-right: 3px;
+    &:last-child{
+      margin-right: 0;
+    }
+    &.status0 {
+      background-color: #526069;
+    }
+    &.status1 {
+      background-color: #11C26D;
+    }
+    &.status2 {
+      background-color: #0BB2D4;
+    }
+  }
+  
+  .productImg {
+    img {
+      max-width: 100%;
+    }
   }
 </style>

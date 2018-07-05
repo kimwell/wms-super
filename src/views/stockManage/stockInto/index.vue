@@ -81,36 +81,58 @@
       <Table width="100%" border :columns="goodsDetailColumns" :data="detailItem.storageInGoods"></Table>
     </Modal>
     <Modal title="当前合并货品" width="800" v-model="goodsDetailShow" :mask-closable="false">
-      <div v-if="detailData">
-        <Row class="row-list">
-          <Col span="6">产品编号：{{detailData.productNumber}}</Col>
-          <Col span="6">货物名称：{{detailData.cargoName}}</Col>
-          <Col span="6">表面：{{detailData.surface}}</Col>
-          <Col span="6">物流状态：{{detailData.status | toMegerStatus}}</Col>
-        </Row>
-        <Row class="row-list">
-          <Col span="6" v-if="detailData.wareHouseCargoSet">仓库：{{detailData.wareHouseCargoSet[0].wareHouseName}}</Col>
-          <Col span="6">型号：{{detailData.model}}</Col>
-          <Col span="6">公差：{{detailData.tolerance}}</Col>
-          <Col span="6">库存数量：{{detailData.warehouseNumber}}</Col>
-        </Row>
-        <Row class="row-list">
-          <Col span="6">日期：{{detailData.createTime | dateformat}}</Col>
-          <Col span="6">品类：{{detailData.category}}</Col>
-          <Col span="6">规格：{{detailData.specifications != "" ? detailData.specifications :`${detailData.height}*${detailData.width}*${detailData.length}`}}</Col>
-          <Col span="6">库存重量：{{detailData.warehouseWeights}}</Col>
-        </Row>
-        <Row class="row-list">
-          <Col span="6">产地：{{detailData.proPlacesName}}</Col>
-          <Col span="6">材质：{{detailData.material}}</Col>
-          <Col span="6">卷号：{{detailData.coiledSheetNum}}</Col>
-          <Col span="6">预入库重量：{{detailData.weights}}</Col>
-        </Row>
-        <Row class="row-list">
-          <Col span="6">成本价：{{detailData.costPrice}}</Col>
-          <Col span="6">备注：{{detailData.remark}}</Col>
-        </Row>
-      </div>
+        <Form :label-width="120" label-position="right" inline class="cargo-info" v-if="detailData">
+        <FormItem label="货品名称:"><span>{{ detailData.cargoName }}</span></FormItem>
+        <FormItem label="型号:"><span>{{ detailData.model }}</span></FormItem>
+        <FormItem label="卷号:"><span>{{ detailData.coiledSheetNum }}</span></FormItem>
+        <FormItem label="品类:"><span>{{ detailData.category }}</span></FormItem>
+        <FormItem label="材质:"><span>{{ detailData.material }}</span></FormItem>
+        <FormItem label="表面:"><span>{{ detailData.surface }}</span></FormItem>
+        <FormItem label="公差:"><span>{{ detailData.tolerance }}</span></FormItem>
+        <FormItem label="产地:"><span>{{ detailData.proPlacesName }}</span></FormItem>
+        <FormItem label="规格:"><span>{{ detailData.specifications != "" ? detailData.specifications : `${detailData.height}*${detailData.width}*${detailData.length}` }}</span></FormItem>
+        <FormItem label="销售底价:"><span>{{ detailData.salePrice}}</span></FormItem>
+        <FormItem label="成本价:"><span>{{ detailData.costPrice }}</span></FormItem>
+        <FormItem label="计价方式:"><span v-if="detailData.pricingWay !=''">{{ detailData.pricingWay == '1' ? '按重量':'按数量' }}</span><span v-else>暂无</span></FormItem>
+        <FormItem label="内部编号:"><span>{{ detailData.internalNumber }}</span></FormItem>
+        <FormItem label="属性:"><span>{{ detailData.qualitativeTypeDes }}</span></FormItem>
+        <FormItem label="类型:"><span>{{ detailData.productTypeDes }}</span></FormItem>
+        <FormItem label="密度"><span>{{detailData.density}}</span></FormItem>
+        <FormItem label="物流状态:">
+          <span v-if="detailData.cargoStatus">
+            <a class="cargo-status" :class="'status'+el" v-for="(el,i) in detailData.cargoStatus.split(',')" :key="i">
+              {{ el | cargoStatusStr }}
+            </a>
+          </span>
+        </FormItem>
+        <FormItem label="理算方法:"><span>{{ detailData.formula }}</span></FormItem>
+        <FormItem label="销项税:"><span>{{ detailData.outputTaxVal }}</span></FormItem>
+        <FormItem label="进项税:"><span>{{ detailData.inputTaxVal }}</span></FormItem>
+        <FormItem label="数量单位:"><span>{{ detailData.numberUnit }}</span></FormItem>
+        <FormItem label="重量单位:"><span>{{ detailData.weightUnit }}</span></FormItem>
+        <FormItem label="在库数量:"><span>{{ detailData.numbers }}</span></FormItem>
+        <FormItem label="在途数量:"><span>暂无</span></FormItem>
+        <FormItem label="理计单重:"><span>{{ detailData.singleWeight }}</span></FormItem>
+        <FormItem label="过磅单重:"><span>{{ detailData.ponderanceCoiledSheetTotalWeights}}</span></FormItem>
+        <FormItem label="剩余重量:"><span>{{ detailData.warehouseWeights }}</span></FormItem>
+        <FormItem label="在库重量:"><span>{{ detailData.warehouseWeights }}</span></FormItem>
+        <FormItem label="理计重量:"><span>{{ detailData.totalSingleWeight }}</span></FormItem>
+        <FormItem label="过磅重量:"><span>{{ detailData.ponderanceCoiledSheetWeights }}</span></FormItem>
+        <FormItem label="原(毛)卷重:"><span>{{ detailData.totalCoiledSheetWeights }}</span></FormItem>
+        <FormItem label="预入库重量:"><span>{{ detailData.preInWareHouseWeight }}</span></FormItem>
+        <FormItem label="各仓库重量/KG:">
+          <p style="width:800px" v-for="(w,i) in whereHoses" :key="i">{{ w | isEmpty('未入库') }}</p>
+        </FormItem>
+        <FormItem label="备注:">
+          <p style="width:800px">{{ detailData.remark | isEmpty('暂无')}}</p>
+        </FormItem>
+        <FormItem label="产品图片:">
+          <p style="width:400px" v-if="detailData.productImg !=''" class="productImg">
+            <img :src="detailData.productImg">
+          </p>
+          <p v-else>暂无</p>
+        </FormItem>
+      </Form>
       <div slot="footer">
         <Button @click="goodsDetailShow = false">关闭</Button>
       </div>
@@ -400,7 +422,10 @@ import {dateformat} from '@/utils/filters'
           default:
             break;
         }
-      }
+      },
+      cargoStatusStr(value) {
+          return ['无', '在途', '在库'][value]
+      },
     },
     computed: {
       handleFilter() {
@@ -414,6 +439,10 @@ import {dateformat} from '@/utils/filters'
           endTime: this.dataValue[1] != '' ? this.dataValue[1].getTime() : '',
           status: this.pageApi.status
         }
+      },
+      // 详情仓库
+      whereHoses() {
+        return this.detailData.wareHouseCargoStr ? this.detailData.wareHouseCargoStr.split(';') : []
       }
     },
     watch: {
@@ -599,6 +628,45 @@ import {dateformat} from '@/utils/filters'
     }
     to {
       transform: rotate(360deg);
+    }
+  }
+
+    .cargo-info {
+    span {
+      display: block;
+      width: 109px;
+    }
+    .ivu-form-item {
+      margin: 0 0 10px 0;
+    }
+  }
+  .cargo-status {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 4px;
+    margin-right: 3px;
+    &:last-child{
+      margin-right: 0;
+    }
+    &.status0 {
+      background-color: #526069;
+    }
+    &.status1 {
+      background-color: #11C26D;
+    }
+    &.status2 {
+      background-color: #0BB2D4;
+    }
+  }
+  
+  .productImg {
+    img {
+      max-width: 100%;
     }
   }
 </style>

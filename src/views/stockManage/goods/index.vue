@@ -89,7 +89,13 @@
         <FormItem label="属性:"><span>{{ detail.qualitativeTypeDes }}</span></FormItem>
         <FormItem label="类型:"><span>{{ detail.productTypeDes }}</span></FormItem>
         <FormItem label="密度"><span>{{detail.density}}</span></FormItem>
-        <FormItem label="物流状态:"><span><a class="cargo-status" :class="'status'+detail.cargoStatus">{{ detail.cargoStatus | cargoStatusStr }}</a></span></FormItem>
+        <FormItem label="物流状态:">
+          <span v-if="detail.cargoStatus">
+            <a class="cargo-status" :class="'status'+el" v-for="(el,i) in detail.cargoStatus.split(',')" :key="i">
+              {{ el | cargoStatusStr }}
+            </a>
+          </span>
+        </FormItem>
         <FormItem label="理算方法:"><span>{{ detail.formula }}</span></FormItem>
         <FormItem label="销项税:"><span>{{ detail.outputTaxVal }}</span></FormItem>
         <FormItem label="进项税:"><span>{{ detail.inputTaxVal }}</span></FormItem>
@@ -520,6 +526,10 @@
     color: #fff;
     font-size: 12px;
     border-radius: 4px;
+    margin-right: 3px;
+    &:last-child{
+      margin-right: 0;
+    }
     &.status0 {
       background-color: #526069;
     }

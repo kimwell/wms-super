@@ -257,7 +257,7 @@
           customerBankName: '',
           bankCardNo: '',
           bankName: '',
-          amount: this.dataApi.amount,
+          amount: 0,
           inTime: this.dataApi.inTime,
           bankTradeNo: this.dataApi.bankTradeNo,
           remark: this.dataApi.remark,

@@ -512,6 +512,7 @@ import {
       },
       onClose(data) {
         this.panelShow = data;
+        this.getList(this.handleFilter);
       },
       closePanel(){
         this.panelShow = false;

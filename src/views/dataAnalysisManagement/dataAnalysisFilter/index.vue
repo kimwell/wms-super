@@ -173,27 +173,7 @@
         this.$emit('on-change', this.filters);
       },
       resetFilter() {
-        this.filterApi = {
-            sellCompanyName: '',
-            startTime: '',
-            endTime: '',
-            buyCompanyName: '',
-            cargoName: '',
-            model: '',
-            ironType: '',
-            material: '',
-            surface: '',
-            specification: '',
-            tolerance: '',
-            proPlace: '',
-            storeHouse: '',
-            heightMax: '',
-            heightMin: '',
-            widthMax: '',
-            widthMin: '',
-            lengthMax: '',
-            lengthMin: ''
-          },
+          Object.keys(this.filterApi).forEach(key => this.filterApi[key] = '');
           this.$emit('on-change', this.filters);
       },
       //  供应商

@@ -108,11 +108,7 @@
         })
       },
       resetFilter(){
-        this.dataApi = {
-          buser: '',
-          startTime: '',
-          endTime: ''
-        }
+        Object.keys(this.dataApi).forEach(key => this.dataApi[key] = '');
         this.companyList = [];
         this.dataValue = ['',''];
       },

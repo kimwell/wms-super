@@ -2,8 +2,10 @@
   <div>
     <Row class="row-list">
       <Col span="8">作废单号：<span class="numbers">{{itemData.id}}</span></Col>
-      <Col span="8">待供应商支付金额：<span class="numbers">{{itemData.sellPay }}</span></Col>
-      <Col span="8">待客户支付金额：<span class="numbers">{{itemData.customerPay}}</span></Col>
+      <Col v-if="!isFK" span="8">待供应商支付金额：<span class="numbers">{{itemData.sellPay }}</span></Col>
+      <Col v-if="!isFK" span="8">待客户支付金额：<span class="numbers">{{itemData.customerPay}}</span></Col>
+      <Col v-if="isFK" span="8">应退回供应商金额：<span class="numbers">{{itemData.sellGet }}</span></Col>
+      <Col v-if="isFK" span="8">应退回客户金额：<span class="numbers">{{itemData.customerGet}}</span></Col>
     </Row>
     <Form ref="formInline" :model="dataApi" :label-width="140" :rules="ruleInline">
       <FormItem label="用户类型：">
@@ -51,10 +53,10 @@
       <FormItem v-if="!isFK" label="入账金额：" prop="amount">
         <InputNumber style="width: 300px;" :max="dataApi.cType == '1' ? itemData.sellPay : itemData.customerPay" :min="0" v-model="dataApi.amount" placeholder="请输入..."></InputNumber>
       </FormItem>
-      <FormItem v-if="isFK" label="入账金额：" prop="amount">
+      <FormItem v-if="isFK" label="出账金额：" prop="amount">
         <InputNumber style="width: 300px;" :max="dataApi.cType == '1' ? itemData.sellGet : itemData.customerGet" :min="0" v-model="dataApi.amount" placeholder="请输入..."></InputNumber>
       </FormItem>
-      <FormItem label="入账时间：" prop="inTime">
+      <FormItem :label="isFK ? '出账时间':'入账时间：'" prop="inTime">
         <DatePicker type="datetime" v-model="dataApi.inTime" placeholder="请选择日期" style="width: 300px"></DatePicker>
       </FormItem>
       <FormItem label="银行流水号：">
@@ -186,10 +188,10 @@
         return this.dataApi.inTime != '' ? this.dataApi.inTime.getTime() : ''
       },
       customerPay() {
-        return this.itemData.customerPay === 0;
+        return this.isFK ? this.itemData.customerGet === 0 : this.itemData.customerPay === 0;
       },
       sellPay() {
-        return this.itemData.sellPay === 0;
+        return this.isFK ? this.itemData.sellGet === 0 : this.itemData.sellPay === 0;
       },
       customerNum() {
         return this.itemData.customerPay - this.dataApi.amount === 0

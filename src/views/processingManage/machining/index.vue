@@ -8,8 +8,8 @@
         </FormItem>
         <FormItem label="仓库名称：">
           <Select v-model="pageApi.storeHouseName" style="width: 160px;">
-              <Option v-for="(item,index) in wareHouseList" :value="item" :key="index">{{ item }}</Option>
-            </Select>
+            <Option v-for="(item,index) in wareHouseList" :value="item" :key="index">{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="加工公司名称：">
           <Input type="text" v-model="pageApi.companyName" placeholder="请输入..."></Input>

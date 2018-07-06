@@ -21,14 +21,14 @@
         </div>
       </div>
     </Card>
-    <Modal v-model="cancelShow" width="500" :mask-closable="false" title="作废">
+    <Modal v-model="cancelShow" width="500" :mask-closable="false" :closable="false" title="作废">
       <Form :label-width="110" ref="cancelForm" :model="cancelData" :rules="cancelRules">
         <FormItem label="备注：" prop="deleteRemark">
           <Input type="text" v-model="cancelData.deleteRemark" style="width: 300px;" placeholder="请输入..."></Input>
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="cancelShow = false">取消</Button>
+        <Button @click="cancelHide">取消</Button>
         <Button type="primary" @click="cancelAction">确定</Button>
       </div>
     </Modal>
@@ -297,6 +297,10 @@
       deleteItem(data) {
         this.cancelShow = true;
         this.cancelData.id = data.id;
+      },
+      cancelHide(){
+        this.cancelShow = false;
+        this.cancelData.deleteRemark = '';
       },
       // 确定作废
       cancelAction() {

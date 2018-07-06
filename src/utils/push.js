@@ -22,9 +22,16 @@ export default {
         this.$ls.set('rand', rand);
       }
       // 建立WebSocket链接
-      let ws = new WebSocket(this.api.ws + "/saas?userId=" + this.$store.state.loginId + rand);
+      // let ws = new WebSocket(this.api.ws + "/saas?userId=" + this.$store.state.loginId + rand);
+      let ws = new WebSocket(this.api.ws);
       ws.onopen = function (evt) {
         //  console.log("消息推送链接成功");
+        let params ={
+          userId: _this.$store.state.loginId,
+          random: rand
+        }
+        params = JSON.stringify(params);
+        ws.send(params);
       };
 
       ws.onmessage = function (evt) {

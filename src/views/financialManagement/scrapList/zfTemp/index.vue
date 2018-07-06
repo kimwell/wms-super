@@ -24,14 +24,14 @@
         <Button @click="show = false">关闭</Button>
       </div>
     </Modal>
-    <Modal v-model="cancelShow" width="600" :mask-closable="false" :title="types === 1 ? '作废收款单':'作废付款单'">
+    <Modal v-model="cancelShow" width="600" :mask-closable="false" :closable="false" :title="types === 1 ? '作废收款单':'作废付款单'">
       <Form  :model="dataApi" ref="formRef" :label-width="100" :rules="ruleInline" onkeydown="if(event.keyCode==13)return false;">
       <FormItem label="作废备注：" prop="deleteRemark">
         <Input type="text" v-model="dataApi.deleteRemark" style="width: 300px;" placeholder="请输入..."></Input>
       </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="cancelShow = false">取消</Button>
+        <Button @click="cancelHide">取消</Button>
         <Button type="primary" @click="handleAction">确定</Button>
       </div>
     </Modal>
@@ -282,6 +282,11 @@ import detailModal from './detailModal'
             this.totalCount = res.data.totalCount;
           }
         })
+      },
+      cancelHide(){
+        this.cancelShow = false;
+        this.dataApi.deleteRemark = '';
+        this.$refs.formRef.resetFields();
       },
       changePage(data){
         this.dataApi.currentPage = page;

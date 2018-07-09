@@ -199,7 +199,7 @@
       handleFilter() {
         return {
           buser: this.filterApi.buser,
-          pageSize: this.filterApi.pageSize,
+          pageSize: this.filterApi.pageSize != null ? this.filterApi.pageSize : 10,
           startTime: this.dataValue[0] != '' ? this.dataValue[0].getTime() : '',
           endTime: this.dataValue[1] != '' ? this.dataValue[1].getTime() : '',
           type: this.filterApi.type,

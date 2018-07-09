@@ -19,13 +19,13 @@
             <div class="chart-item">
               <div class="chart-item-title">销售额</div>
               <div class="chart-item-main">
-                <chartTemp :listData="list" :types="2" ids="xseChart" ref="chartRef"></chartTemp>
+                <chartTemp :listData="list" :types="2" ids="xseChart"></chartTemp>
               </div>
             </div>
             <div class="chart-item">
               <div class="chart-item-title">销售重量</div>
               <div class="chart-item-main">
-                <chartTemp :listData="list" :types="3" ids="xswChart" ref="chartRef2"></chartTemp>
+                <chartTemp :listData="list" :types="3" ids="xswChart"></chartTemp>
               </div>
             </div>
           </div>
@@ -163,12 +163,6 @@
     },
     mounted() {
       this.$refs.childFilter.searchFilter();
-      window.onresize = () => {
-          setTimeout(() => {
-              this.$refs.chartRef.myChart.resize();
-              this.$refs.chartRef2.myChart.resize();
-          }, 100)
-      }
     },
     created() {
       this.dataValue[0] = this.todayEnd;

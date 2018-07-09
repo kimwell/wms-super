@@ -74,6 +74,8 @@
     <Card :bordered="false" class="card">
       <p slot="title">加工入库货物明细</p>
       <div slot="extra">
+        <span>货物数量合计：{{total.number}}</span>
+        <span style="display:inline-block;margin: 0 15px;">货物重量合计：{{total.weight}}kg</span>
         <Button type="warning" v-if="item.status === '2'" @click="selectGoods">选择库存货物</Button>
       </div>
       <div class="detail-wrapper">
@@ -95,6 +97,12 @@
             <FormItem label="余卷备注：">
               {{item.coilSheetRemark}}
             </FormItem>
+            <FormItem label="货物数量合计：">
+              {{showTotal.number}}
+            </FormItem>
+            <FormItem label="货物重量合计：">
+              {{showTotal.weight}}kg
+            </FormItem>
           </Form>
         </div>
         <div>
@@ -113,28 +121,28 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.cargoStatus" style="width: 130px;">
-              <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-            </Select>
+                <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+              </Select>
         </FormItem>
         <FormItem label="品类：">
           <Select v-model="pageApi.category" style="width: 130px;">
-              <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
+              </Select>
         </FormItem>
         <FormItem label="表面：">
           <Select v-model="pageApi.surface" style="width: 130px;">
-              <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
+              </Select>
         </FormItem>
         <FormItem label="材质：">
           <Select v-model="pageApi.material" style="width: 130px;">
-              <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
+              </Select>
         </FormItem>
         <FormItem label="产地：">
           <Select v-model="pageApi.proPlacesName" style="width: 130px;">
-              <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
-            </Select>
+                <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
+              </Select>
         </FormItem>
         <FormItem label="厚度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.heightBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
@@ -182,8 +190,8 @@
         </FormItem>
         <FormItem label="库存：">
           <Select v-model="mergeApi.hasStore" style="width: 130px;">
-                <Option v-for="item in [{name:'有',value: '1'},{name:'无',value: '0'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-              </Select>
+                  <Option v-for="item in [{name:'有',value: '1'},{name:'无',value: '0'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+                </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetMergeApi">清除</Button>
@@ -213,10 +221,10 @@
         <FormItem label="密度"><span>{{detailItem.density}}</span></FormItem>
         <FormItem label="物流状态:">
           <span v-if="detailItem.cargoStatus">
-            <a class="cargo-status" :class="'status'+el" v-for="(el,i) in detailItem.cargoStatus.split(',')" :key="i">
-              {{ el | cargoStatusStr }}
-            </a>
-          </span>
+              <a class="cargo-status" :class="'status'+el" v-for="(el,i) in detailItem.cargoStatus.split(',')" :key="i">
+                {{ el | cargoStatusStr }}
+              </a>
+            </span>
         </FormItem>
         <FormItem label="理算方法:"><span>{{ detailItem.formula }}</span></FormItem>
         <FormItem label="销项税:"><span>{{ detailItem.outputTaxVal }}</span></FormItem>
@@ -330,8 +338,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                        params.row.length
-                      }`;
+                          params.row.length
+                        }`;
               return h("div", str);
             }
           },
@@ -375,30 +383,6 @@
             width: 120,
           },
           {
-            title: "成本价",
-            key: "costPrice",
-            width: 120,
-            render: (h, params) => {
-              return h('span', `￥${params.row.costPrice}`)
-            }
-          },
-          {
-            title: "成本金额",
-            key: "costNumber",
-            width: 120,
-            render: (h, params) => {
-              return h('span', `￥${params.row.costNumber}`)
-            }
-          },
-          {
-            title: "销售底价",
-            key: "floorPrice",
-            width: 120,
-            render: (h, params) => {
-              return h('span', `￥${params.row.floorPrice}`)
-            }
-          },
-          {
             title: "备注",
             key: "remark",
             width: 120,
@@ -406,7 +390,7 @@
           {
             title: "入库后是否自动合并",
             key: "merge",
-            width: 120,
+            minWidth: 120,
             fixed: 'right',
             render: (h, params) => {
               let _this = this;
@@ -486,8 +470,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                        params.row.length
-                      }`;
+                          params.row.length
+                        }`;
               return h("div", str);
             }
           },
@@ -590,8 +574,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                        params.row.length
-                      }`;
+                          params.row.length
+                        }`;
               return h("div", str);
             }
           },
@@ -675,48 +659,6 @@
             title: "过磅单重(KG)",
             key: "gbWeight",
             width: 120
-          },
-          {
-            title: "成本价",
-            key: "costPrice",
-            width: 100,
-            render: (h, params) => {
-              let _this = this;
-              return h("Input", {
-                props: {
-                  type: "text",
-                  placeholder: "请输入",
-                  value: _this.dataApi.goods[params.index].costPrice
-                },
-                on: {
-                  "on-blur": event => {
-                    _this.dataApi.goods[params.index].costPrice =
-                      event.target.value;
-                  }
-                }
-              });
-            }
-          },
-          {
-            title: "销售底价",
-            key: "floorPrice",
-            width: 100,
-            render: (h, params) => {
-              let _this = this;
-              return h("Input", {
-                props: {
-                  type: "text",
-                  placeholder: "请输入",
-                  value: _this.dataApi.goods[params.index].floorPrice
-                },
-                on: {
-                  "on-blur": event => {
-                    _this.dataApi.goods[params.index].floorPrice =
-                      event.target.value;
-                  }
-                }
-              });
-            }
           },
           {
             title: "内部编号",
@@ -876,8 +818,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                        params.row.length
-                      }`;
+                          params.row.length
+                        }`;
               return h("div", str);
             }
           },
@@ -964,6 +906,30 @@
     computed: {
       id() {
         return this.$route.params.id;
+      },
+      total() {
+        let datas = {
+          number: 0,
+          weight: 0
+        };
+        this.dataApi.goods.forEach(el => {
+          datas.number += Number(el.number)
+          datas.weight += Number(el.poundWeight)
+        })
+        return datas;
+      },
+      showTotal() {
+        let datas = {
+          number: 0,
+          weight: 0
+        };
+        if (this.item.processIns) {
+          this.item.processIns.forEach(el => {
+            datas.number += Number(el.number)
+            datas.weight += Number(el.poundWeight)
+          })
+        }
+        return datas;
       },
       handleFilter() {
         return {
@@ -1145,10 +1111,9 @@
               el.poundWeight = "",
               el.coiledWeight = "",
               el.oldCoiledWeight = "",
-              el.floorPrice = el.salePrice,
               el.merge = false,
               el.mergeCargoId = ""
-            el.autoStauts = undefined
+              el.autoStauts = undefined
           });
           this.show = false;
           this.dataApi.goods = this.goods;
@@ -1446,6 +1411,7 @@
       margin: 0 0 10px 0;
     }
   }
+  
   .cargo-status {
     display: inline-block;
     width: 40px;
@@ -1456,7 +1422,7 @@
     font-size: 12px;
     border-radius: 4px;
     margin-right: 3px;
-    &:last-child{
+    &:last-child {
       margin-right: 0;
     }
     &.status0 {

@@ -19,7 +19,7 @@
     },
     data() {
       return {
-        myChart: ''
+        myChart: null
       }
     },
     computed: {
@@ -136,6 +136,7 @@
         this.myChart = echarts.init(document.getElementById(this.ids));
         this.myChart.setOption(option);
         this.draw();
+        window.addEventListener('resize', this.myChart.resize)
       },
       draw() {
         let data = this.$clearData(this.chartData)
@@ -176,6 +177,12 @@
     },
     mounted() {
       this.chartInit();
+    },
+    beforeDestroy(){
+      window.removeEventListener('resize', this.myChart.resize)
+      if (this.myChart) {
+        this.myChart.dispose(); // 销毁图表实例
+      }
     }
   }
 </script>

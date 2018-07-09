@@ -95,6 +95,10 @@
           key: 'price',
           minWidth: 150
         }, {
+          title: '税/%',
+          key: 'tax',
+          minWidth: 150
+        }, {
           title: '金额',
           key: 'money',
           minWidth: 150

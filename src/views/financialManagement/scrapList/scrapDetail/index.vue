@@ -2,7 +2,6 @@
   <div class="details">
     <Card :bordered="false" class="card">
       <p slot="title">原单基本信息<span class="title-bar-status">状态：{{item.cancelTicket.status | toStatus}}</span></p>
-      <!-- <Button slot="extra" v-show="item.cancelTicket.status == '1'" type="warning" @click="add">确认退货入库</Button> -->
         <Row class="row-list">
         <Col span="6">平台代收金额：{{item.oldSaleTicket.platFormMoney}}</Col>
         <Col span="6">平台已结算金额：{{item.oldSaleTicket.settleMoney}}</Col>
@@ -34,11 +33,14 @@
       <h4 style="padding: 15px 0;">其他费用</h4>
       <Table width="100%" :columns="costHeader" :data="item.oldSaleTicket.saleTicketCosts"></Table>
     </Card>
-    <Card :bordered="false" class="card" title="退货单">
+    <Card :bordered="false" class="card" >
+      <p slot="title">
+        退货单<span class="other-cost">(退货单的货物种类与数量加实单的货物种类与数量等于原单货物数量，且退货单货物不可为空)</span>
+      </p>
       <Table width="100%" :columns="tableHeader" :data="item.cancelTicket.cancelTicketInfos"></Table>
       <h4 style="padding: 15px 0;">其他信息</h4>
       <Row class="row-list">
-        <Col span="6">实单金额：￥{{item.cancelTicket.refundMoney}}</Col>
+        <Col span="6">退货金额合计：￥{{item.cancelTicket.refundMoney}}</Col>
         <Col span="6">附件：<img v-if="item.cancelTicket.attachMent !=''" style="width: 200px;vertical-align: top;" :src="item.cancelTicket.attachMent"><span v-else>暂无</span></Col>
         <Col span="6">备注：{{item.cancelTicket.remark | isEmpty('暂无')}}</Col>
       </Row>
@@ -54,14 +56,16 @@
       </Form>
     </Card>
     <Card :bordered="false" class="card" title="实单">
-      <Table width="100%" :columns="tableHeader" :data="item.newSaleTicket.saleTicketInfos"></Table>
-      <h4 style="padding: 15px 0;">其他费用</h4>
-      <Table width="100%" :columns="costHeader" :data="item.newSaleTicket.saleTicketCosts"></Table>
-      <Row class="row-list" style="padding-top: 20px;">
-        <Col span="8">退款金额：￥{{item.cancelTicket.refundMoney}}</Col>
-        <Col span="8">备注：{{item.cancelTicket.remark | isEmpty('暂无')}}</Col>
-        <Col span="8">附件：<img v-if="item.cancelTicket.attachMent != ''" :src="item.cancelTicket.attachMent" style="max-width: 300px;vertical-align: top;"><span v-else>暂无</span></Col>
+      <Row class="row-list">
+        <Col span="4">销售总额：￥{{item.newSaleTicket.saleMoney}}</Col>
+        <Col span="4">不含税总金额：￥{{item.newSaleTicket.moneyWithoutTax}}</Col>
+        <Col span="4">税：￥{{item.newSaleTicket.tax}}</Col>
+        <Col span="4">总重量：{{item.newSaleTicket.weight}}KG</Col>
+        <Col span="4">总件数：{{item.newSaleTicket.number}}</Col>
       </Row>
+      <Table width="100%" :columns="tableHeader" :data="item.newSaleTicket.saleTicketInfos"></Table>
+      <h4 style="padding: 15px 0;">其他费用<span class="other-cost">原单中的其他费用需全部退掉，如有需要请在实单中另开</span></h4>
+      <Table width="100%" :columns="costHeader" :data="item.newSaleTicket.saleTicketCosts"></Table>
     </Card>
     <Card :bordered="false" class="card" title="操作日志">
       <Table width="100%" :columns="logHeader" :data="item.cancelTicketLog"></Table>
@@ -126,6 +130,10 @@ import {
         }, {
           title: '单价',
           key: 'price',
+          minWidth: 150
+        }, {
+          title: '税/%',
+          key: 'tax',
           minWidth: 150
         }, {
           title: '金额',
@@ -341,5 +349,10 @@ import {
         margin: 0;
       }
     }
+  }
+  .other-cost{
+    display: inline-block;
+    margin-left: 10px;
+    color: rgb(255, 76, 83);
   }
 </style>

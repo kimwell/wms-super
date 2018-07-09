@@ -277,9 +277,9 @@ import {dateformat} from '@/utils/filters'
           {
             title: "创建时间",
             key: "createTime",
-            minWidth: 150,
+            minWidth: 180,
             render: (h, params) => {
-              return h('span', params.row.createTime != '' ? dateformat(params.row.createTime):'暂无')
+              return h('span', params.row.createTime != '' ? dateformat(params.row.createTime,'yyyy-MM-dd hh:mm:ss'):'暂无')
             }
           },
           {

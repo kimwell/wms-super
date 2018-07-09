@@ -6,8 +6,8 @@
           <div class="layout-logo-left">超管后台管理系统</div>
           <Submenu :name="index" v-for="(item,index) in menu" :key="index">
             <template slot="title">
-                <span class="pointer" v-show="item.showPointer"></span>
-                <span class="iconfont menuicon" :class="item.icon"></span>{{ item.menuName }}
+                  <span class="iconfont menuicon" :class="item.icon"></span>{{ item.menuName }}
+                  <span class="pointer" v-show="item.showPointer"></span>
 </template>
             <MenuItem :name="index+'-'+i" v-for="(sub,i) in item.children" :key="i">
               {{ sub.menuName }}
@@ -101,24 +101,29 @@
             el.showPointer = false;
             el.children.forEach((sub, i) => {
               sub.showPointer = false;
-              if (sub.url == "stockOut") {
-                sub.showPointer = this.pointData.ckdgl;
+              switch (sub.url) {
+                case 'stockOut':
+                  sub.showPointer = this.pointData.ckdgl;
+                  break;
+                case 'machining':
+                  sub.showPointer = this.pointData.ckdgl;
+                  break;
+                case 'stockInto':
+                  sub.showPointer = this.pointData.rkdgl;
+                  break;
+                case 'stockCancel':
+                  sub.showPointer = this.pointData.zfgl;
+                  break;
+                case 'scrapList':
+                  sub.showPointer = this.pointData.zfgl;
+                  break;
+                case 'saleOrder':
+                  sub.showPointer = this.pointData.xsdgl;
+                  break;
+                default:
+                  break;
               }
-              if (sub.url == 'machining') {
-                sub.showPointer = this.pointData.jgd;
-              }
-              if (sub.url == 'stockInto') {
-                sub.showPointer = this.pointData.rkdgl;
-              }
-              if (sub.url == 'stockCancel') {
-                sub.showPointer = this.pointData.zfgl;
-              }
-              if (sub.url == 'saleOrder') {
-                sub.showPointer = this.pointData.xsdgl;
-              }
-              if (sub.showPointer) {
-                el.showPointer = true;
-              }
+              if (sub.showPointer) el.showPointer = true;
             });
           }
         });
@@ -197,8 +202,8 @@
         this.$store.commit(types.LOGOUT, data);
         window.location.href = "/bg/login";
       },
-      dropDown(data){
-        if(data == 'loginout'){
+      dropDown(data) {
+        if (data == 'loginout') {
           this.loginout();
         }
       }
@@ -349,12 +354,12 @@
   }
   
   .pointer {
-    position: absolute;
+    display: inline-block;
     width: 5px;
     height: 5px;
     border-radius: 50%;
     background-color: red;
-    top: 20px;
-    right: 60px;
+    vertical-align: 3px;
+    margin-left: 10px;
   }
 </style>

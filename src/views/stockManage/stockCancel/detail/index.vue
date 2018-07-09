@@ -6,7 +6,7 @@
       <Row class="row-list">
         <Col span="6">客户单位：{{item.oldSaleTicket.buyCompanyName}}</Col>
         <Col span="6">仓库：{{item.oldSaleTicket.storeHouseName}}</Col>
-        <Col span="6">下单日期：{{item.oldSaleTicket.ticketTime}}</Col>
+        <Col span="6">下单日期：{{item.oldSaleTicket.ticketTime | dateformat('yyyy-MM-dd hh:mm:ss')}}</Col>
         <Col span="6">跟单员：{{item.oldSaleTicket.merchandiser}}</Col>
       </Row>
       <Row class="row-list">
@@ -138,7 +138,11 @@
         }, {
           title: '产品单位',
           key: 'numberUnit',
-          minWidth: 150
+          minWidth: 150,
+          render: (h,params) =>{
+            let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
+            return h("span", str);
+          }
         }, {
           title: '卷号',
           key: 'coiledSheetNum',

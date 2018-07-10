@@ -84,6 +84,9 @@ const router = new Router({
         path: 'machining',
         name: 'machining',
         component: resolve => require(['@/views/processingManage/machining/index'], resolve),
+        meta: {
+          keepAlive: true
+        }
       },{
         path: 'machiningDetail/:id/',
         name: 'machiningDetail',
@@ -142,6 +145,9 @@ const router = new Router({
         path: 'scrapList',
         name: 'scrapList',
         component: resolve => require(['@/views/financialManagement/scrapList/index'], resolve),
+        meta: {
+          keepAlive: true
+        }
       },{
         path: 'scrapDetail/:id/',
         name: 'scrapDetail',
@@ -192,6 +198,9 @@ const router = new Router({
         path: 'stockCancel',
         name: 'stockCancel',
         component: resolve => require(['@/views/stockManage/stockCancel/index'], resolve),
+        meta: {
+          keepAlive: true
+        }
       },{
         path: 'stockCancelDetail/:id/',
         name: 'stockCancelDetail',

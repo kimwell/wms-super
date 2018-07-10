@@ -1234,6 +1234,13 @@ export const cancelPaymentPage ='/sys/cancelTicketBg/payment/page'
 */
 export const cancelReceiptPage ='/sys/cancelTicketBg/receipt/page'
 
+
+/*
+* 查询客户可分配余额
+*/
+export const findCustomerAccount ='/sys/customerAccount/find'
+
+
 // -----------------------------------数据分析---------------------------------
 
 /*

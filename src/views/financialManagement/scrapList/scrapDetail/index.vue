@@ -11,7 +11,7 @@
       <Row class="row-list">
         <Col span="6">客户单位：{{item.oldSaleTicket.buyCompanyName}}</Col>
         <Col span="6">仓库：{{item.oldSaleTicket.storeHouseName}}</Col>
-        <Col span="6">下单日期：{{item.oldSaleTicket.ticketTime}}</Col>
+        <Col span="6">下单日期：{{item.oldSaleTicket.ticketTime | dateformat('yyyy-MM-dd')}}</Col>
         <Col span="6">跟单员：{{item.oldSaleTicket.merchandiser}}</Col>
       </Row>
       <Row class="row-list">

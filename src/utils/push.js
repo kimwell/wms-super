@@ -63,15 +63,6 @@ export default {
         });
         notif.onclick = () => {
           this.$router.push({ name: codeUrl(data.code) })
-          // if (data.code == 1 || data.code == 5) {
-          //   this.$router.push('/ironBuys');
-          // } else if(data.code == 2){
-          //   this.$router.push('/dispatch');
-          // }else if(data.code == 6 || data.code == 7 || data.code == 9){
-          //   this.$router.push('/order');
-          // }else if(data.code == 10){
-          //   this.$router.push('/user/examine');
-          // }
           window.focus();
           notif.close();
         }

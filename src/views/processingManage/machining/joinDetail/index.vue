@@ -190,8 +190,8 @@
         </FormItem>
         <FormItem label="库存：">
           <Select v-model="mergeApi.hasStore" style="width: 130px;">
-                  <Option v-for="item in [{name:'有',value: '1'},{name:'无',value: '0'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-                </Select>
+            <Option v-for="item in [{name:'有',value: '1'},{name:'无',value: '0'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+          </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetMergeApi">清除</Button>
@@ -916,7 +916,7 @@
         };
         this.dataApi.goods.forEach(el => {
           datas.number += Number(el.number)
-          datas.weight +=  el.poundWeight !='' ?  Number(el.poundWeight) : Number(el.meterWeight);
+          datas.weight +=  Number(el.poundWeight);
         })
         return datas;
       },
@@ -1100,7 +1100,9 @@
                 this.dataApi.remark = res.data.remark;
                 this.dataApi.processId = res.data.id;
                 res.data.processIns.forEach(el =>{
-                  el.gbWeight = el.poundWeight / el.number
+                  el.autoStauts = undefined;
+                  el.merge = false;
+                  el.gbWeight = el.poundWeight / el.number;
                 })
               }
               this.item = res.data;

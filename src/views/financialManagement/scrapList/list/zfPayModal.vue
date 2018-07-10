@@ -53,6 +53,18 @@
       <FormItem v-if="!isFK" label="入账金额：" prop="amount">
         <InputNumber style="width: 300px;" :max="dataApi.cType == '1' ? itemData.sellPay : itemData.customerPay" :min="0" v-model="dataApi.amount" placeholder="请输入..."></InputNumber>
       </FormItem>
+      <div v-if="!isFK">
+        <FormItem v-if="dataApi.cType === '2'" label="客户余额抵扣：">
+          <InputNumber style="width: 300px;" :max="customerMoney" :min="0" v-model="dataApi.accountDeduction" placeholder="请输入..."></InputNumber>
+          <!-- <Input type="text" v-model="dataApi.accountDeduction" style="width: 300px;" placeholder="请输入..."></Input> -->
+        </FormItem>
+        <FormItem v-if="dataApi.cType === '2'" label="客户余额：">
+          {{customerMoney}}
+        </FormItem>
+        <FormItem v-if="dataApi.cType === '2'" label="实际入账金额：">
+          {{deductible}}
+        </FormItem>
+      </div>
       <FormItem v-if="isFK" label="出账金额：" prop="amount">
         <InputNumber style="width: 300px;" :max="dataApi.cType == '1' ? itemData.sellGet : itemData.customerGet" :min="0" v-model="dataApi.amount" placeholder="请输入..."></InputNumber>
       </FormItem>
@@ -111,7 +123,8 @@
           remark: '',
           feeType: '',
           fileAddress: '',
-          cancelTicketId: ''
+          cancelTicketId: '',
+          accountDeduction: 0
         },
         ruleInline: {
           feeType: [{
@@ -180,7 +193,8 @@
         companyList: [],
         queryLoading: false,
         bankList: [],
-        platList: []
+        platList: [],
+        customerMoney: 0
       }
     },
     computed: {
@@ -201,6 +215,9 @@
       },
       isZero() {
         return this.itemData.customerPay - this.dataApi.amount === 0 && this.itemData.sellPay - this.dataApi.amount === 0 && this.itemData.customerGet === 0 && this.itemData.sellGet === 0;
+      },
+      deductible(){
+        return (Number(this.dataApi.amount) + Number(this.dataApi.accountDeduction)).toFixed(2)
       }
     },
     watch: {
@@ -226,13 +243,15 @@
               this.dataApi.buserName = this.itemData.sellCompany;
             }
           } else {
-  
             if (this.itemData.sellPay === 0) {
               this.dataApi.cType = '2';
               this.dataApi.customerName = this.itemData.buyCompany;
             } else {
               this.dataApi.cType = '1';
               this.dataApi.buserName = this.itemData.sellCompany;
+            }
+            if(this.dataApi.cType === '2'){
+              this.findCustomerAccount();
             }
           }
         }
@@ -263,7 +282,8 @@
           remark: this.dataApi.remark,
           feeType: this.dataApi.feeType,
           fileAddress: this.dataApi.fileAddress,
-          cancelTicketId: this.dataApi.cancelTicketId
+          cancelTicketId: this.dataApi.cancelTicketId,
+          accountDeduction: 0
         }
       },
       clearData() {
@@ -285,7 +305,8 @@
           remark: '',
           feeType: '',
           fileAddress: '',
-          cancelTicketId: ''
+          cancelTicketId: '',
+          accountDeduction: 0
         }
       },
       getFeeList() {
@@ -299,6 +320,13 @@
         this.$http.post(this.api.findPlatBankCard).then(res => {
           if (res.code === 1000) {
             this.platList = res.data != '' ? JSON.parse(res.data.cardInfo) : []
+          }
+        })
+      },
+      findCustomerAccount(){
+        this.$http.post(this.api.findCustomerAccount,{customerName: this.dataApi.customerName}).then(res =>{
+          if(res.code === 1000){
+            this.customerMoney = res.data.account;
           }
         })
       },

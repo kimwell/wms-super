@@ -3,7 +3,7 @@
     <Card :bordered="false" class="card">
       <p slot="title">加工单详情<span class="status-header">状态：{{item.status | toStatus}}</span><span class="status-header">加工单号:{{item.id}}</span></p>
       <div slot="extra">
-        <Button type="primary" @click="saveMerge" v-if="item.status === '2'">提交</Button>
+        <Button type="primary" @click="saveMerge" v-if="item.status === '2' || item.status === '6'">提交</Button>
         <Button type="warning" @click="goBack">返回</Button>
       </div>
       <div class="detail-wrapper">
@@ -76,10 +76,10 @@
       <div slot="extra">
         <span>货物数量合计：{{total.number}}</span>
         <span style="display:inline-block;margin: 0 15px;">货物重量合计：{{total.weight}}kg</span>
-        <Button type="warning" v-if="item.status === '2'" @click="selectGoods">选择库存货物</Button>
+        <Button type="warning" v-if="item.status === '2' || item.status === '6'" @click="selectGoods">选择库存货物</Button>
       </div>
       <div class="detail-wrapper">
-        <div class="extra-form" v-if="item.status === '2'">
+        <div class="extra-form" v-if="item.status === '2' || item.status === '6'">
           <Form :mode="dataApi" :label-width="100" inline>
             <FormItem label="余卷过磅重量：">
               <Input type="text" v-model="dataApi.coildSheetWeight" placeholder="请输入..."></Input>
@@ -89,7 +89,7 @@
             </FormItem>
           </Form>
         </div>
-        <div class="extra-form" v-if="item.status != '2'">
+        <div class="extra-form" v-if="item.status != '2' && item.status != '6'">
           <Form :label-width="100" inline>
             <FormItem label="余卷过磅重量：">
               {{item.coildSheetWeight}}
@@ -106,7 +106,7 @@
           </Form>
         </div>
         <div>
-          <Table width="100%" v-if="item.status === '2'" border :columns="goodsColumns" :data="dataApi.goods"></Table>
+          <Table width="100%" v-if="item.status === '2'  || item.status === '6'" border :columns="goodsColumns" :data="dataApi.goods"></Table>
           <Table width="100%" v-if="item.status === '3' || item.status === '4' || item.status === '5'" border :columns="goodsDetailColumns" :data="item.processIns"></Table>
         </div>
       </div>
@@ -600,7 +600,7 @@
           },
           {
             title: "理计重量(KG)",
-            key: "ljWeight",
+            key: "meterWeight",
             width: 120
           },
           {
@@ -621,8 +621,8 @@
                     _this.dataApi.goods[params.index].number = e;
                     if (e != "") {
                       let result = Number(e * _this.dataApi.goods[params.index].singleWeight).toFixed(3)
-                      delete _this.dataApi.goods[params.index].ljWeight;
-                      _this.$set(_this.dataApi.goods[params.index], "ljWeight", result);
+                      delete _this.dataApi.goods[params.index].meterWeight;
+                      _this.$set(_this.dataApi.goods[params.index], "meterWeight", result);
                     }
                   }
                 }
@@ -1090,6 +1090,15 @@
           })
           .then(res => {
             if (res.code === 1000) {
+              if(res.data.status === '6'){
+                this.dataApi.goods = res.data.processIns;
+                this.dataApi.coildSheetWeight = res.data.coildSheetWeight;
+                this.dataApi.remark = res.data.remark;
+                this.dataApi.processId = res.data.id;
+                res.data.processIns.forEach(el =>{
+                  el.gbWeight = el.poundWeight / el.number
+                })
+              }
               this.item = res.data;
             }
           });

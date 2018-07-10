@@ -1022,10 +1022,17 @@ export const saveProcess= '/sys/processTicket/process'
 
 
 export const cargoInfoDetail= '/common/cargoInfo/detail'
+
+
 /*
 *加工单入库
 */
 export const saveProcessIn= '/sys/processTicket/processIn'
+
+/*
+*加工单入库编辑
+*/
+export const processInAgain= '/sys/processTicket/processInAgain'
 
 /*
 *查询银行名称

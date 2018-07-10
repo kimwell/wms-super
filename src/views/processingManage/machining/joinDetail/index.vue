@@ -74,9 +74,9 @@
     <Card :bordered="false" class="card">
       <p slot="title">加工入库货物明细</p>
       <div slot="extra">
-        <span>货物数量合计：{{total.number}}</span>
-        <span style="display:inline-block;margin: 0 15px;">货物重量合计：{{total.weight}}kg</span>
-        <Button type="warning" v-if="item.status === '2' || item.status === '6'" @click="selectGoods">选择库存货物</Button>
+        <span v-if="item.status === '2' || item.status === '6'">货物数量合计：{{total.number}}</span>
+        <span v-if="item.status === '2' || item.status === '6'" style="display:inline-block;margin: 0 15px;">货物重量合计：{{total.weight}}kg</span>
+        <Button type="warning"  @click="selectGoods" v-if="item.status === '2' || item.status === '6'">选择库存货物</Button>
       </div>
       <div class="detail-wrapper">
         <div class="extra-form" v-if="item.status === '2' || item.status === '6'">
@@ -886,13 +886,15 @@
           widthEnd: "",
           lengthBegin: "",
           lengthEnd: "",
-          status: "",
+          status: "1",
           cargoStatus: '',
           model: '',
           costPrice: '',
           wareHouseName: '',
           productNumber: '',
-          internalNumber: ''
+          internalNumber: '',
+          hasCoiledSheetNum: '0',
+          processIn: '0'
         },
         goodsDetailShow: false,
         detailItem: {
@@ -914,7 +916,7 @@
         };
         this.dataApi.goods.forEach(el => {
           datas.number += Number(el.number)
-          datas.weight += Number(el.poundWeight)
+          datas.weight +=  el.poundWeight !='' ?  Number(el.poundWeight) : Number(el.meterWeight);
         })
         return datas;
       },
@@ -926,7 +928,7 @@
         if (this.item.processIns) {
           this.item.processIns.forEach(el => {
             datas.number += Number(el.number)
-            datas.weight += Number(el.poundWeight)
+            datas.weight += el.poundWeight !='' ?  Number(el.poundWeight) : Number(el.meterWeight);
           })
         }
         return datas;
@@ -985,7 +987,9 @@
           costPrice: this.mergeApi.costPrice,
           wareHouseName: this.item.storeHouseName,
           productNumber: this.mergeApi.productNumber,
-          internalNumber: this.mergeApi.internalNumber
+          internalNumber: this.mergeApi.internalNumber,
+          hasCoiledSheetNum: this.mergeApi.hasCoiledSheetNum,
+          processIn: this.mergeApi.processIn
         };
       },
       productImg() {
@@ -1192,14 +1196,16 @@
           widthEnd: '',
           lengthBegin: this.pageFilterData.row.length,
           lengthEnd: "",
-          status: "",
+          status: "1",
           cargoStatus: '',
           model: '',
           costPrice: '',
           wareHouseName: this.item.storeHouseName,
           productNumber: '',
           internalNumber: '',
-          hasCoiledSheetNum: '0'
+          hasCoiledSheetNum: '0',
+          hasCoiledSheetNum: this.mergeApi.hasCoiledSheetNum,
+          processIn: this.mergeApi.processIn
         }
         this.getmergeData(this.mergeFilter)
       },
@@ -1318,7 +1324,8 @@
             title: '确认加工',
             content: '是否确认开始加工？',
             onOk: () => {
-              this.$http.post(this.api.saveProcessIn, params).then(res => {
+              let postUrl = this.item.status === '2' ? this.api.saveProcessIn : this.api.processInAgain;
+              this.$http.post(postUrl, params).then(res => {
                 if (res.code === 1000) {
                   this.$Message.success('加入成功')
                   this.$router.push({

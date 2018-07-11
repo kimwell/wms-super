@@ -56,7 +56,6 @@
       <div v-if="!isFK">
         <FormItem v-if="dataApi.cType === '2'" label="客户余额抵扣：">
           <InputNumber style="width: 300px;" :max="customerMoney" :min="0" v-model="dataApi.accountDeduction" placeholder="请输入..."></InputNumber>
-          <!-- <Input type="text" v-model="dataApi.accountDeduction" style="width: 300px;" placeholder="请输入..."></Input> -->
         </FormItem>
         <FormItem v-if="dataApi.cType === '2'" label="客户余额：">
           {{customerMoney}}

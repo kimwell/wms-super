@@ -47,7 +47,7 @@
           </AutoComplete>
         </FormItem>
         <FormItem label="付款金额：" prop="amount" v-if="dataApi.isBuser =='false'">
-          <Input type="text" v-model="dataApi.amount" style="width: 300px;" placeholder="请输入..."></Input>
+          <InputNumber style="width: 300px;" :max="9999999" :min="0" v-model="dataApi.amount" placeholder="请输入..."></InputNumber>
         </FormItem>
         <FormItem label="付款金额：" v-if="dataApi.isBuser =='true'">
           <Button @click="selectDistribution">选择结算客户</Button><span class="totalaccount" v-if="detail !=''">待结算金额：{{detail.account}}元</span>
@@ -121,7 +121,7 @@
           customerBankName: '',
           bankCardNo: '',
           bankName: '',
-          amount: '',
+          amount: 0,
           inTime: '',
           bankTradeNo: '',
           remark: '',
@@ -158,7 +158,17 @@
           amount: [{
             required: true,
             message: '不能为空',
-            trigger: 'blur'
+            trigger: 'blur',
+            type: 'number'
+          }, {
+            validator: (rule, value, callback) => {
+              var reg = /^((?!0)\d+(\.\d{1,2})?)$/g;
+              if (!reg.test(value)) {
+                return callback(new Error('请输入正确的入账金额'));
+              } else {
+                callback();
+              }
+            }
           }],
           inTime: [{
             required: true,
@@ -211,7 +221,7 @@
         this.dataApi.bankCardNo = '';
         this.dataApi.customerBankCardNo = '';
         this.dataApi.bankTradeNo = '';
-        this.dataApi.amount = '';
+        this.dataApi.amount = 0;
         this.dataApi.customerBankName = '';
         this.dataApi.paymentOrderAmountItem = [];
         this.selectList = [];

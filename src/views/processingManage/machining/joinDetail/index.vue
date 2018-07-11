@@ -76,7 +76,7 @@
       <div slot="extra">
         <span v-if="item.status === '2' || item.status === '6'">货物数量合计：{{total.number}}</span>
         <span v-if="item.status === '2' || item.status === '6'" style="display:inline-block;margin: 0 15px;">货物重量合计：{{total.weight}}kg</span>
-        <Button type="warning"  @click="selectGoods" v-if="item.status === '2' || item.status === '6'">选择库存货物</Button>
+        <Button type="warning" @click="selectGoods" v-if="item.status === '2' || item.status === '6'">选择库存货物</Button>
       </div>
       <div class="detail-wrapper">
         <div class="extra-form" v-if="item.status === '2' || item.status === '6'">
@@ -121,28 +121,28 @@
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.cargoStatus" style="width: 130px;">
-                <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-              </Select>
+                    <Option v-for="item in [{name:'在途',value: '1'},{name:'在库',value: '2'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="品类：">
           <Select v-model="pageApi.category" style="width: 130px;">
-                <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
-              </Select>
+                    <Option v-for="(item,index) in ironTypeList" :value="item" :key="item.index">{{ item }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="表面：">
           <Select v-model="pageApi.surface" style="width: 130px;">
-                <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
-              </Select>
+                    <Option v-for="(item,index) in surfaceList" :value="item" :key="item.index">{{ item }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="材质：">
           <Select v-model="pageApi.material" style="width: 130px;">
-                <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
-              </Select>
+                    <Option v-for="(item,index) in materialList" :value="item" :key="item.index">{{ item }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="产地：">
           <Select v-model="pageApi.proPlacesName" style="width: 130px;">
-                <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
-              </Select>
+                    <Option v-for="(item,index) in proPlaceList" :value="item" :key="item.index">{{ item }}</Option>
+                  </Select>
         </FormItem>
         <FormItem label="厚度：" v-if="isBJ">
           <Input type="text" v-model="pageApi.heightBegin" style="width:60px;" placeholder="请输入..."></Input><span class="splits">-</span>
@@ -190,8 +190,8 @@
         </FormItem>
         <FormItem label="库存：">
           <Select v-model="mergeApi.hasStore" style="width: 130px;">
-            <Option v-for="item in [{name:'有',value: '1'},{name:'无',value: '0'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
-          </Select>
+                <Option v-for="item in [{name:'有',value: '1'},{name:'无',value: '0'}]" :value="item.value" :key="item.name">{{ item.name }}</Option>
+              </Select>
         </FormItem>
         <FormItem>
           <Button type="warning" @click.native="resetMergeApi">清除</Button>
@@ -221,10 +221,10 @@
         <FormItem label="密度"><span>{{detailItem.density}}</span></FormItem>
         <FormItem label="物流状态:">
           <span v-if="detailItem.cargoStatus">
-              <a class="cargo-status" :class="'status'+el" v-for="(el,i) in detailItem.cargoStatus.split(',')" :key="i">
-                {{ el | cargoStatusStr }}
-              </a>
-            </span>
+                  <a class="cargo-status" :class="'status'+el" v-for="(el,i) in detailItem.cargoStatus.split(',')" :key="i">
+                    {{ el | cargoStatusStr }}
+                  </a>
+                </span>
         </FormItem>
         <FormItem label="理算方法:"><span>{{ detailItem.formula }}</span></FormItem>
         <FormItem label="销项税:"><span>{{ detailItem.outputTaxVal }}</span></FormItem>
@@ -338,8 +338,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                          params.row.length
-                        }`;
+                              params.row.length
+                            }`;
               return h("div", str);
             }
           },
@@ -470,8 +470,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                          params.row.length
-                        }`;
+                              params.row.length
+                            }`;
               return h("div", str);
             }
           },
@@ -574,8 +574,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                          params.row.length
-                        }`;
+                              params.row.length
+                            }`;
               return h("div", str);
             }
           },
@@ -624,6 +624,9 @@
                       delete _this.dataApi.goods[params.index].meterWeight;
                       _this.$set(_this.dataApi.goods[params.index], "meterWeight", result);
                     }
+                  },
+                  "on-keyup": event => {
+                    event.target.value = event.target.value.replace(/[^\d.]/g,"").replace(".","$#$").replace(/\./g,"").replace("$#$",".").replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
                   }
                 }
               });
@@ -650,6 +653,9 @@
                       delete _this.dataApi.goods[params.index].gbWeight;
                       _this.$set(_this.dataApi.goods[params.index], "gbWeight", result);
                     }
+                  },
+                  "on-keyup": event => {
+                    event.target.value = event.target.value.replace(/[^\d.]/g,"").replace(".","$#$").replace(/\./g,"").replace("$#$",".").replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
                   }
                 }
               });
@@ -818,8 +824,8 @@
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                          params.row.length
-                        }`;
+                              params.row.length
+                            }`;
               return h("div", str);
             }
           },
@@ -916,7 +922,7 @@
         };
         this.dataApi.goods.forEach(el => {
           datas.number += Number(el.number)
-          datas.weight +=  Number(el.poundWeight);
+          datas.weight += el.poundWeight != '' ? Number(el.poundWeight) : Number(el.meterWeight);
         })
         return datas;
       },
@@ -928,7 +934,7 @@
         if (this.item.processIns) {
           this.item.processIns.forEach(el => {
             datas.number += Number(el.number)
-            datas.weight += el.poundWeight !='' ?  Number(el.poundWeight) : Number(el.meterWeight);
+            datas.weight += el.poundWeight != '' ? Number(el.poundWeight) : Number(el.meterWeight);
           })
         }
         return datas;
@@ -1094,12 +1100,12 @@
           })
           .then(res => {
             if (res.code === 1000) {
-              if(res.data.status === '6'){
+              if (res.data.status === '6') {
                 this.dataApi.goods = res.data.processIns;
                 this.dataApi.coildSheetWeight = res.data.coildSheetWeight;
                 this.dataApi.remark = res.data.remark;
                 this.dataApi.processId = res.data.id;
-                res.data.processIns.forEach(el =>{
+                res.data.processIns.forEach(el => {
                   el.autoStauts = undefined;
                   el.merge = false;
                   el.gbWeight = el.poundWeight / el.number;
@@ -1128,7 +1134,7 @@
               el.oldCoiledWeight = "",
               el.merge = false,
               el.mergeCargoId = ""
-              el.autoStauts = undefined
+            el.autoStauts = undefined
           });
           this.show = false;
           this.dataApi.goods = this.goods;

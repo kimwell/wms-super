@@ -182,9 +182,9 @@
     </Modal>
     <Modal title="选择合并货物" width="1000" v-model="mergeShow" :mask-closable="false">
       <Form :mode="mergeApi" :label-width="85" inline>
-        <FormItem label="产品编号：">
+        <!-- <FormItem label="产品编号：">
           <Input type="text" v-model="mergeApi.productNumber" placeholder="请输入..."></Input>
-        </FormItem>
+        </FormItem> -->
         <FormItem label="内部编号：">
           <Input type="text" v-model="mergeApi.internalNumber" placeholder="请输入..."></Input>
         </FormItem>
@@ -420,26 +420,14 @@
           }
         ],
         mergeColumns: [{
-            title: "产品编号",
-            key: "productNumber",
+            title: "内部编号",
+            key: "internalNumber",
             width: 200
           },
           {
-            title: "仓库",
-            key: "wareHouseCargoSet",
-            width: 150,
-            render: (h, params) => {
-              let str = params.row.wareHouseCargoSet[0].wareHouseName;
-              return h("div", str);
-            }
-          },
-          {
-            title: "日期",
-            key: "createTime",
-            width: 135,
-            render: (h, params) => {
-              return h("div", dateformat(params.row.createTime));
-            }
+            title: "货物名称",
+            key: "cargoName",
+            width: 150
           },
           {
             title: "型号",
@@ -486,22 +474,19 @@
             width: 100
           },
           {
-            title: "卷号",
-            key: "coiledSheetNum",
+            title: "库存数量",
+            key: "numbers",
             width: 100
           },
           {
-            title: "货物状态",
-            key: "cargoStatus",
-            width: 100,
-            render: (h, params) => {
-              return h("div", this.toStatus(params.row.cargoStatus));
-            }
+            title: "库存重量(KG)",
+            key: "weights",
+            width: 120,
           },
           {
-            title: "备注",
-            key: "remark",
-            width: 100
+            title: "预入库重量(KG)",
+            key: "preInWareHouseWeight",
+            width: 130
           },
           {
             title: "操作",
@@ -922,7 +907,7 @@
         };
         this.dataApi.goods.forEach(el => {
           datas.number += Number(el.number)
-          datas.weight += el.poundWeight != '' ? Number(el.poundWeight) : Number(el.meterWeight);
+          datas.weight += el.poundWeight != '' ? Number(el.poundWeight) : el.meterWeight ? Number(el.meterWeight) : 0;
         })
         return datas;
       },
@@ -1101,6 +1086,7 @@
           .then(res => {
             if (res.code === 1000) {
               if (res.data.status === '6') {
+                //  编辑赋值
                 this.dataApi.goods = res.data.processIns;
                 this.dataApi.coildSheetWeight = res.data.coildSheetWeight;
                 this.dataApi.remark = res.data.remark;
@@ -1108,7 +1094,7 @@
                 res.data.processIns.forEach(el => {
                   el.autoStauts = undefined;
                   el.merge = false;
-                  el.gbWeight = el.poundWeight / el.number;
+                  el.gbWeight = (el.poundWeight / el.number).toFixed(3);
                 })
               }
               this.item = res.data;
@@ -1336,9 +1322,7 @@
               this.$http.post(postUrl, params).then(res => {
                 if (res.code === 1000) {
                   this.$Message.success('加入成功')
-                  this.$router.push({
-                    name: 'machining'
-                  })
+                  this.$router.replace({name: 'machining'})
                 } else {
                   this.$Message.error(res.message)
                 }

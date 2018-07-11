@@ -7,7 +7,7 @@
       <Col v-if="isFK" span="8">应退回供应商金额：<span class="numbers">{{itemData.sellGet }}</span></Col>
       <Col v-if="isFK" span="8">应退回客户金额：<span class="numbers">{{itemData.customerGet}}</span></Col>
     </Row>
-    <Form ref="formInline" :model="dataApi" :label-width="140" :rules="ruleInline">
+    <Form ref="formInline" :model="dataApi" :label-width="145" :rules="ruleInline">
       <FormItem label="用户类型：">
         <RadioGroup v-model="dataApi.cType">
           <Radio label="1" :disabled="sellPay">

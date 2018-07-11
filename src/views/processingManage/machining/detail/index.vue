@@ -136,7 +136,7 @@
             this.$http.post(this.api.saveProcess, params).then(res => {
               if (res.code === 1000) {
                 this.$Message.success('确认成功');
-                this.$router.go(-1)
+                this.$router.replace({name: 'machining'})
               } else {
                 this.$Message.error(res.message)
               }

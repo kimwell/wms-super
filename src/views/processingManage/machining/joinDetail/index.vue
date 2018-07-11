@@ -255,8 +255,8 @@
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="giveMerge" v-if="item.status === '2'">放弃合并</Button>
-        <Button type="primary" @click="changeMerge" v-if="item.status === '2'">变更合并</Button>
+        <Button @click="giveMerge" v-if="item.status === '2' || item.status === '6'">放弃合并</Button>
+        <Button type="primary" @click="changeMerge" v-if="item.status === '2' || item.status === '6'">变更合并</Button>
       </div>
     </Modal>
   </div>
@@ -506,6 +506,9 @@
                       on: {
                         click: () => {
                           this.mergeShow = false;
+                          this.mergeList.forEach(el =>{
+                            el.selected = false
+                          })
                           delete _this.dataApi.goods[_this.activeGoods.index].mergeCargoId;
                           delete _this.dataApi.goods[_this.activeGoods.index].autoStauts;
                           delete _this.dataApi.goods[_this.activeGoods.index].merge;
@@ -885,7 +888,8 @@
           productNumber: '',
           internalNumber: '',
           hasCoiledSheetNum: '0',
-          processIn: '0'
+          processIn: '0',
+          ownerId: ""
         },
         goodsDetailShow: false,
         detailItem: {
@@ -980,7 +984,8 @@
           productNumber: this.mergeApi.productNumber,
           internalNumber: this.mergeApi.internalNumber,
           hasCoiledSheetNum: this.mergeApi.hasCoiledSheetNum,
-          processIn: this.mergeApi.processIn
+          processIn: this.mergeApi.processIn,
+          ownerId: this.item.customerId
         };
       },
       productImg() {
@@ -1199,7 +1204,8 @@
           internalNumber: '',
           hasCoiledSheetNum: '0',
           hasCoiledSheetNum: this.mergeApi.hasCoiledSheetNum,
-          processIn: this.mergeApi.processIn
+          processIn: this.mergeApi.processIn,
+          ownerId: this.item.customerId
         }
         this.getmergeData(this.mergeFilter)
       },
@@ -1250,7 +1256,8 @@
       getcargoInfoDetail(data) {
         this.goodsDetailShow = true;
         this.$http.post(this.api.cargoInfoDetail, {
-          id: data.row.mergeCargoId
+          id: data.row.mergeCargoId,
+          wareHouseName: this.item.storeHouseName
         }).then(res => {
           if (res.code === 1000) {
             this.detailItem = res.data;

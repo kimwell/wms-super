@@ -358,7 +358,7 @@
             key: "numberUnit",
             width: 100,
             render: (h, params) => {
-              let str = `${params.row.numberUnit}/${params.row.weightUnit}`;
+              let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
               return h("div", str);
             }
           },
@@ -380,6 +380,11 @@
           {
             title: "过磅单重(KG)",
             key: "poundSingleWeight",
+            width: 120,
+          },
+          {
+            title: "内部编号",
+            key: "internalNumber",
             width: 120,
           },
           {
@@ -582,7 +587,7 @@
             key: "numberUnit",
             width: 100,
             render: (h, params) => {
-              let str = `${params.row.numberUnit}/${params.row.weightUnit}`;
+              let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
               return h("div", str);
             }
           },

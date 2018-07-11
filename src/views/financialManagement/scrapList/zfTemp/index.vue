@@ -36,7 +36,7 @@
       </div>
     </Modal>
     <Modal v-model="detailShow" width="600" :mask-closable="false" :title="this.types === 1 ? '收款单详情':'付款单详情'">
-      <detailModal :activeData="activeItem"></detailModal>
+      <detailModal :activeData="activeItem" :types="this.types"></detailModal>
       <div slot="footer">
         <Button @click="detailShow = false">关闭</Button>
       </div>
@@ -309,7 +309,7 @@
         this.$refs.formRef.resetFields();
       },
       changePage(data) {
-        this.dataApi.currentPage = page;
+        this.dataApi.currentPage = data;
         this.getList(this.handleFilter)
       },
       previewImg(data) {

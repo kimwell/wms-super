@@ -25,11 +25,20 @@
       <FormItem v-if="activeData.cType == '2'" label="客户账户银行名称：">
         {{activeData.customerBankName}}
       </FormItem>
+      <FormItem v-if="activeData.cType == '2'" label="客户余额抵扣：">
+        {{activeData.customerBankName}}
+      </FormItem>
       <FormItem label="平台对公银行账户：">
         {{activeData.bankCardNo}}
       </FormItem>
       <FormItem label="入账金额：">
         {{activeData.amount}}
+      </FormItem>
+      <FormItem v-if="types === 1 && activeData.cType == '2'" label="客户余额抵扣：">
+        {{activeData.accountDeduction !='' ? activeData.accountDeduction : 0}}
+      </FormItem>
+      <FormItem v-if="types === 1 && activeData.cType == '2'" label="实际入账金额：">
+        {{allMoney}}
       </FormItem>
       <FormItem label="入账时间：" prop="inTime">
         {{activeData.inTime | dateformat}}
@@ -55,11 +64,19 @@
     props: {
       activeData: {
         type: Object
+      },
+      types:{
+        type: Number
       }
     },
     data() {
       return {
   
+      }
+    },
+    computed:{
+      allMoney(){
+        return this.activeData.amount + (this.activeData.accountDeduction!="" ? Number(this.activeData.accountDeduction):0)
       }
     },
     methods: {

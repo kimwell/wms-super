@@ -2,6 +2,9 @@
   <div class="details">
     <Card :bordered="false" class="card">
       <p slot="title">原单基本信息<span class="title-bar-status">状态：{{item.cancelTicket.status | toStatus}}</span></p>
+      <div slot="extra">
+        <Button type="warning" @click="goBack">返回</Button>
+      </div>
         <Row class="row-list">
         <Col span="6">平台代收金额：{{item.oldSaleTicket.platFormMoney}}</Col>
         <Col span="6">平台已结算金额：{{item.oldSaleTicket.settleMoney}}</Col>
@@ -324,7 +327,11 @@ import {
             })
           }
         })
-      }
+      },
+      // 返回
+      goBack() {
+        this.$router.go(-1)
+      },
     },
     created() {
       this.getData();

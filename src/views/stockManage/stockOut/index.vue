@@ -17,13 +17,13 @@
         </FormItem>
         <FormItem label="仓库名称：">
           <Select v-model="pageApi.storeHouseName" style="width: 150px;">
-              <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
-            </Select>
+                <Option v-for="(item,index) in storeHouseList" :value="item" :key="index">{{ item }}</Option>
+              </Select>
         </FormItem>
         <FormItem label="状态：">
           <Select v-model="pageApi.status" style="width: 100px;">
-            <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
+              <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
         </FormItem>
         <FormItem label="供应商名称：">
           <Input type="text" v-model="pageApi.sellCompanyName" placeholder="请输入..."></Input>
@@ -47,7 +47,7 @@
         <Row class="row-list">
           <Col span="8">客户单位：{{detailItem.saleTicket.buyCompanyName}}</Col>
           <Col span="8">仓库：{{detailItem.saleTicket.storeHouseName}}</Col>
-          <Col span="8">下单日期：{{detailItem.saleTicket.ticketTime | dateformat}}</Col>
+          <Col span="8">下单日期：{{detailItem.saleTicket.ticketTime | dateformat('yyyy-MM-dd')}}</Col>
         </Row>
         <Row class="row-list">
           <Col span="8">跟单员：{{detailItem.saleTicket.merchandiser}}</Col>
@@ -107,7 +107,7 @@
           <Row v-for="(item,index) in printData" :key="item.id">
             <Col class-name="col" span="12">{{`出库单_${item.orderNum}`}}</Col>
             <Col class-name="col" span="12">
-              <a class="ivu-btn ivu-btn-warning ivu-btn-small" :href="item.viewUrl" target="_blank">打印</a>
+            <a class="ivu-btn ivu-btn-warning ivu-btn-small" :href="item.viewUrl" target="_blank">打印</a>
             </Col>
           </Row>
           <Row v-if="printData.length == 0">
@@ -122,9 +122,9 @@
 </template>
 
 <script>
-import {
-  dateformat
-} from '@/utils/filters.js'
+  import {
+    dateformat
+  } from '@/utils/filters.js'
   export default {
     data() {
       return {
@@ -249,7 +249,7 @@ import {
           key: "outTime",
           minWidth: 150,
           render: (h, params) => {
-            return h('span', params.row.outTime != '' ? dateformat(params.row.outTime):'暂无')
+            return h('span', params.row.outTime != '' ? dateformat(params.row.outTime) : '暂无')
           }
         }, {
           title: "状态",
@@ -268,7 +268,7 @@ import {
           key: "updateTime",
           minWidth: 150,
           render: (h, params) => {
-            return h('span', params.row.updateTime != '' ? dateformat(params.row.updateTime):'暂无')
+            return h('span', params.row.updateTime != '' ? dateformat(params.row.updateTime) : '暂无')
           }
         }, {
           title: '操作',
@@ -276,33 +276,53 @@ import {
           fixed: 'right',
           width: 140,
           render: (h, params) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'warning',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.goDetail(params.row)
+            let status = params.row.status;
+            if (status === '6' || status === '9') {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.goDetail(params.row)
+                    }
                   }
-                }
-              }, '详情'),
-              h('Button', {
-                props: {
-                  type: 'warning',
-                  size: 'small'
-                },
-                on: {
-                  click: () => {
-                    this.print(params.row)
+                }, '详情')
+              ]);
+            } else {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.goDetail(params.row)
+                    }
                   }
-                }
-              }, '打印')
-            ]);
+                }, '详情'),
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.print(params.row)
+                    }
+                  }
+                }, '打印')
+              ]);
+            }
           }
         }],
         columns: [{
@@ -333,8 +353,8 @@ import {
                 params.row.specifications != "" ?
                 params.row.specifications :
                 `${params.row.height}*${params.row.width}*${
-                                  params.row.length
-                                }`;
+                                    params.row.length
+                                  }`;
               return h("div", str);
             }
           },
@@ -371,8 +391,8 @@ import {
             title: "理计重量(KG)",
             key: "meterWeight",
             width: 120,
-            render: (h,params) =>{
-              let str = params.row.singleWeight != '' ?  (params.row.singleWeight*params.row.number).toFixed(3) : ''
+            render: (h, params) => {
+              let str = params.row.singleWeight != '' ? (params.row.singleWeight * params.row.number).toFixed(3) : ''
               return h("div", str);
             }
           },

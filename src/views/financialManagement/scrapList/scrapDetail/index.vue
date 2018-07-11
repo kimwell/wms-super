@@ -331,7 +331,7 @@ import {
       // 返回
       goBack() {
         this.$router.go(-1)
-      },
+      }
     },
     created() {
       this.getData();

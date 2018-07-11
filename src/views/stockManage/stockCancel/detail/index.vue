@@ -2,7 +2,10 @@
   <div class="details">
     <Card :bordered="false" class="card">
       <p slot="title">原单基本信息<span class="title-bar-status">状态：{{item.cancelTicket.status | toStatus}}</span></p>
-      <Button slot="extra" v-show="item.cancelTicket.status == '1'" type="warning" @click="add">确认退货入库</Button>
+      <div slot="extra">
+        <Button v-show="item.cancelTicket.status == '1'" type="warning" @click="add">确认退货入库</Button>
+        <Button type="warning" @click="goBack">返回</Button>
+      </div>
       <Row class="row-list">
         <Col span="6">客户单位：{{item.oldSaleTicket.buyCompanyName}}</Col>
         <Col span="6">仓库：{{item.oldSaleTicket.storeHouseName}}</Col>
@@ -230,6 +233,10 @@
             this.item = res.data || {}
           }
         })
+      },
+      // 返回
+      goBack() {
+        this.$router.go(-1)
       },
       add() {
         this.$Modal.confirm({

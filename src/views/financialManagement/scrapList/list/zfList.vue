@@ -53,9 +53,9 @@
         <Row class="row-list">
           <Col span="4">销售总额：<span class="numbers">￥{{saleDetail.saleMoney}}</span></Col>
           <Col span="4">不含税总金额：<span class="numbers">￥{{saleDetail.moneyWithoutTax}}</span></Col>
-          <Col span="4">税：<span class="numbers">{{saleDetail.tax }}</span></Col>
+          <Col span="4">税：<span class="numbers">￥{{saleDetail.tax }}</span></Col>
           <Col span="4">总重量：<span class="numbers">{{saleDetail.weight}}KG</span></Col>
-          <Col span="4">总数量：<span class="numbers">{{saleDetail.number}}KG</span></Col>
+          <Col span="4">总数量：<span class="numbers">{{saleDetail.number}}</span></Col>
         </Row>
       </div>
       <Table border :columns="columns" :data="saleDetail.saleTicketInfos"></Table>

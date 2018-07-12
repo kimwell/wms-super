@@ -9,6 +9,9 @@
         <FormItem label="下单日期：">
           <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
         </FormItem>
+        <FormItem label="创建日期：">
+          <DatePicker type="daterange" placement="bottom-end" v-model="dataValue2" placeholder="选择日期" style="width: 200px"></DatePicker>
+        </FormItem>
         <FormItem label="客户名称：">
           <Input type="text" v-model="pageApi.buyCompanyName" placeholder="请输入..."></Input>
         </FormItem>
@@ -35,10 +38,11 @@
             <Col class-name="col" span="2">创建时间</Col>
             <Col class-name="col" span="3">供应商名称</Col>
             <Col class-name="col" span="3">客户名称</Col>
-            <Col class-name="col" span="2">跟单员</Col>
+            <Col class-name="col" span="1">跟单员</Col>
             <Col class-name="col" span="2">重量(KG)</Col>
             <Col class-name="col" span="2">销售总额</Col>
-            <Col class-name="col" span="2">状态</Col>
+            <Col class-name="col" span="1">状态</Col>
+            <Col class-name="col" span="2">更新日期</Col>
             <Col class-name="col" span="1">打印次数</Col>
             <Col class-name="col" span="2">操作</Col>
           </Row>
@@ -48,10 +52,11 @@
             <Col class-name="col" span="2">{{item.createTime | dateformat}}</Col>
             <Col class-name="col" span="3">{{item.sellCompanyName}}</Col>
             <Col class-name="col" span="3">{{item.buyCompanyName}}</Col>
-            <Col class-name="col" span="2">{{item.merchandiser}}</Col>
+            <Col class-name="col" span="1">{{item.merchandiser}}</Col>
             <Col class-name="col" span="2">{{item.weight}}</Col>
             <Col class-name="col" span="2">{{item.saleMoney}}</Col>
-            <Col class-name="col" span="2">{{item.status | toStatus}}</Col>
+            <Col class-name="col" span="1">{{item.status | toStatus}}</Col>
+            <Col class-name="col" span="2">{{item.updateTime | dateformat}}</Col>
             <Col class-name="col" span="1">{{item.printNum}}</Col>
             <Col class-name="col" span="2">
             <Button size="small" type="warning" @click="goDetail(item)">详情</Button>
@@ -71,7 +76,7 @@
         <Row class="row-list">
           <Col span="8">客户单位：{{detailItem.buyCompanyName}}</Col>
           <Col span="8">仓库：{{detailItem.storeHouseName}}</Col>
-          <Col span="8">下单日期：{{detailItem.ticketTime | dateformat}}</Col>
+          <Col span="8">下单日期：{{detailItem.ticketTime | dateformat('yyyy-MM-dd')}}</Col>
         </Row>
         <Row class="row-list">
           <Col span="8">跟单员：{{detailItem.merchandiser}}</Col>
@@ -141,12 +146,15 @@
           buyCompanyName: '',
           merchandiser: '',
           status: '',
-          sellCompanyName: ''
+          sellCompanyName: '',
+          createStartTime: '',
+          createEndTime: ''
         },
         printShow: false,
         spinShow: true,
         printData: [],
         dataValue: ['', ''],
+        dataValue2: ['', ''],
         statusData: [{
           label: '待支付',
           value: '1'
@@ -305,7 +313,9 @@
           startTime: this.dataValue[0] != '' ? this.dataValue[0].getTime() : '',
           endTime: this.dataValue[1] != '' ? this.dataValue[1].getTime() : '',
           status: this.pageApi.status,
-          merchandiser: this.pageApi.merchandiser
+          merchandiser: this.pageApi.merchandiser,
+          createStartTime:  this.dataValue2[0] != '' ? this.dataValue2[0].getTime() : '',
+          createEndTime: this.dataValue2[1] != '' ? this.dataValue2[1].getTime() : ''
         }
       }
     },
@@ -358,9 +368,12 @@
           buyCompanyName: '',
           merchandiser: '',
           status: '',
-          sellCompanyName: ''
+          sellCompanyName: '',
+          createStartTime:  '',
+          createEndTime: ''
         }
         this.dataValue = ['', '']
+        this.dataValue2 = ['', '']
         this.getList(this.handleFilter)
       },
       changePage(page) {

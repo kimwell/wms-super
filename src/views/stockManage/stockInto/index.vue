@@ -68,7 +68,7 @@
       </Row>
       <Row class="row-list">
         <Col span="6">供应商：{{detailItem.sellCompany}}</Col>
-        <Col span="6">开单日期：{{detailItem.createTime | dateformat('yyyy-MM-dd')}}</Col>
+        <Col span="6">开单日期：{{detailItem.storageInDate | dateformat('yyyy-MM-dd')}}</Col>
         <Col span="6">提货车主：{{detailItem.carMan}}</Col>
         <Col span="6">车牌号：{{detailItem.carId}}</Col>
       </Row>

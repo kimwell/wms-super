@@ -25,7 +25,7 @@
         <Col span="4">不含税总金额：￥{{item.oldSaleTicket.moneyWithoutTax}}</Col>
         <Col span="4">税：￥{{item.oldSaleTicket.tax}}</Col>
         <Col span="4">总重量：{{item.oldSaleTicket.weight}}KG</Col>
-        <Col span="4">总件数：{{item.oldSaleTicket.number}}KG</Col>
+        <Col span="4">总件数：{{item.oldSaleTicket.number}}</Col>
       </Row>
       <Table width="100%" :columns="tableHeader" :data="item.oldSaleTicket.saleTicketInfos"></Table>
     </Card>

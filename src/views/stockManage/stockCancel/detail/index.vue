@@ -59,233 +59,268 @@
 </template>
 
 <script>
-  import uploadPic from '@/components/basics/uploadPic.vue'
-  export default {
-    components: {
-      uploadPic
-    },
-    data() {
-      return {
-        item: {
-          oldSaleTicket: {},
-          cancelTicket: {},
-          newSaleTicket: {},
-          cancelTicketLog: []
-        },
-        dataApi: {
-          zfId: '',
-          inRemark: '',
-          inAttachMent: ''
-        },
-        attachMent: [],
-        costHeader: [{
-          title: '序号',
-          key: 'index',
+import uploadPic from "@/components/basics/uploadPic.vue";
+export default {
+  components: {
+    uploadPic
+  },
+  data() {
+    return {
+      item: {
+        oldSaleTicket: {},
+        cancelTicket: {},
+        newSaleTicket: {},
+        cancelTicketLog: []
+      },
+      dataApi: {
+        zfId: "",
+        inRemark: "",
+        inAttachMent: ""
+      },
+      isRefresh: false,
+      attachMent: [],
+      costHeader: [
+        {
+          title: "序号",
+          key: "index",
           minWidth: 60,
           render: (h, params) => {
-            return h('span', params.index + 1)
+            return h("span", params.index + 1);
           }
-        }, {
-          title: '费用名称',
-          key: 'costName',
+        },
+        {
+          title: "费用名称",
+          key: "costName",
           minWidth: 150
-        }, {
-          title: '数量',
-          key: 'number',
+        },
+        {
+          title: "数量",
+          key: "number",
           minWidth: 150
-        }, {
-          title: '单价',
-          key: 'price',
+        },
+        {
+          title: "单价",
+          key: "price",
           minWidth: 150
-        }, {
-          title: '税/%',
-          key: 'tax',
+        },
+        {
+          title: "税/%",
+          key: "tax",
           minWidth: 150
-        }, {
-          title: '金额',
-          key: 'money',
+        },
+        {
+          title: "金额",
+          key: "money",
           minWidth: 150
-        }],
-        tableHeader: [{
-          title: '序号',
-          key: 'index',
+        }
+      ],
+      tableHeader: [
+        {
+          title: "序号",
+          key: "index",
           minWidth: 60,
           render: (h, params) => {
-            return h('span', params.index + 1)
+            return h("span", params.index + 1);
           }
-        }, {
-          title: '货物名称',
-          key: 'cargoName',
+        },
+        {
+          title: "货物名称",
+          key: "cargoName",
           minWidth: 150
-        }, {
-          title: '产地',
-          key: 'proPlaceName',
+        },
+        {
+          title: "产地",
+          key: "proPlaceName",
           minWidth: 150
-        }, {
-          title: '规格',
-          key: 'specifications',
+        },
+        {
+          title: "规格",
+          key: "specifications",
           minWidth: 150,
           render: (h, params) => {
             let str =
-              params.row.specifications != "" ?
-              params.row.specifications :
-              `${params.row.height}*${params.row.width}*${
-                              params.row.length
-                            }`;
+              params.row.specifications != ""
+                ? params.row.specifications
+                : `${params.row.height}*${params.row.width}*${
+                    params.row.length
+                  }`;
             return h("div", str);
           }
-        }, {
-          title: '公差',
-          key: 'tolerance',
+        },
+        {
+          title: "公差",
+          key: "tolerance",
           minWidth: 150
-        }, {
-          title: '单件重量(KG)',
-          key: 'singleWeight',
+        },
+        {
+          title: "单件重量(KG)",
+          key: "singleWeight",
           minWidth: 150
-        }, {
-          title: '产品单位',
-          key: 'numberUnit',
+        },
+        {
+          title: "产品单位",
+          key: "numberUnit",
           minWidth: 150,
           render: (h, params) => {
             let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
             return h("span", str);
           }
-        }, {
-          title: '卷号',
-          key: 'coiledSheetNum',
+        },
+        {
+          title: "卷号",
+          key: "coiledSheetNum",
           minWidth: 100
-        }, {
-          title: '数量',
-          key: 'number',
+        },
+        {
+          title: "数量",
+          key: "number",
           minWidth: 100
-        }, {
-          title: '理计重量(KG)',
-          key: 'meterWeight',
+        },
+        {
+          title: "理计重量(KG)",
+          key: "meterWeight",
           minWidth: 120,
           render: (h, params) => {
             let str = (params.row.singleWeight * params.row.number).toFixed(3);
             return h("span", str);
           }
-        }, {
-          title: '过磅重量(KG)',
-          key: 'poundWeight',
+        },
+        {
+          title: "过磅重量(KG)",
+          key: "poundWeight",
           minWidth: 120
-        }, {
-          title: '过磅单重(KG)',
-          key: 'poundSingleWeight',
+        },
+        {
+          title: "过磅单重(KG)",
+          key: "poundSingleWeight",
           minWidth: 120
-        }, {
-          title: '备注',
-          key: 'remark',
+        },
+        {
+          title: "备注",
+          key: "remark",
           minWidth: 100
-        }]
-      }
-    },
-    computed: {
-      id() {
-        return this.$route.params.id
-      },
-      inRemark() {
-        return this.item.cancelTicket.inRemark
-      },
-      inAttach() {
-        return this.item.cancelTicket.inAttachMent
-      }
-    },
-    filters: {
-      toStatus(val) {
-        switch (val * 1) {
-          case 1:
-            return '待退货入库'
-            break;
-          case 2:
-            return '退货已入库'
-            break;
-          case 3:
-            return '待财务处理'
-            break;
-          case 4:
-            return '财务已处理'
-            break;
-          case 5:
-            return '已完成'
-            break;
-          case 6:
-            return '已取消'
-            break;
         }
-      }
+      ]
+    };
+  },
+  computed: {
+    id() {
+      return this.$route.params.id;
     },
-    watch: {
-      inRemark(newValue, oldValue) {
-        this.dataApi.inRemark = newValue
-      },
-      inAttach(newValue, oldValue) {
-        this.attachMent = newValue != '' ? JSON.parse(newValue) : []
-      }
+    inRemark() {
+      return this.item.cancelTicket.inRemark;
     },
-    methods: {
-      getData() {
-        this.$http.post(this.api.findCancelTicket, {
+    inAttach() {
+      return this.item.cancelTicket.inAttachMent;
+    }
+  },
+  filters: {
+    toStatus(val) {
+      switch (val * 1) {
+        case 1:
+          return "待退货入库";
+          break;
+        case 2:
+          return "退货已入库";
+          break;
+        case 3:
+          return "待财务处理";
+          break;
+        case 4:
+          return "财务已处理";
+          break;
+        case 5:
+          return "已完成";
+          break;
+        case 6:
+          return "已取消";
+          break;
+      }
+    }
+  },
+  watch: {
+    inRemark(newValue, oldValue) {
+      this.dataApi.inRemark = newValue;
+    },
+    inAttach(newValue, oldValue) {
+      this.attachMent = newValue != "" ? JSON.parse(newValue) : [];
+    }
+  },
+  methods: {
+    getData() {
+      this.$http
+        .post(this.api.findCancelTicket, {
           zfId: this.id
-        }).then(res => {
+        })
+        .then(res => {
           if (res.code === 1000) {
-            this.item = res.data || {}
+            this.item = res.data || {};
           }
-        })
-      },
-      // 返回
-      goBack() {
-        this.$router.go(-1)
-      },
-      add() {
-        this.$Modal.confirm({
-          title: "退货确认提示！",
-          content: "确认后无法撤销，是否继续？",
-          onOk: () => {
-            let params = this.$clearData(this.dataApi)
-            params.zfId = this.id;
-            let arrayFilter = this.attachMent.filter(function(item) {
-              return item;
-            });
-            params.inAttachMent = JSON.stringify(arrayFilter);
-            this.$http.post(this.api.cancelTicketIn, params).then(res => {
-              if (res.code === 1000) {
-                this.$Message.success('操作成功');
-                this.$route.params.refresh = true;
-                this.$router.push({
-                  name: 'stockCancel'
-                })
-              } else {
-                this.$Message.error(res.message)
-              }
-            })
-          }
-        })
-      }
+        });
     },
-    created() {
-      this.getData();
+    // 返回
+    goBack() {
+      this.$router.go(-1);
+      this.isRefresh = false;
+    },
+    add() {
+      this.$Modal.confirm({
+        title: "退货确认提示！",
+        content: "确认后无法撤销，是否继续？",
+        onOk: () => {
+          let params = this.$clearData(this.dataApi);
+          params.zfId = this.id;
+          let arrayFilter = this.attachMent.filter(function(item) {
+            return item;
+          });
+          params.inAttachMent = JSON.stringify(arrayFilter);
+          this.$http.post(this.api.cancelTicketIn, params).then(res => {
+            if (res.code === 1000) {
+              this.$Message.success("操作成功");
+              // this.$router.push({
+              //   name: "stockCancel"
+              // });
+              this.isRefresh = true;
+              this.$router.go(-1);
+            } else {
+              this.$Message.error(res.message);
+            }
+          });
+        }
+      });
+    }
+  },
+  created() {
+    this.getData();
+  },
+  beforeRouteLeave(to, from, next) {
+    next();
+    //  返回是否刷新列表
+    if(this.isRefresh){
+      to.meta.keepAlive = false
+    }else{
+      to.meta.keepAlive = true
     }
   }
+};
 </script>
 
 <style lang='less' scoped>
-  .title-bar-status {
-    display: inline-block;
-    margin-left: 80px;
-    font-weight: normal
+.title-bar-status {
+  display: inline-block;
+  margin-left: 80px;
+  font-weight: normal;
+}
+
+.details {
+  .card {
+    margin-bottom: 15px;
   }
-  
-  .details {
-    .card {
-      margin-bottom: 15px;
-    }
-    .row-list {
-      margin-bottom: 10px;
-      &:last-child {
-        margin: 0;
-      }
+  .row-list {
+    margin-bottom: 10px;
+    &:last-child {
+      margin: 0;
     }
   }
+}
 </style>

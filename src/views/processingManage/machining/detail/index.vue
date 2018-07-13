@@ -78,7 +78,8 @@
   export default {
     data() {
       return {
-        item: {}
+        item: {},
+        isRefresh: false
       }
     },
     computed: {
@@ -122,7 +123,8 @@
       },
       // 返回
       goBack() {
-        this.$router.go(-1)
+        this.isRefresh = false;
+        this.$router.go(-1);
       },
       //  确认加工
       onPrecess() {
@@ -136,7 +138,9 @@
             this.$http.post(this.api.saveProcess, params).then(res => {
               if (res.code === 1000) {
                 this.$Message.success('确认成功');
-                this.$router.replace({name: 'machining'})
+                // this.$router.replace({name: 'machining'})
+                this.isRefresh = true;
+                this.$router.go(-1);
               } else {
                 this.$Message.error(res.message)
               }
@@ -147,6 +151,15 @@
     },
     created() {
       this.getData();
+    },
+    beforeRouteLeave(to, from, next) {
+      next();
+      //  返回是否刷新列表
+      if (this.isRefresh) {
+        to.meta.keepAlive = false
+      } else {
+        to.meta.keepAlive = true
+      }
     }
   }
 </script>

@@ -1115,6 +1115,7 @@
       },
       // 返回
       goBack() {
+        this.isRefresh = false;  
         this.$router.go(-1);
       },
       //  选择货物
@@ -1336,7 +1337,9 @@
               this.$http.post(postUrl, params).then(res => {
                 if (res.code === 1000) {
                   this.$Message.success('加入成功')
-                  this.$router.push({name: 'machining'})
+                  // this.$router.push({name: 'machining'})
+                  this.isRefresh = true;  
+                  this.$router.go(-1);
                 } else {
                   this.$Message.error(res.message)
                 }
@@ -1348,6 +1351,15 @@
     },
     created() {
       this.asyncGoods();
+    },
+    beforeRouteLeave(to, from, next) {
+      next();
+      //  返回是否刷新列表
+      if(this.isRefresh){
+        to.meta.keepAlive = false
+      }else{
+        to.meta.keepAlive = true
+      }
     }
   };
 </script>

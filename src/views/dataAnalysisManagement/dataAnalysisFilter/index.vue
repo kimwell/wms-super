@@ -47,19 +47,19 @@
         <Input type="text" v-model="filterApi.tolerance" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem label="厚度：" v-if="isBJ">
-        <Input type="text" v-model="filterApi.heightMax" style="width:77px;" placeholder="请输入..."></Input>
-        <span class="line">-</span>
         <Input type="text" v-model="filterApi.heightMin" style="width:77px;" placeholder="请输入..."></Input>
+        <span class="line">-</span>
+        <Input type="text" v-model="filterApi.heightMax" style="width:77px;" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem label="宽度：" v-if="isBJ">
-        <Input type="text" v-model="filterApi.widthMax" style="width:77px;" placeholder="请输入..."></Input>
-        <span class="line">-</span>
         <Input type="text" v-model="filterApi.widthMin" style="width:77px;" placeholder="请输入..."></Input>
+        <span class="line">-</span>
+        <Input type="text" v-model="filterApi.widthMax" style="width:77px;" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem label="长度：" v-if="isBJ">
-        <Input type="text" v-model="filterApi.lengthMax" style="width:77px;" placeholder="请输入..."></Input>
-        <span class="line">-</span>
         <Input type="text" v-model="filterApi.lengthMin" style="width:77px;" placeholder="请输入..."></Input>
+        <span class="line">-</span>
+        <Input type="text" v-model="filterApi.lengthMax" style="width:77px;" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem>
         <Button type="text" @click="resetFilter">清空</Button>

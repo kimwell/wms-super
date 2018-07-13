@@ -9,7 +9,7 @@
       <Row class="row-list">
         <Col span="6">客户单位：{{item.oldSaleTicket.buyCompanyName}}</Col>
         <Col span="6">仓库：{{item.oldSaleTicket.storeHouseName}}</Col>
-        <Col span="6">下单日期：{{item.oldSaleTicket.ticketTime | dateformat('yyyy-MM-dd hh:mm:ss')}}</Col>
+        <Col span="6">下单日期：{{item.oldSaleTicket.ticketTime | dateformat('yyyy-MM-dd')}}</Col>
         <Col span="6">跟单员：{{item.oldSaleTicket.merchandiser}}</Col>
       </Row>
       <Row class="row-list">
@@ -21,9 +21,9 @@
     </Card>
     <Card :bordered="false" class="card" title="原单明细">
       <Row class="row-list">
-        <Col span="4">销售总额：￥{{item.oldSaleTicket.saleMoney}}</Col>
-        <Col span="4">不含税总金额：￥{{item.oldSaleTicket.moneyWithoutTax}}</Col>
-        <Col span="4">税：￥{{item.oldSaleTicket.tax}}</Col>
+        <!-- <Col span="4">销售总额：￥{{item.oldSaleTicket.saleMoney}}</Col>
+          <Col span="4">不含税总金额：￥{{item.oldSaleTicket.moneyWithoutTax}}</Col>
+          <Col span="4">税：￥{{item.oldSaleTicket.tax}}</Col> -->
         <Col span="4">总重量：{{item.oldSaleTicket.weight}}KG</Col>
         <Col span="4">总件数：{{item.oldSaleTicket.number}}</Col>
       </Row>
@@ -31,8 +31,8 @@
     </Card>
     <Card :bordered="false" class="card" title="退货单">
       <Table width="100%" :columns="tableHeader" :data="item.cancelTicket.cancelTicketInfos"></Table>
-      <h4 style="padding: 15px 0;">其他信息</h4>
-      <Table width="100%" :columns="costHeader" :data="item.oldSaleTicket.saleTicketCosts"></Table>
+      <!-- <h4 style="padding: 15px 0;">其他信息</h4>
+        <Table width="100%" :columns="costHeader" :data="item.oldSaleTicket.saleTicketCosts"></Table> -->
     </Card>
     <Card :bordered="false" class="card" title="退货信息">
       <Form :mode="dataApi" :label-width="100" inline>
@@ -42,11 +42,11 @@
         <FormItem label="附件1：" v-if="item.cancelTicket.status == '1'">
           <uploadPic v-model="attachMent[0]"></uploadPic>
         </FormItem>
-        <FormItem label="附件2："  v-if="item.cancelTicket.status == '1'">
+        <FormItem label="附件2：" v-if="item.cancelTicket.status == '1'">
           <uploadPic v-model="attachMent[1]"></uploadPic>
         </FormItem>
-        <FormItem label="附件3："  v-if="item.cancelTicket.status == '1'">
-          <uploadPic v-model="attachMent[2]" ></uploadPic>
+        <FormItem label="附件3：" v-if="item.cancelTicket.status == '1'">
+          <uploadPic v-model="attachMent[2]"></uploadPic>
         </FormItem>
         <div v-if="item.cancelTicket.status != '1'" style="display:inline-block;">
           <FormItem :label="`附件${index+1}：`" v-for="(item,index) in attachMent" :key="index">
@@ -130,8 +130,8 @@
               params.row.specifications != "" ?
               params.row.specifications :
               `${params.row.height}*${params.row.width}*${
-                            params.row.length
-                          }`;
+                              params.row.length
+                            }`;
             return h("div", str);
           }
         }, {
@@ -146,7 +146,7 @@
           title: '产品单位',
           key: 'numberUnit',
           minWidth: 150,
-          render: (h,params) =>{
+          render: (h, params) => {
             let str = `${params.row.weightUnit}/${params.row.numberUnit}`;
             return h("span", str);
           }
@@ -162,8 +162,8 @@
           title: '理计重量(KG)',
           key: 'meterWeight',
           minWidth: 120,
-          render: (h,params) =>{
-            let str = (params.row.singleWeight*params.row.number).toFixed(3);
+          render: (h, params) => {
+            let str = (params.row.singleWeight * params.row.number).toFixed(3);
             return h("span", str);
           }
         }, {
@@ -246,13 +246,16 @@
             let params = this.$clearData(this.dataApi)
             params.zfId = this.id;
             let arrayFilter = this.attachMent.filter(function(item) {
-                return item;
+              return item;
             });
             params.inAttachMent = JSON.stringify(arrayFilter);
             this.$http.post(this.api.cancelTicketIn, params).then(res => {
               if (res.code === 1000) {
                 this.$Message.success('操作成功');
-                this.$router.go(-1)
+                this.$route.params.refresh = true;
+                this.$router.push({
+                  name: 'stockCancel'
+                })
               } else {
                 this.$Message.error(res.message)
               }

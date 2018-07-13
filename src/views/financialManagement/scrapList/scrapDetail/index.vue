@@ -212,6 +212,18 @@ import {
           key: 'poundSingleWeight',
           minWidth: 120
         }, {
+          title: '单价(元)',
+          key: 'price',
+          minWidth: 120
+        }, {
+          title: '税/%',
+          key: 'tax',
+          minWidth: 120
+        }, {
+          title: '金额(元)',
+          key: 'money',
+          minWidth: 120
+        }, {
           title: '备注',
           key: 'remark',
           minWidth: 100

@@ -1,6 +1,6 @@
 <template>
   <div class="details">
-    <Form :label-width="120">
+    <Form :label-width="135">
       <FormItem label="用户类型：">
         {{activeData.cType == '1' ? '供应商':'客户'}}
       </FormItem>

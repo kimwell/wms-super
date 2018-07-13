@@ -918,6 +918,7 @@
           datas.number += Number(el.number)
           datas.weight += el.poundWeight != '' ? Number(el.poundWeight) : el.meterWeight ? Number(el.meterWeight) : 0;
         })
+        datas.weight = datas.weight.toFixed(3);
         return datas;
       },
       showTotal() {
@@ -931,6 +932,7 @@
             datas.weight += el.poundWeight != '' ? Number(el.poundWeight) : Number(el.meterWeight);
           })
         }
+        datas.weight = datas.weight.toFixed(3);
         return datas;
       },
       handleFilter() {
@@ -1334,7 +1336,7 @@
               this.$http.post(postUrl, params).then(res => {
                 if (res.code === 1000) {
                   this.$Message.success('加入成功')
-                  this.$router.replace({name: 'machining'})
+                  this.$router.push({name: 'machining'})
                 } else {
                   this.$Message.error(res.message)
                 }

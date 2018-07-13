@@ -407,25 +407,6 @@
             width: 120
           },
           {
-            title: "单价(元/KG)",
-            key: "price",
-            width: 120,
-          },
-          {
-            title: "税(%)",
-            key: "tax",
-            width: 100,
-          },
-          {
-            title: "金额",
-            key: "money",
-            width: 100,
-            render: (h, params) => {
-              let str = `￥${params.row.money}`;
-              return h("span", str);
-            }
-          },
-          {
             title: "备注",
             key: "remark",
             width: 200,

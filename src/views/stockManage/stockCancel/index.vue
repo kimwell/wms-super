@@ -22,8 +22,8 @@
       </FormItem>
       <FormItem label="状态：">
         <Select v-model="pageApi.status" style="width: 100px;">
-              <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+                <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
       </FormItem>
       <FormItem>
         <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import {
-  dateformat
-} from '@/utils/filters.js'
+  import {
+    dateformat
+  } from '@/utils/filters.js'
   export default {
     data() {
       return {
@@ -102,17 +102,17 @@ import {
           key: 'status',
           minWidth: 150,
           render: (h, params) => {
-              let strs = this.statusData.find(item => item.value == params.row.status).label;
-             return h('span', {
-                class: `status status${params.row.status}`,
-              }, strs)
+            let strs = this.statusData.find(item => item.value == params.row.status).label;
+            return h('span', {
+              class: `status status${params.row.status}`,
+            }, strs)
           }
         }, {
           title: '退货时间',
           key: 'createTime',
           minWidth: 150,
           render: (h, params) => {
-            return h('span', params.row.createTime != '' ? dateformat(params.row.createTime):'暂无')
+            return h('span', params.row.createTime != '' ? dateformat(params.row.createTime) : '暂无')
           }
         }, {
           title: '退货开单人',
@@ -123,7 +123,7 @@ import {
           key: 'updateTime',
           minWidth: 150,
           render: (h, params) => {
-            return h('span', params.row.updateTime != '' ? dateformat(params.row.updateTime):'暂无')
+            return h('span', params.row.updateTime != '' ? dateformat(params.row.updateTime) : '暂无')
           }
         }, {
           title: '最近更新人',
@@ -146,7 +146,7 @@ import {
                 },
                 on: {
                   click: () => {
-                    this.goDetail( params.row)
+                    this.goDetail(params.row)
                   }
                 }
               }, '详情'),
@@ -196,20 +196,20 @@ import {
     },
     methods: {
       resetFilter() {
-        this.pageApi =  {
-          currentPage: 1,
-          pageSize: 10,
-          zfId: '',
-          saleTicketId: '',
-          customer: '',
-          status: '',
-          startTime: '',
-          endTime: '',
-          sellCompany: '',
-          startTicketTime: '',
-          endTicketTime: ''
-        },
-        this.dataValue = ['', ''];
+        this.pageApi = {
+            currentPage: 1,
+            pageSize: 10,
+            zfId: '',
+            saleTicketId: '',
+            customer: '',
+            status: '',
+            startTime: '',
+            endTime: '',
+            sellCompany: '',
+            startTicketTime: '',
+            endTicketTime: ''
+          },
+          this.dataValue = ['', ''];
         this.dataValue2 = ['', ''];
         this.getList(this.handleFilter)
       },
@@ -221,12 +221,12 @@ import {
           }
         })
       },
-      changePage(page){
+      changePage(page) {
         this.pageApi.currentPage = page;
         this.getList(this.handleFilter)
       },
-      goDetail(data){
-        this.$router.push('./stockCancelDetail/'+data.id)
+      goDetail(data) {
+        this.$router.push('./stockCancelDetail/' + data.id)
       }
     },
     created() {
@@ -236,33 +236,34 @@ import {
 </script>
 
 <style lang='less'>
-  .status{
+  .status {
     display: inline-block;
     height: 20px;
     line-height: 20px;
     padding: 0 10px;
     color: #fff;
     border-radius: 10px;
-    &.status1{
+    &.status1 {
       background-color: #0BB2D4
     }
-    &.status2{
+    &.status2 {
       background-color: #EB6609
     }
-    &.status3{
+    &.status3 {
       background-color: #FCB900
     }
-    &.status4{
+    &.status4 {
       background-color: #F13A30
     }
-    &.status5{
+    &.status5 {
       background-color: #008947
     }
-    &.status6{
+    &.status6 {
       background-color: #008989
     }
   }
-  .page-count{
+  
+  .page-count {
     text-align: right;
     margin-top: 20px;
   }

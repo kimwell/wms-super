@@ -2,13 +2,11 @@
   <div>
     <Form :mode="filterApi" :label-width="80">
       <FormItem label="供应商：">
-        <!-- <Input type="text" v-model="filterApi.sellCompanyName" placeholder="请输入..."></Input> -->
-
       <Select v-model="filterApi.sellCompanyName" filterable remote :remote-method="remoteMethod" placeholder="选择供应商" :loading="queryLoading">
         <Option v-for="(option, index) in companyList" :value="`${option.companyName}`" :key="index">{{option.companyName}}</Option>
       </Select>
       </FormItem>
-      <FormItem label="客户：">
+      <FormItem label="客户：" v-if="isInventory">
         <Input type="text" v-model="filterApi.buyCompanyName" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem label="货物名称：">
@@ -73,6 +71,12 @@
 
 <script>
   export default {
+    props: {
+      isInventory: {
+        type: Boolean,
+        default: true
+      }
+    },
     data() {
       return {
         filterData: [{

@@ -26,7 +26,7 @@
         </div>
         <div class="card-body-aside">
           <div class="card-body-aside-title">条件搜索</div>
-          <commFilter @on-change="doFilter" ref="childFilter"></commFilter>
+          <commFilter @on-change="doFilter" ref="childFilter" :isInventory="false"></commFilter>
         </div>
       </div>
     </Card>

@@ -88,9 +88,9 @@
         }, {
           title: '原单下单日期',
           key: 'ticketTime',
-          minWidth: 200,
+          minWidth:150,
           render: (h, params) => {
-            return h('span', params.row.ticketTime != '' ? dateformat(params.row.ticketTime) : '暂无')
+            return h('span', params.row.ticketTime != '' ? dateformat(params.row.ticketTime,'yyyy-MM-dd') : '暂无')
           }
         }, {
           title: '客户名称',

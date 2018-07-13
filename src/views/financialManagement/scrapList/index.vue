@@ -33,6 +33,13 @@
       tabsChange(data) {
         this.page = data;
       }
+    },
+    beforeRouteEnter(to, from, next) {
+      next();
+      let name  = from.name;
+      if(name == 'paymentOrder' || name == 'receiptOrder' || name == 'distributeSettlementManagement' || name == 'supplierAmountManagement' || name == 'balanceManagement' ){
+        to.meta.keepAlive = false;
+      }
     }
   }
 </script>

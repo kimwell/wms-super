@@ -9,9 +9,9 @@
         <Input type="text" v-model="pageApi.saleTicketId" placeholder="请输入..."></Input>
       </FormItem>
       <FormItem label="退货时间：">
-        <DatePicker type="daterange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 200px"></DatePicker>
+        <DatePicker type="datetimerange" placement="bottom-end" v-model="dataValue" placeholder="选择日期" style="width: 330px"></DatePicker>
       </FormItem>
-      <FormItem label="原单下单时间：">
+      <FormItem label="原单下单日期：">
         <DatePicker type="daterange" placement="bottom-end" v-model="dataValue2" placeholder="选择日期" style="width: 200px"></DatePicker>
       </FormItem>
       <FormItem label="供应商名称：">
@@ -22,8 +22,8 @@
       </FormItem>
       <FormItem label="状态：">
         <Select v-model="pageApi.status" style="width: 100px;">
-                <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
-              </Select>
+          <Option v-for="item in statusData" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
       </FormItem>
       <FormItem>
         <Button type="warning" @click.native="resetFilter">清除</Button>
@@ -85,6 +85,13 @@
           title: '原销售单号',
           key: 'ticketId',
           minWidth: 200
+        }, {
+          title: '原单下单日期',
+          key: 'ticketTime',
+          minWidth: 200,
+          render: (h, params) => {
+            return h('span', params.row.ticketTime != '' ? dateformat(params.row.ticketTime) : '暂无')
+          }
         }, {
           title: '客户名称',
           key: 'buyCompany',
@@ -231,6 +238,13 @@
     },
     created() {
       this.getList(this.handleFilter)
+    },
+    beforeRouteEnter(to, from, next) {
+      next();
+      let name  = from.name;
+      if(name == 'stockOut' || name == 'stockInto' || name == 'goods'){
+        to.meta.keepAlive = false;
+      }
     }
   }
 </script>

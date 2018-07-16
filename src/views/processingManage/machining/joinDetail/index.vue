@@ -1121,6 +1121,9 @@
       //  选择货物
       selectGoods() {
         this.show = true;
+        if(this.dataApi.goods){
+          this.goods =  [...this.dataApi.goods];
+        }
       },
       saveData(status) {
         if (this.goods.length > 0) {
@@ -1136,7 +1139,7 @@
             el.autoStauts = undefined
           });
           this.show = false;
-          this.dataApi.goods = this.goods;
+          this.dataApi.goods = [...this.goods,...this.$clearData(this.dataApi.goods)];
           this.$refs.tableList.selectAll(status)
         } else {
           this.$Message.error("请选择货品");

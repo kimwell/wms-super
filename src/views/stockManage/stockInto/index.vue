@@ -317,32 +317,32 @@ import {dateformat} from '@/utils/filters'
             key: "oldCoiledWeight",
             minWidth: 120,
           },
-          {
-            title: "成本价",
-            key: "costPrice",
-            minWidth: 120,
-            render: (h, params) => {
-              let str = `￥${params.row.costPrice}`;
-              return h("span", str);
-            }
-          },
-          {
-            title: "成本金额",
-            key: "costNumber",
-            minWidth: 120,
-            render: (h, params) => {
-              let str = `￥${params.row.costNumber}`;
-              return h("span", str);
-            }
-          },{
-            title: "销售底价",
-            key: "floorPrice",
-            width: 100,
-            render: (h, params) => {
-              let str =  params.row.floorPrice != '' ? `￥${params.row.floorPrice}`: `￥0`;
-              return h("span", str);
-            }
-          },
+          // {
+          //   title: "成本价",
+          //   key: "costPrice",
+          //   minWidth: 120,
+          //   render: (h, params) => {
+          //     let str = `￥${params.row.costPrice}`;
+          //     return h("span", str);
+          //   }
+          // },
+          // {
+          //   title: "成本金额",
+          //   key: "costNumber",
+          //   minWidth: 120,
+          //   render: (h, params) => {
+          //     let str = `￥${params.row.costNumber}`;
+          //     return h("span", str);
+          //   }
+          // },{
+          //   title: "销售底价",
+          //   key: "floorPrice",
+          //   width: 100,
+          //   render: (h, params) => {
+          //     let str =  params.row.floorPrice != '' ? `￥${params.row.floorPrice}`: `￥0`;
+          //     return h("span", str);
+          //   }
+          // },
           {
             title: "内部编号",
             key: "internalNumber",

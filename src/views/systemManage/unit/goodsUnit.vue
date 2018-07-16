@@ -28,14 +28,14 @@
     
         <Modal v-model="show" title="编辑品类绑定计量单位" :closable="false" :mask-closable="false">
             <Form :label-width="80" ref="ironUnit" :model="dataApi" :rules="rules">
-                <FormItem label="品类" prop="ironId">
+                <FormItem label="品类" prop="ironName">
                     <Select v-model="dataApi.ironName" size="small" style="width:200px"><Option v-for="type in ironTypes" :key="type" :value="type">{{ type }}</Option></Select>
                 </FormItem>
-                <FormItem label="数量单位">
-                    <Select v-model="dataApi.numUnitId" size="small" style="width:200px"><Option v-for="type in numberUnits" :key="type.id" :value="type.id">{{ type.cName }}</Option></Select>
+                <FormItem label="数量单位" prop="numUnitCName">
+                    <Select v-model="dataApi.numUnitCName" size="small" style="width:200px"><Option v-for="type in numberUnits" :key="type.id" :value="type.cName">{{ type.cName }}</Option></Select>
                 </FormItem>
-                <FormItem label="重量单位">
-                    <Select v-model="dataApi.weightUnitId" size="small" style="width:200px"><Option v-for="type in weightUnits" :key="type.id" :value="type.id">{{ type.cName }}</Option></Select>
+                <FormItem label="重量单位" prop="weightUnitCName">
+                    <Select v-model="dataApi.weightUnitCName" size="small" style="width:200px"><Option v-for="type in weightUnits" :key="type.id" :value="type.cName">{{ type.cName }}</Option></Select>
                 </FormItem>
             </Form>
             <div slot="footer">
@@ -54,27 +54,22 @@
                 show: false,
                 dataApi: {
                     id: '',
-                    ironId: '',
                     ironName: '',
-                    weightUnitId: '',
                     weightUnitCName: '',
-                    weightUnitEName: '',
-                    numUnitId: '',
                     numUnitCName: '',
-                    numUnitEName: ''
                 },
                 rules: {
-                    ironId: [{
+                    ironName: [{
                         required: true,
                         message: '请选择品类',
                         trigger: 'change'
                     }],
-                    numUnitId: [{
+                    weightUnitCName: [{
                         required: true,
                         message: '请选择',
                         trigger: 'change'
                     }],
-                    weightUnitId: [{
+                    numUnitCName: [{
                         required: true,
                         message: '请选择',
                         trigger: 'change'
@@ -91,34 +86,6 @@
                 weightUnits: []
             }
         },
-        watch: {
-            'dataApi.ironName': {
-                handler: function(nowVal, oldVal) {
-                    let type = this.ironTypes.find(val => {
-                        return val == nowVal
-                    })
-                    this.dataApi.ironName = type;
-                }
-            },
-            'dataApi.numUnitId': {
-                handler: function(nowVal, oldVal) {
-                    let type = this.numberUnits.find(val => {
-                        return val.id == nowVal
-                    })
-                    this.dataApi.numUnitCName = type.cName;
-                    this.dataApi.numUnitEName = type.eName;
-                }
-            },
-            'dataApi.weightUnitId': {
-                handler: function(nowVal, oldVal) {
-                    let type = this.weightUnits.find(val => {
-                        return val.id == nowVal
-                    })
-                    this.dataApi.weightUnitCName = type.cName;
-                    this.dataApi.weightUnitEName = type.eName;
-                }
-            }
-        },
         methods: {
             // 分页
             changePage(page) {
@@ -130,14 +97,9 @@
                 // console.log(item)
                 this.dataApi = {
                     id: item.id,
-                    ironId: item.ironId,
                     ironName: item.ironName,
-                    weightUnitId: item.weightUnitId,
                     weightUnitCName: item.weightUnitCName,
-                    weightUnitEName: item.weightUnitEName,
-                    numUnitId: item.numUnitId,
                     numUnitCName: item.numUnitCName,
-                    numUnitEName: item.numUnitEName
                 }
                 this.show = true;
             },
